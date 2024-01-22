@@ -1,0 +1,2290 @@
+         Grammar, Syntax, and Vocabulary of the IGBA Card-Image File
+                       Revised version of circular Igb 832               
+                   
+                                  Contents
+       INTRODUCTION...................................................2
+
+       ANALYSIS DATA FILE.............................................2
+
+       1. The Identification Field....................................3
+
+       2. Record Preface Images.......................................4
+
+       2.1. The Record Title Card.....................................4
+
+       2.2. The Record Reference and Location Card....................4
+
+       3. Specimen Card 'A'; the name and unit card...................5
+
+       4. Specimen Card 'B'; the essential oxide card.................6
+
+       5. Other Specimen Cards; 'C', 'D', . . .,'Z'...................7
+
+       6. Encoding Rules of Optional Informations.....................7
+
+       6.1. Punctuation...............................................7
+
+       6.2. The Status List...........................................7
+
+       6.3. The Trace-Element List....................................8
+
+       6.4. The Age List..............................................8
+
+       6.4.1. The stratigraphic age field and its subfields...........9
+
+       6.4.2. The physical age field and its subfields................9
+
+       6.5. The Petrographic Descriptor List.........................10
+
+       6.6. The Mineral Assemblage List..............................11
+
+       6.7. The Additional Information List..........................11
+
+       THE BILBLIOGRAPHY DATA FILE...................................12
+
+
+           Appendix A: IGBA Symbol Tables
+                Al. Rock Names.......................................13
+                A2. Status Symbols...................................16
+                A3. Age Vocabulary...................................17
+                A4. Petrographic Vocabulary..........................18
+                A5. Mineral Vocabulary...............................20
+                A6. Additional Information Tags......................22
+                A7. IGBA Version of FIPS 2-Level Place Codes
+                    corrected trough Apr-89. (NB - Ocean codes
+                    specific to IGBA)................................23
+                A8. Example for Igba Format..........................43
+                                      INTRODUCTION
+
+          During the development of IGCP Projects 163 and 239 and the first
+stage of this Subcommission a special structure has been prepared to
+realize the successive IGBADAT versions.
+
+          The data base has been builded in two steps. Chayes (1985) uses
+the names of "Data capture" for the (non-electronic) movement of data from
+publications to project coding sheet and "Data transfer" for the movement
+of data from coding sheet to machine readable form. The sheet form has been
+described in different papers and internal notes, for instance Chayes
+(1985).
+
+          IGBA is composed of two files, the first is Analyses Data and is
+named IGBADAT, the second is Bibliography Data and is named IGBAREF.  A
+five-digit number is the linkage between them.
+
+                              ANALYSIS DATA FILE
+
+          Analyses Data File consists of 80 characters long physical
+records, referred along this note as "card image", "card" or "image". The
+first six characters of each image are used for identification, the
+remaining 74 for text.
+
+          The data file is divided to logical records or groups. The first
+two card images of a logical record, the record preface contain information
+common to the group.
+
+          The other cards in the record contain information about
+individual specimens.  Each specimen is described on 3 or more card images:
+the first two having fix formats, the rest having variable formats. The
+information in variable format cards is always sequential consisting of the
+following parts: Status List, Trace Element List, Age List, Petrographic
+Descriptors, Mineral Assemblage, Addition Information (see after).
+
+          The separation of logical records, analyses and parts of the
+       analyses is made in the identification field.
+
+                1. The Identification Field
+
+          The identification field, the first six characters of each image
+     in a data file, is divided into three subfields:
+
+     Column(s)            Contents of subfield
+
+        1-3  The record identifier; an alphabetic symbol of one to
+             three letters, right justified. All cards of a
+             particular logical record contain the same record
+             identifier. (Letters only. No digits.)
+
+        4-5  The specimen identifier; an alphabetic symbol of one or
+             two letters, right justified. All cards of a
+             particular specimen description carry the same specimen
+             identifier. (Letters only. No diqits.)
+
+         6   The card-sequence symbol; a one-character symbol which
+             may be either of the numerals 1 or 2, or any letter of
+             the alphabet. The within-specimen order of
+             card-sequence symbols is the same for all specimens.
+
+          The record preface consists of two cards, the first bearing the
+     card-sequence symbol '1', the second the card-sequence symbol '2'. 
+The  first card of a specimen description contains the sequence symbol 'A',
+the second 'B', the third 'C', etc., for as many cards as may be  
+necessary.  Specimen identifiers may occur in any order, but    
+card-sequence symbols follow a fixed order in every logical record,    
+viz. 1, 2, A, B, ..., k1, A, B, ..., k2, A, B, ..., k3, etc., where ki is
+the terminal card image of the i-th specimen description.
+
+
+                            2. Record Preface Images
+
+          The record preface consists of a title card followed by a   
+reference and location card.  Definitions and positions of the variables
+they contain are as follows:
+
+        2.1 The Record Title Card
+
+     Column(s)         Variable               Definition
+
+     1-3               RS                     Record identifier
+
+     4-5               Blank
+
+      6                '1'                    Card-sequence symbol
+
+     7-80              TITL                   Up to 74 characters,
+                                              free field
+
+        2.2 The Record Reference and Location Card
+
+     Column(s)         Variable               Definition
+
+     1-3               RS                     Record identifier
+
+     4-5               Blank
+
+      6                '2'                    Card-sequence symbol
+
+     7-10              Not used
+
+     11-13             GLAT                   Latitude, to nearest degree
+                                              north of northernmost
+                                              specimen locality
+
+      14               GLA                    Either 'N' or 'S'
+
+     15-17             GLON                   Longitude, to nearest degree
+                                              east of easternmost
+                                              specimen locality
+
+      18               GLO                    Either 'E' or 'W'
+
+     19-30             KTRB                   Contributor's surname,
+                                              initial(s)
+
+     31-35             NREF(1)                Index no. of 1st source
+                                              reference listed on group
+                                              title sheet
+
+     36-40             NREF(2)                Index no. of 2d ref.
+                                               .  (Use only as many
+                                               .  as needed. Leave
+                                               .  rest blank)
+     76-80             NREF(10)               Index no. of 10th ref.
+
+          'GLAT' and 'GLON' are defined initially for records in which no
+descriptions are of specimens distant from each other by more than 5øof
+either latitude or longitude.  Occasional references contain new data from
+widely divergent sites.  If the sites are clustered, a record is created
+for each cluster.  If there is no clustering of sites within  5ø limits,
+'GLAT' is set to 90øN. and 'GLON' to 0øW.  (It is possible, though no
+examples have so far been encountered, that some of the sites of specimens
+described in a source reference are clustered and others are not.  In such
+a case, a record should be created for each cluster, and another, with
+'GLAT' = 90øN, 'GLON' = OøW, for the unclustered material.)
+
+                 3. Specimen Card 'A': the name and unit card
+
+          The first image of each specimen description, identified by
+     card-sequence symbol 'A', contains the specimen location, the literal
+     source name of the rock, and a brief (36-character) identification of
+     the geologic, stratigraphic, or geographic unit from which it was
+     collected, as given in the source reference.  Information is stored
+in
+     image 'A' as shown on the following table:
+
+     Column(s)         Variable               Definition
+
+     1-3               RS                     Record identifier symbol
+
+     4-5               IS                     Specimen identifier symbol
+
+      6                'A'                    Card-sequence symbol
+
+     7-12              SLAT                   1000 X (latitude to
+                                              nearest decimal part
+                                              of degree, as available),
+                                              right justified
+
+      13               SLA                    'N' or 'S'
+
+     14-19             SLON                   1000 X (longitude to
+                                              nearest decimal part
+                                              of degree, as available),
+                                              right justified
+
+      20               SLO                    'E' or 'W'
+
+     21-44             LTNA                   Name of rock, as given
+                                              in source reference
+
+     45-80             GLUN                   Geologic unit from which
+                                              specimen was collected,
+                                              as specified in source
+                                              reference
+
+                 4. Specimen Card 'B': the essential oxide card
+
+          Image 'B' of a specimen description contains the 'major' or 
+'essential' oxide analysis of the specimen.  The value for each oxide    
+is multiplied by 100 to eliminate decimals, and stored in columns 11-71 
+inclusive, in the following sequence:
+
+     Column(s)         Variable               Definition
+
+     1-3               RS                     Record identifier symbol
+
+     4-5               IS                     Specimen identifier symbol
+
+      6                'B'                    Card-sequence symbol
+
+     7-9               NOREF                  Sequence no. of reference
+                                              in vector NREF of card '2'
+      10               Not used
+
+     11-14             NWT(1)                 SIO2 x 100, right justified
+
+     15-18              " (2)                 TIO2    "     "       "
+
+     19-22              " (3)                 AL2O3   "     "       "
+
+     23-26              " (4)                 FE2O3   "     "       "
+
+     27-30              " (5)                 FEO     "     "       "
+
+     31-34              " (6)                 MNO     "     "       "
+
+     35-38              " (7)                 MGO     "     "       "
+
+     39-42              " (8)                 CAO     "     "       "
+
+     43-46              " (9)                 NA2O    "     "       "
+
+     47-50              " (10)                K2O     "     "       "
+
+     51-54              " (11)                P2O5    "     "       "
+
+     55-58              " (12)                CO2     "     "       "
+
+     59-62              " (13)                H2O+    "     "       "
+
+     63-66              " (14)                H2O-    "     "       "
+
+     67-71              " (15)                Author's total
+
+     72-76             RKNUM                  System no. of rock
+                                              name, from table 1,
+                                              right justified
+
+
+     NB: Trailing blanks are retained in the images of the oxide amounts.
+     For example, 2.10% TIO2 is entered as 210 in columns 16-18 but 2.1%
+     TIO2 is entered as 21 in columns 16-17.
+
+          5. Other Specimen Description Images: cards 'C', 'D' . . . .
+          Specimen description cards with sequence symbols > B contain  
+optional informations with variable length.  This information is encoded
+as a single character string separated into lists, fields and subfields by
+punctuation characters.  From the identification field, cols 1-6 of every
+card, the card processor 'knows' what record and item it is scanning, and
+from the sequence of punctuation characters bounding fields and subfields
+of the character string it 'determines' the nature of the information 
+currently awaiting interpretation.  Conventions governing this  operation
+are described in section 6.
+
+             6. Encoding Information from Optional Informations.
+
+       6.1 Punctuation
+          In this section the characters used to bound lists, fields,
+       and subfields are described.
+
+6.1.1 The list separator - The colon separates and identifies  lists. 
+Every list ends with a colon.  The sequence of lists is -
+
+          1. the status symbol list, see Appendix Table 2.
+
+          2. the trace element list
+
+          3. the geological age list, see Appendix Table 3
+
+          4. the petrographic descriptor list, see Appendix Table 4
+
+          5. the mineral association list, see Appendix Table 5
+
+          6. the additional information list, see Appendix Table 6.
+
+          The processor keeps track of its position by a count of colons. 
+Only if it has counted 3 colons, for instance, will it properly interpret
+and test a field of petrographic descriptors. If one of the leading colons
+is missing, the petrographic  descriptors will be considered geologic age
+symbols, and will be rejected as 'unknown'  If two of these colons are
+missing, the processor will try to identify the petrographic descriptors
+as trace elements, with the same disastrous result.  All colons are
+necesary to use because the additional information XP country is necesary
+(to see additional information).
+          All blanks are optional in these lists; only those in list 6  are
+retained in the base.
+
+6.1.2 The field separator - The semicolon partitions certain lists into
+fields.  In some lists this is unnecessary, as for example, in petrographic
+descriptor list.  In the trace element list, on the other hand, each trace
+element has a different field containing 3 subfields, (of which one may be
+implicit).
+
+6.1.3 Sub-field separators - Hyphens, commas, slashes or relational
+operators (' > ','=',' < ') may be used to partition fields into
+sub-fields.  In context, the choice of sub-field separator is usually
+self-evident; sub-field separators are described below in the discussions
+of the lists in which they are used.
+
+6.2 The status list
+
+          This list lies between the identification field and the first
+colon on a "C" card.  It consists of a series of 2-character symbols
+separated by commas.  In each, the first character is a digit, the second
+a letter.
+
+                                   Example:
+
+                                 4A,lD,2B,3C:
+
+       is a valid status list.  Order of mention of symbols in the list
+       is immaterial.  The currently recognized status symbols and their
+       meanings are shown in Appendix Table A2.
+
+6.3 The Trace Element List
+
+          The trace element list lies between the first and second   
+colons of a specimen description.  The first entry in each field of the
+list is the standard literal symbol of some element in the periodic table;
+one letter symbols are left justified.  The       element symbol is
+separated by a relational operator (' > ', '=', '< ') from the determined
+amount.  The amount is given as an integer, the scaling symbol 'P' (an
+acronym for 'parts per'), and the exponent of the decimal scale, also an
+integer.  The exponent is usually separated by a comma from a third
+integer, the position of the source reference key in the reference vector,
+as given in image 'B' of the record preface.  The reference subfield is
+optional it provides for the contingency that a trace element determination
+is drawn from a reference other than that which provided the essential
+oxide analysis.
+
+          The trace element field is terminated by a colon if it is, and
+by a semi-colon if it is not, the last field in the list.
+
+                                    Example
+
+                 :BA >OP?;SR = 75P6, 3; RB = lP5, 3; CL = 15P7:
+
+          A trace of barium and 1.5 ppm of chlorine are given in the
+       source from which the essential oxide analysis was drawn; the
+       reference indexed by the contents of NREF(3) reports 75 ppm of
+       strontium and 10 ppm of rubidium.  (Note that the treatment of
+       trailing zeroes in trace element amounts is at the option of the
+       contributor, but the amount itself is always given as an integer).
+
+6.4 The age list
+
+          An age list lies between the second and third colons of the
+specimen description.  If no information about age is to be entered in the
+base, no non-blank characters occur between these colons.  A non-blank age
+list is partitioned into fields by  semi-colons; a field may be partitioned
+into sub-fields by any of the characters '-', '/', or ','.
+
+6.4.1.  The stratigraphic age field and its sub-fields.  The stratigraphic
+age field is always the first field of an age list.  If no stratigraphic
+age is given, its absence is recorded by an empty field unless no age data
+at all are available; in the latter case the whole list is blank, e.g., if
+the left colon is the origin of the list, the sequence ': :' signifies an
+empty list, while ':;KKKK;LLLL:' signifies a list containing 2 physical or
+radiochemical ages but no stratigraphic age.
+
+          The first subfield of the stratigraphic age field contains either
+a noun or an adjective; in the latter case the second subfield is a noun,
+and the two are separated by a hyphen.  The subfield that contains the age
+noun is bounded on the right by a slash, a comma, a semicolon or a colon. 
+A slash is used if the succeeding sub-field contains a second stratigraphic
+noun or noun-adjective pair defining a range, a comma if the succeeding
+sub-field is a reference number, a semi-colon if the reference is implicit
+and the current sub-field is the last in the field, a colon if, in
+addition, the field is the last in the list.  The stratigraphic age
+vocabulary of IGBA is shown in Appendix Table A3.
+
+          Calendar ages are considered stratigraphic.  If no date or age
+is given for a historic flow, its age field is just 'HISTORIC', followed,
+if necessary, by a reference subfield.  The date of a flow may be given as
+either 'HISTORIC/KKKKII' or simply 'KKKKII', where KKKK is an integer and
+II is either 'AD' or 'BC'.  Either form may be followed by a reference
+subfield.  If KKKK is an age rather than a date, II is 'BP'.
+
+                                    Examples
+
+                        1) :MIDDLE-CAMBRIAN/SILURIAN, 5;
+
+                        2) :LOWE-PALZ;
+
+                        3) :1920 AD,8:
+
+                        4) :HISTORIC:
+
+          Example 1 records an age range, example 2 a single
+       stratigraphic age assignment; examples 3 and 4 are calendar ages
+       of dated flows.
+
+          In examples 1 and 3, specific references (5,8) are cited.  In
+       examples 2 and 4 the reference assianment is implicit.
+
+          Terminal punctuation indicates that in examples 1 and 2 the
+       specimen age list contains at least one more field, but that no
+       further dating is available for examples 3 and 4.
+
+6.4.2.  The physical age field and its sub-fields.  For convenience, all
+non-stratigraphic, non-calendar age determinations are referred to here as
+"physical ages".  With exception of the magnetic and fission track
+procedures, those currently recognized are in fact based on radioactive
+decay schemes.  The physical-age part of the age list lies between the  
+semicolon that terminates the stratigraphic age field and the colon that
+terminates the list.  Fields in this part of the age list are partitioned
+into sub-fields by commas, hyphens or slashes (no field contains more than
+one of each, and only the hyphen is compulsory.)
+
+          The first subfield of a physical age field contains the age in
+abbreviated scientific notation, with the decimal point implied between the
+number and the scaling symbol 'E', i.e., an age of 10 million years is
+entered as lE7 or 10E6, one of 10.5 million years as 105E5, one of 3.8
+billion as 38E8 or 3800E6.
+
+          The age subfield is separated by a hyphen from the method
+subfield, which contains a 3- or 4-character symbol denoting the method by
+which the age was determined.  The physical age method symbols of IGBA are
+shown in Appendix Table A3.
+
+          The method subfield is separated by a slash from the materials
+subfield, which contains a 2-letter symbol identifying the material on
+which the determination was made.  Age materials are denoted by symbols
+drawn from Appendix Table A5.
+
+          The materials subfield is separated from the reference subfield,
+if there is one, by a comma.  The reference subfield is optional; for rules
+governing its content and use, see the section on the trace element list.
+
+          Only one stratigraphic field is permitted.  There may be as many
+as 5 physical ages per specimen description.
+
+                                    Examples
+
+                             :; 1053E6 - UPB/TI, 2:
+
+                             :; 280E6 - RBSR/WR;
+
+          Example 1 records that reference 2 contains a lead-uranium age
+       determination of 1053 million years made on zircon from the
+       analyzed specimen.  Example 2 states that the source reference
+       from which the essential oxide analysis was drawn reports a whole
+       rock rubidium- strontium age determination of 280 million years
+       for the specimen.  Terminal punctuation indicates that example 1
+       is, and example 2 is not, the last field of an age list.
+
+6.5 The Petrographic Descriptor List 
+
+          This list lies between the 3d and 4th colons and consists of a
+single field partitioned by commas into as many as 15 sub-fields, one for
+each of the circled symbols in Block E of the coding form.
+
+                                    Examples
+
+                          :AY, BV, DR, EG, GA, IB, HY:
+
+     and
+
+                                      :BH:
+
+     are valid petrographic descriptor lists.
+
+          Symbols used in the first two examples are taken from Appendix
+       Table A4. The first example records that the terms lava,
+       subaerial, amygdular, fine, vesicular and fresh occur in the
+       source reference description of the analyzed specimen.  The
+       description also contains texture-structure terms not included in
+       the system glossary, (HY); these are noted later in the
+       additional information list.  In the second example, evidently
+       the only source reference term clearly applicable to the analyzed
+       specimen is pillow lava.  The petrographic descriptor list must
+       not contain more than 15 subfields.
+6.6.  The Mineral Assemblage List 
+
+          The mineral assemblage list, lying between the 4th and 5 the
+colons, consists of a single field divided by commas into as many
+sub-fields as there are minerals found during the data capture. The mineral
+vocabulary of IGBA is summarized in Appendix Table A5.
+
+          The first two non-blank characters in each sub-field will be  
+interpreted as a mineral symbol drawn from table A5a. Any additional
+non-blank characters in the sub-field will be interpreted as mineral
+information flags drawn from Table A5b.
+
+                                    EXAMPLE
+
+                               :NJ374,OG34,PE,RT:
+
+          The first sub-field of the example records the presence of
+          euhedral sanidine in phenocrysts and groundmass; the second
+          records the  presence of euhedral groundmass nepheline, the
+          third and fourth fields record the presence of phlogopite and
+          aegerine in the specimen.
+
+          The mineral assemblage list may contain up to 15 subfields no one
+          of which may contain more than 15 information flags.
+
+6.7 The Additional Information List 
+
+          This list lies between the 5th and 6th colons.  Designed to 
+provide maximum freedom for recording information not included in the
+previous lists.  It may contain up to 500 characters, and all characters
+except the colon are legal in it.  Material in the additional information
+block is uncoded either because it is so uncommon that it would be wasteful
+to encumber the system with grammatical conventions concerning it, or
+because it has so far successfully resisted standardization of the
+variables concerned or of the symbols used to denote them.
+
+          Routine machine sorting of information of this kind is not
+feasible but it would often be useful to be able to determine whether
+information of a certain type is present, or to retrieve it without listing
+out the contents of the whole description.  (A person planning to visit a
+well studied area, for instance, might  want detailed locality information
+about analyzed specimens from the area, or someone interested in comparing
+modal and chemical analyses might wish to restrict his retrieval of the
+latter to specimen descriptions for which the former were also available.)
+       Accordingly, each item in the additional information block is framed
+and tagged.  The leading frame is a double left parenthesis, '((', the
+trailing frame a double right parenthesis,'))'.
+
+          The first two non-blank characters to the right of a leading   
+   frame are interpreted as a tag, identifying the type of information
+contained in the frame.  Any 2-letter symbol from Appendix Tables A4 and
+A5 may be used as a tag.  Appendix Table A6 is a list of currently
+recognized IGBA tags for other kinds of information.  The frames in an
+additional information list are indexed by a non-repetitive set of tags
+drawn from Tables A4, A5 and A6 ,A7 in any order.
+
+          Tags will be added as necessary, both to accommodate types of  
+    information so far overlooked and to permit expansion of the
+information content of the system as the subject itself expands. And
+although IGBA currently specifies neither vocabulary nor syntax for
+material referenced by any tag, such specifications could be established
+whenever desirable, either for existing tags or for new ones; the system
+may thus grow without extensive revision of operating software.The
+additional list have to be completed with geopolitical code ((XP......))
+Table A7
+
+                                     Example
+
+            :((XL - specimen collected in R.R. cut at E end of town))
+            ((XM - Quartz = 38, Plag = 45, K-spar = 15, MGT = 2))((TQ
+            sphene mantles about magnetite))((XP HU23):
+
+                         THE BILBLIOGRAPHY DATA FILE
+
+          This file is formed of bibliography records having variable    
+  length.  Physically it is also composed of 80 characters long card
+images.  Characters 1-5 is the identification field, identical for all
+cards belonging to one bibliography record, and  contain the number of
+reference given in the Record Reference and Location Card, see 2.2 above.
+Characres 6-80 contain the text of citation.
+
+          The reference record is broken into 'author', 'title', and
+'publication' fields.  Within each field, the sequence is that currently 
+ used in the Bulletin of the Geological Society of America.  A slash
+terminates the first and second fields, and a double slash the third.
+
+          The first word of the author field is the surname of the senior
+author.  A '$' symbol precedes the surname of each other author.  The date
+of publication is the last information in the author block.
+
+          Abbreviations may be used in the second field unless it contains
+a book title, and for words like 'page' or 'volume' in the third.  The name 
+of the publication, however, is to be spelled out in full, with upper and
+lower case characters as in normal publication.
+
+                                     Example
+
+     2222 Washington, H. S., 1917/ Chemical Analyses of Igneous Rocks/
+     2222United States Geological Survey Professional Paper 99, 1201pp.//
+                                                                           
+              APPENDIX: IGBA Symbol Tables as of February, 1983
+
+                               TABLE A1. Rock Names
+
+                              10 NOT NAMED IN SOURCE
+                              20 NOT NAMED IN IGBA
+
+      30 ABSAROKITE            430  - ANDESITE           840 CHARNOCKITE
+      40 ADAMELLITE            440  - ANKARAMITIC        850 CHROMITITE
+      50 AGGLOMERATE           450  - CALCALKALINE       860 CIMINITE
+      60 AGPAITE               460  - DOLERITIC          870 CINERITE
+      70 ARERITE               470  - ESSEXITE           880 COMEMDITE
+      80 ALASKITE              480  - FERRO-             890  - TRACHYTIC
+      90 ALBANITE              490  - HIGH-ALUMINA       900 CRAIGNURITE
+     100 ALBITITE              500  - HYPERSTHENE        910 CRINANITE
+     105 ALBITOPHYRE           510  - LATITE             920 CUMULATE
+     110 ALBORANITE            520  - MUGEARITE          930 DACITE
+     120 ALEUTITE              530  - OLIVINE            940  - ANDESITE
+     130 ALGARVITE             540  - PICRITE            950  - CALCALKALINE
+     140 ALLIVALITE            550  - QUARTZ             960  - THOLEIITIC
+     150 ALNOITE               560  - SPILITIC           970 DELLENITE
+                               565  - SUBALKALI 
+     160 CARBONATITE           570  - THOLEIITIC         980 DIABASE
+     170 AMPHIBOLITE           580  - THOL.-PICRITE      990  - ALKALI
+     180 ANALCIMITE            590  - TRACHYANDESITE    1000  - SPILITIC
+     190 ANDESITE              600  - TRANSITIONAL      1010  - THOLEIITIC
+     200  - BASALTIC           610  - 2 PYROXENE        1020 DIALLAGITE
+     210  - HIGH-ALUMINA       620 BASANITE             1030 DIORITE
+     220  - LATITE             630  - PHONOLITIC        1040  - MICRO-
+     230  - THOLEIITIC         640 BASANITOID           1050  - QUARTZ
+     240  - 2 PYROXENE         650 BEFORSITE            1060 DOLERITE
+     250 ANKARAMITE            660 BEKINKINITE          1070  - ALKALI
+     260 ANKARATRITE           670 BENMOREITE           1074  - META-
+     270 ANORTHOSITE           680 - PHONOLITIC         1075  - PEGMATITIC
+     280 APHANITE              690 BERGALITE            1080  - QUARTZ
+     290 APLITE                700 BERONDRITE           1090 DOMITE
+     300 APLODIORITE           710 BIOTITITE            1100 DOREITE
+     310 APLOGRANITE           720 BLAIRMORITE          1110 DUNITE
+     320 APORHYOLITE           730 BOMB                 1120 ECOLOGITE
+     330 APPINITE              740 BOROLANITE           1130 EKERITE
+     340 ASH                   750 BOSTONITE            1140 ELVAN
+     350 ATLANTITE             760  - QUARTZ            1150 ENSTATITITE
+     360 AUGITITE              770 BRONZITITE           1160 EPIDIORITE
+     370 BANAKITE              780 BUCHITE              1170 ESSEXITE
+     380 BANDAITE              790 BUCHONITE            1180  - QUARTZ
+     390 BASALT                800 CAMPANITE            1190 ETINDITE
+     400  - ALKALI             810 CAMPTONITE           1200 ETNAITE
+     410  - ALKALI OLIVINE     820 CARBONATITE          1210 EUCRITE
+     420  - ALKALI PICRITE     830 CECILITE             1220 FARSUNDITE
+
+                            Table A1. Rock Names, cont.
+
+    1230 FASINITE             1730 JUMILLITE            2250 MISSOURITE
+    1240 FELSITE              1740 JUVITE               2260 MONCHIQUITE
+    1250 FENITE               1750 KAJANITE             2270 MONZODIORITE
+    1260 FLOW                 1760 KAKORTOKITE          2280  - QUARTZ
+    1270 FORTUNITE            1770 KATUNGITE            2290 MONZOGABBRO
+    1280 FOURCHITE            1780 KAUAIITE             2300  - QUARTZ
+    1290 FOYAITE              1790 KENTALLENITE         2310 MONZONITE
+    1300 GABBRO               1800 KENYITE              2320  - MICRO-
+    1310  - ALKALI            1810 KERATOPHYRE          2330  - QUARTZ
+    1320  - ESSEXITE          1820  - QUARTZ            2340 MUGEARITE
+    1330  - QUARTZ            1830 KERSANTITE           2345  - BASIC
+    1340  - THERALITE         1840 KIMBERLITE           2350  - SODA
+    1350 GABBRODIORITE        1850 KIVITE               2360 MURAMBITE
+    1360 GABBRONORITE         1860 KOMATIITE            2370 MURITE
+    1370 GAUTEITE             1870  - BASALTIC          2380 NAUJAITE
+    1380 GIBELITE             1880  - PERIDOTITIC       2390 NEPHELINITE
+    1390 GLASS                1890 KOTUITE              2400 NEVADITE
+    1400 GLENMUIRITE          1900 KULAITE              2410 NGURUMANITE
+    1410 GLIMMERITE           1910 LABRADORITE          2420 NILIGONGITE
+    1420 GRANITE              1920 LAMPROITE            2430 NORDMARKITE
+    1430  - ALKALI            1930 LAMPROPHYRE          2440  - MICRO-
+    1440  - MICRO             1940 LARDALITE            2450  - QUARTZ
+    1450  - PERALKALINE       1950 LARVIKITE            2460 NORITE
+    1460  - RAPAKIVI          1960 LATIANDESITE         2470  - MICRO-
+    1470  - SODA              1970 LATITE               2480  - QUARTZ
+    1480  - 2 MICA            1980  - QUARTZ            2490 NOSELITITE
+    1485  - GNEISSIC          1990 LAVA                 2500 OBSIDIAN
+    1490 GRANODIORITE         2000 LEDMORITE            2510  - PERALKALINE
+    1500 GRANOGABBRO          2010 LEIDLEITE            2520 OCEANITE
+    1510 GRANOPHYRE           2020 LEUCITITE            2530 ODINITE
+    1520 GREISEN              2030 LEUCITOPHYRE         2540 OKAITE
+    1530 GRORUDITE            2040 LHERZOLITE           2550 OLIVINITE
+    1540 GUARDIAITE           2050 LIMBURGITE           2560 ONGONITE
+    1550 HAKUTOITE            2060 LINOSAITE            2570 OPHIOLITE
+    1560 HARRISITE            2070 LIPARITE             2580 ORDANCHITE
+    1570 HARZBURGITE          2080 LUGARITE             2590 ORENDITE
+    1580 HAUYNITE             2090 LUJAVRITE            2600 ORTHOSITE
+    1590 HAUNOPHYRE           2100 LUSCLADITE           2610 ORVIETITE
+    1600 HAWAIITE             2110 LUSITANITE           2620 OTTAJANITE
+    1610 HIGHWOODITE          2120 MADUPITE             2630 OUACHITITE
+    1620 HORNBLENDITE         2130 MAFRAITE             2640 PAISANITE
+    1625 HYALOCLASTITE        2140 MAGNETITITE          2650 PALAGONITE
+    1630 HYALOTRACHYTE        2150 MALIGNITE            2660 PANTELLERITE
+    1640 HYPERITE             2160 MANDSCHURITE         2670 PEGMATITE
+    1650 HYPERSTHENITE        2170 MANGERITE            2680  - MICRO-
+    1660 ICELANDITE           2180 MARSCOITE            2690 PELE'S HAIR
+    1670  - BASALTIC          2190 MELILITITE           2700 PEPERINO
+    1680 IGNIMBRITE           2200 MELTEIGITE           2710 PERIDOTITE
+    1690 IJOLITE              2210 MIASKITE             2720 PERKNITE
+    1700 INNINMORITE          2220 MICKENITE            2730 PERLITE
+    1710 ITALITE              2230 MIMOSITE             2740 PERTHOSITE
+    1720 JACUPIRANGITE        2240 MINETTE              2750 PHANERITE
+                                                                          
+                          Table A1: Rock Names, cont.
+
+    2760 PHONOLITE            3210 SCORIA               3650 TRACHYANDESITE
+    2770  - ALKALI            3220 SELBERGITE           3660 TRACHYBASALT
+    2780  - BASANITIC         3230 SERPENTINITE         3670 TRACHYBASANITE
+    2790  - LATITE            3240 SHACKANITE           3680 TRACHYDACITE
+    2800  - TEPHRITIC         3250 SHIHLUNITE           3690 TRACHYDOLERITE
+    2810 PICOTITITE           3260 SHONKINITE           3700 TRACHYLIPARITE
+    2820 PICRITE              3270 SHOSHONITE           3710 TRACHYPHONOLITE
+    2830 PITCHSTONE           3280 SIDEROMELANE         3720 TRACHYTE
+    2840 PLAGIOGRANITE        3290 SILEXITE             3730  - ALKALI
+    2850 PLAGIOLIPARITE       3300 SOLVSBERGITE         3740  - MUGEARITE
+    2860 PLAGIOTRACHYTE       3310 SOVITE               3750  - PANTELLERITIC
+    2870 PORPHYRY             3320 SPESSARTITE          3760  - PERALKALINE
+    2880  - FELDSPAR          3330 SPILITE              3780  - QUARTZ
+    2890  - QUARTZ            3340 SUSSEXITE            3790  - RHYOLITIC
+    2900  - RHOMB-            3350 SYENITE              3800  - SODA
+    2910 PSEUDOTACHYLITE      3360  - ALKALI            3810  - TEPHRITIC
+    2920 PULASKITE            3370  - MICRO-            3820 TRACHYTEANDESITE
+    2930 PUMICE               3380  - NEPHELINE         3830 TRACHYVICOITE
+    2940 PYROXENITE           3390  - PERALKALINE       3840 TRAP
+    2950  - CLINO-            3400  - QUARTZ            3850 TRISTANITE
+    2960  - ORTHO-            3410  - RAPAKIVI          3860 TROCTOLITE
+    2970 RAPAKIVI             3420 SYENODIORITE         3870 TRONDHJEMITE
+    2980 RAUHAUGITE           3430 SYENOGABBRO          3880 TUFF
+    2990 RHYOBASALT           3440 TACHYLITE            3890 TURLITE
+    3000 RHYODACITE           3450 TAHITITE             3900 UGANDITE
+    3010 RHYOLITE             3460 TANNBUSCHITE         3910 ULTRAMAFITE
+    3020  - ALKALI            3470 TAUTIRITE            3920 UMPTEKITE
+    3030  - CALCALKALINE      3480 TEPHRA               3930 UNCOMPAHGRITE
+    3040  - PERALKALINE       3490 TEPHRITE             3940 URTITE
+    3050  - SODA              3500  - ANDESITE          3950 VARIOLITE
+    3060  - THOLEIITIC        3510  - BASALTIC          3960 VENANZITE
+    3070  - TRACHYTIC         3515  - PHONOLITIC        3970 VERITE
+    3080 RINGITE              3520 TEPHRITOID           3980 VESUVITE
+    3090 ROCKALLITE           3530 TESCHENITE           3990 VICOITE
+    3100 RODINGITE            3540  - PICRITE           4000 VITROPHYRE
+    3110 RONGSTOCKITE         3550 THERALITE            4010 VOGESITE
+    3120 ROUGEMONTITE         3560  - ESSEXITE          4020  - SODA
+    3130 RUSHAYITE            3570 THOLEIITE            4030 VULSINITE
+    3140 SAKALAVITE           3580  - HIGH ALUMINA      4040 WEBSTERITE
+    3150 SANCYITE             3590  - LOW ALUMINA       4050 WEHRLITE
+    3160 SANIDINITE           3600  - OLIVINE           4060 WELDED TUFF
+    3170  - SODA              3610 TINGUAITE            4070 WOODENITE
+    3180 SANTORINITE          3620 TONALITE             4080 WYOMINGITE
+    3190 SANUKITE             3630 TORDRILLITE          4090 YAMASKITE
+    3200 SAXONITE             3640 TOSCANITE            4100 ZWITTER
+                                                                          
+
+                            TABLE A2. Status Symbols
+
+     Specimen location by latitude and longitude, in source reference
+
+        lD NOT LISTED OR SHOWN
+        lB TO NEAREST DEGREE ONLY
+        lC TO NEAREST TENTH OF DEGREE ONLY
+
+     'Completeness' of an essential oxide analysis
+
+        2A COMPLETENESS INCOMPLETELY SPECIFIED IN SOURCE DESCRIPTION
+        2B ANALYSIS NORMALIZED TO 100% IN SOURCE
+        2C FE-OXIDE PARTITION NOT DETERMINED ON ANALYSED SEPCIMEN
+        2D TOTAL IRON ONLY. STORED AS FEO, FE2O3, OR FE
+        2E TOTAL H20 NOT DIRECTLY DETERMINED
+        2F H2O NOT PARTITIONED
+        2G H2O+ IS LOSS ON IGNITION
+        2H SAMPLE AIR DRIED, DESSICATED DURING ANALYSIS
+        2I SOME ESSENTIAL OXIDE(S) NOT DETERMINED
+
+     Analytical Procedures and Methods
+
+        3A RESULT AN AVERAGE FOR MULTIPLE ANALYSES OF SAME SPECIMEN
+        3K RESULT AN AVERAGE OF ANALYSES OF 2 OR MORE SPECIMENS
+        3B COMPOSITE SAMPLE USED FOR ANALYSIS
+        3L REPLICATE ANALYSIS OF SPECIMEN
+        3M 'CORRECTION' OF A PREVIOUSLY PUBLISHED ANALYSIS
+        3C SOME ESSENTIAL OXIDE(S) NOT QUOTED TO 0.01%
+        3D ALRALIS DETERMINED BY FLAME PHOTOMETER
+        3E SOME ESSENTIAL OXIDE(S) DONE BY X-RAY FLUORESCENCE
+        3J SOME ESSENTIAL OXIDE(S) DONE BY ATOMIC ABSORPTION
+        3F SOME ESSENTIAL OXIDE(S) DONE BY ELECTRON PROBE
+        3G SOME ESSENTIAL OXIDE(S) DONE BY NEUTRON ACTIVATION
+        3H RADIATION OTHER THAN XRF,EPR,NAC,ATAB,TLFT USED IN ANALYSIS
+        3I SOME TRACE ELEMENT(S) DETERMINED BY ARC SPECTROGRAPHY
+*       3N Analyzed specimen is a standard or reference material
+
+     Associated data recorded ln source description
+
+        4J NO PETROGRAPHIC INFORMATION GIVEN IN SOURCE REFERENCE
+        4K NO MINERALOGICAL INFORMATION GIVEN IN SOURCE REFERENCE
+        4A PETROG. DESC. GENERALIZED; MAY NOT APPLY TO ANALYSED SPEC.
+        4B MIN. ASSOC. GENERALIZED; MAY NOT APPLY TO ANALYSED SPECIMEN
+        4C STRAT. AGE INFERRED; MAY NOT APPLY TO ANALYSED SPECIMEN
+        4D PHYSICAL AGE INFERRED; NOT DETERMINED ON ANALYSED SPECIMEN
+        4E QUANTITATIVE MODAL ANALYSIS OF CHEMICALLY ANALYSED SPECIMEN
+                                                                          
+
+                            TABLE A3. Age Vocabulary
+
+       Adjectives         Nouns                  Methods
+
+     EARL   EARLY-     CENO   CENOZOIC         C14    CARBON 14
+     LATE   LATE-      QUAT    QUATERNARY      FSTR   FISSION TRACK
+     LOWE   LOWER-     HIST     HISTORIC       ISKR   ISOCHRON
+     MIDD   MIDDLE     RECE     RECENT         KAR    POTASSIUM-ARGON
+@    MID-   MIDDLE     HOLO     HOLOCENE       MGNT   MAGNETIC STRIPNG
+     POST   POST-      PLEI     PLEISTOCENE    NDSM   NEODYMIUM-SAMARIUM
+     PRE-   PRE-       TERT    TERTIARY        RBSR   RUBIDIUM-STRONTIUM
+     UPPE   UPPER-     NEOG     NEOGENE        UPB    LEAD-URANIUM
+                       PLIO      PLIOCENE
+                       MIOC      MIOCENE       OTHR   OTHER AGE METHOD
+                       PALG     PALEOGENE      ???    UNKNOWN AGE METHOD
+                       OLIG      OLIGOCENE
+                       EOCE      EOCENE
+                       PALC      PALEOCENE
+                       MESO   MESOZOIC
+                       CRET    CRETACEOUS
+                       JURA    JURASSIC
+                       TRIA    TRIASSIC
+                       PALZ   PALEOZOIC
+                       PERM    PERMIAN
+                       CARB    CARBONIFEROUS
+                       DEVO    DEVONIAN
+                       SILU    SILURIAN
+                       ORDO    ORDOVICIAN
+                       CAMB    CAMBRIAN
+                       PREC   PRECAMBRIAN
+                       PRCZ    PRECAMBRIAN Z
+                       PRCY    PRECAMBRIAN Y
+                       PRCX    PRECAMBRIAN X
+                       PRCW    PRECAMBRIAN W
+
+                       OTHE   OTHER AGE NOUNS
+                                                                           
+                     TABLE A4. Petrographic Vocabulary
+
+     Eruptive Type or          BQ SCORIA              EP HOLOCRYSTALLINE
+      Mode of Occurrence       BR SEGREGATION         EQ HOLOHYALINE
+                               BS SILL                ER HYALINE
+      AA  No Mode or Type      BT SPATTER             ES HYALOPILITIC
+            Information        BU STOCK               GE HYPIDIOMORPHIC
+                               BV SUBAERIAL           ET HYPOCRYSTALLINE
+      AB  AA                   BX SUBMARINE           GH IGNIMBRITIC
+      AC  AGGLOMERATE          BY TEPHRA              EU INTERSERTAL
+      AD  ASH                  BZ TUFF                EV LAMPROPHYRIC
+      AE  ASH FLOW             CA TUFF BRECCIA        EW LINEATED
+      AF  BATHOLITH            CB VEIN                EX MASSIVE
+      AG  BLOCK LAVA           CC VOLCANIC            EY MEDIUM
+      AH  BOMB                 CD VOLCANOCLASTIC      EZ MICROCRYSTALLINE
+      AI  BOSS                 CE WELDED TUFF         FA MICROGRAPHIC
+      AJ  BRECCIA              CF XENOLITH            FB MICROLITIC
+      AK  CONE SHEET           CG XENOCRYST           FC MICROPEGMATITIC
+      AL  DIATREME                                    FD MICROPOIRILITIC
+      AM  DIKE (DYKE)          DP OTHER(MODE, TYPE)   FE MICROPORPHYRITIC
+      AN  DOME                                        FF MICROSPHERULITIC
+      AO  EXTRUSIVE           Texture, Structure      FG MYRMEKITIC
+      AP  FLOW                                        FH OPHITIC
+      AQ  FLOW BRECCIA         DQ NO FABRIC INFO.     FI ORBICULAR
+      AR  HYALOCLASTITE                               GF PANIDIOMORPHIC
+      AS  HYPABYSSAL           EE ALLOTRIOMORPHIC     FJ PEGMATITIC
+      AT  IGNIMBRITE           DR AMYGDULAR           FK PERLITIC
+      AU  INTRUSIVE            DS APHANITIC           FL PHANERITIC
+      AV  INTRUSION BRECCIA    DT APHYRIC             FM PILOTAXITIC
+      AV  INSTRUSIVE BRECCIA   DU APLITIC             FN PLATY
+      AW  LACCOLITH            DV BANDED              FO POIRILITIC
+      AX  LAPILLI              DW COARSE              FP PORPHYRITIC
+      AY  LAVA                 DX CRYPTOCRYSTLN       FQ PUMICEOUS
+      AZ  LAVA LAKE            DY CUMULATE            FR RECRYSTALLIZED
+      BA  LAYERED INTRUSION    DZ DEVITRIFIED         FS SCHISTOSE
+      BB  LOPOLITH             EA DISCRYSTALLINE      FT SCORIACEOUS
+      BC  NECK                 EB DOLERITIC           FU SERIATE
+      BD  NUEE ARDENTE         EC EUCRYSTALLINE       FV SPHERULITIC
+      BE  NODULE               GI EUTAXITIC           FW SPINIFEX
+      BF  PAHOEHOE             ED EQUIGRANULAR        FX SUBOPHITIC
+      BG  PHACOLITH            EF FELSITIC            FY TRACHYTIC
+      BH  PILLOW LAVA          EG FINE                FZ VARIOLITIC
+      BI  PIPE                 EH GLASSY              GA VESICULAR
+      BJ  PLUG                 EI FOLIATED            GB VITREOUS
+      BK  PLUTON               EJ GLOMEROPORPH.       GC VITROPHYRIC
+      BL  PLUTONIC             EK GNEISSIC            GD XENOCRYSTIC
+      BM  PUMICE               EL GRANITIC            GJ XENOLITHIC
+      BN  PYROCLASTIC          EM GRANOPHYRIC
+      BO  RING DIKE            EN GRANULITIC          HY OTHER (TEXTURE-
+      BP  ROPY LAVA            EO GRAPHIC                  STRUCTURE)
+                                                                           
+                  Table A4. Petrographic Vocabulary, cont.
+
+                       State of preservation
+
+                         IA NO ALTERATION EXTENT INFO.
+
+                         IB FRESH
+                         IC ALTERED
+                         ID SLIGHTLY ALTERED
+                         IE MODERATELY ALTERED
+                         IF EXTENSIVELY ALTERED
+
+                         IJ OTHER ALTERATION EXTENT
+
+                       Type of Alteration
+
+                         IK NO ALTERATION TYPE INFO.
+
+                         IL ARGILLITIC
+                         JE CARBONATIC
+                         IM CHLORITIC
+                         IN DEUTERIC
+                         IO FENITIC
+                         IP HYDRATED
+                         IQ HYDROTHERMAL
+                         IR LEACHED
+                         IS METAMORPHIC
+                         IT METASOMATIC
+                         IU OXIDATION
+                         IV PALAGONITIC
+                         JF PREHNITIC
+                         IW PROPYLITIC
+                         IX PYRITIC
+                         IY SAUSSURITIC
+                         IZ SERICITIC
+                         JA SERPENTINIZED
+                         JB SILICIFICATION
+                         JC SOLFATARIC
+                         JD WEATHERED
+                         JG ZEOLITIC
+
+                         JJ OTHER ALTERATION TYPE(S)
+                                                                           
+                       TABLE A5. Mineral Vocabulary
+
+                             A5a - Mineral Names
+
+     NA NO MINERAL INFO.       PI  PARAGONITE          RV  AEGIRINE-DIOPSIDE
+                               PE  PHLOGOPITE            RW   OMPHACITE
+   Feldspars                   PF  SERICITE              RX   SODIC
+     NB FELDSPAR               PG CHLORITE               RY PECTOLITE
+     NC  ALKALI FELDSPAR       PH SERPENTINE             Rl SPODUMENE
+     Nl   ALBITE               PJ TALC                   RZ WOLLASTONITE
+     ND   ANORTHOCLASE         P9 OTHER PHYLLOSILICATE   R9 OTHER PYROXENE
+     NE   K-FELDSPAR
+     NF   MICROCLINE         Amphiboles, amphiboloids  Olivine
+     NG   MICROPERTHITE        QA AMPHIBOLE              SA OLIVINE
+     NH   ORTHOCLASE           QB BASALTIC HORNBLENDE    SB  FAYALITIC
+     NI   PERTHITE             QC CUMMINGTONITE          SC  FORSTERITIC
+     NJ   SANIDINE             QD HORNBLENDE             SD  MONTICELLITE
+     NK  ANTIPERTHITE          QP PARGASITE              S9 OTHER OLIVINE
+     NL  PLAGIOCLASE           QE ALKALI AMPHIBOLE
+     NM   NA-PLAGIOCLASE       QF   ARFVEDSONITE       Other silicates
+     NN   INTERMED. PLAG.      QG   BARREVIKITE          TA ALLANITE
+     NO   CA-PLAGIOCLASE       QH   HASTINGSITE        Aluminosilicates
+     NP   ALBITE               QI   KAERSUTITE           TB  ANDALUSITE
+     NQ   ALBITE-OLIGOCLASE    QJ   KATOPHORITE          TC  KYANITE
+     NR   OLIGOCLASE           QR   RIEBECRITE           TD  SILLIMANITE
+     NS   OLIGOCL.-ANDESN.     QL   SODIC                TE BERYL
+     NT   ANDESINE             QM AENIGMATITE            TF CLAY MINERAL(S)
+     NU   ANDSN.-LBRDRT.       QN COSSYRITE              TG CORDIERITE
+     NV   LABRADORITE          QO RHONITE                TH EPIDOTE
+     NW   LBRDRT.-BYTNWT.      Q9 OTHER AMPHIBOLE      Garnets
+     NX   BYTOWNITE                                      TI GARNET
+     NY   BYTWNT.-ANORTHITE  Pyroxenes, pyroxenoids      TJ  ALMANDINE
+     NZ   ANORTHITE            RA PYROXENE               TK  ANDRADITE
+     N9 OTHER FELDSPAR         RB  ORTHOPYROXENE         TL  GROSSULAR
+                               RC   BRONZITE             TM  MELANITE
+   Feldspathoids               RD   ENSTATITE            TN  PYROPE
+     OA FELDSPATHOID           RE   HYPERSTHENE          TO  SPESSARTINE
+     OB  ANALCIME              RF  CLINOPYROXENE         TP MELILITE
+     OC  CANCRINITE            RG   AUGITE               TQ TITANITE,SPHENE
+     OD  HAUYNE                RH   DIOPSIDE             TR TOPAZ
+     OE  KALSILITE             RI   DIOPSIDE-AUGITE      TS TOURMALINE
+     OF  LEUCITE               RJ   CHROME-DIOPSIDE      TT VESUWIANITE
+     OG  NEPHELINE             RK   FERROAUGITE        Zeolites
+     OH  NOSEAN                RL   HEDENBERGITE         TU ZEOLITE(S)
+     OI  PSEUDOLEUCITE         RM   HIGH-AL AUGITE       TV  CHABAZITE
+     OJ  SODALITE              RN   PIGEONITE            TW  HEULANDITE
+     O9 OTHER FELDSPATHOID     RO   SUBCALCIC AUGITE     TX  LAUMONTITE
+                               RP   TITANAUGITE          TY  NATROLITE
+   Phyllosilicates             RQ  ALKALI PYROXENE       TZ  PHILLIPSITE
+     PA MICA                   RR   ACMITE             
+     PB  BIOTITE               RS   ACMITE-DIOPSIDE      T1  ZIRCON
+     PC  LEPIDOLITE            RT   AEGIRINE             T2  ZOISITE 
+     PD  MUSCOVITE             RU   AEGIRINE-AUGTTE      T3  APOPHYLLITE 
+                                                         T4  PUMPELLEYTE
+                                                         T5  STILBITE
+                                                         T9  OTHER SILICATES
+                                                                           
+                     TABLE A5. Mineral Vocabulary, cont.
+
+   Oxides                      UR  MAGHEMITE           Sulfides
+     UA ANATASE                US  MAGNETITE             VJ SULFIDES
+     UB BROORITE               UX  PICOTITE              VK CHALCOPYRITE
+     UC CASSITERITE            UT  PLEONASTE             VL PYRITE
+@    UD CORUNDUM               UU  TITANOMAGNETITE       VM PYRRHOTITE
+     UE HEMATITE               UV  ULVOSPINEL            V9 OTHER
+NON-SILICATES
+     UF ILMENITE               UW OPAQUES,ORES
+     UG LIMONITE               U9 OTHER OXIDES         Mineraloids
+     UH PEROVSKITE                                       WA CHLOROPHAEITE
+     UI PSEUDOBROORITE       Non-oxides, non silicates   WB GLASS
+     UJ RUTILE                 VA APATITE                WC IDDINGSITE
+   Silica Polymorphs          Carbonates                 WD LEUCOXENE
+     UR CRISTOBALITE           VB CARBONATE(S)           WE PALAGONITE
+     UL CRYPTOCRYST.           VC  CALCITE               WF SIDEROMELANE
+     UM QUARTZ                 VD  DOLOMITE              W9 OTHER MINERALOIDS
+     UN TRIDYMITE              VE  SIDERITE
+   Spinels                     VF FLUORITE               WR WHOLE ROCK
+     UO SPINEL                 VG MONAZITE               ?? UNKOWN
+     UP CHROMITE               VH NATIVE ELEMENT(S)
+     UO HERCYNITE              VI SULFATE(S)
+
+                        A5b - Mineral Information Flags
+
+              A ACCESSORY
+              1 ALLOTRIOMORPHIC
+              1 ANHEDRAL
+              3 AUTOMORPHIC
+              2 CUMULUS
+              3 EUHEDRAL
+              4 GROUNDMASS
+              6 HYPIDIOMORPHIC
+              3 IDIOMORPHIC
+              5 INTRACUMULUS
+              C MICROLITIC
+              7 PHENOCRYST
+              8 REPLACEMENT RELATION
+              9 SECONDARY
+              6 SUBHEDRAL
+              B XENOCRYST
+              1 XENOMORPHIC
+              D NEW CHEMICAL ANALYSIS IN SOURCE REFERENCE
+              E NEW X-RAY STRUCTURAL DATA IN SOURCE REFERENCE
+              F NEW OPTICAL OR OTHER PHYSICAL DATA IN SOURCE REFERENCE
+                                                                          
+                     TABLE A6. Additional Information Tags
+
+     Uncoded bibliographic and referencing information
+
+             XK  LINK WORD
+             XR  REFERENCE CITATION (SPECIMEN, TABLE, PAGE NUMBERS)
+             XS  CODING SPECIFIC TO DEEP SEA DRILLING PROGRAM
+             $*     "       "    "    "   "      "       "
+
+     Uncoded chemical information
+
+             XB  UNCODED INFORMATION ON MAJOR OXIDES (BLOCK B)
+             XI  ISOTOPE INFORMATION
+             XN  NUISANCE COMPONENT(S), FES2, NA2SO4, ETC.
+            (XP  NOTES ON ANALYTICAL PROCEDURES) - has been changed
+             XF  NOTES ON ANALYTICAL PROCEDURES
+             XP  Two-level geopolitical code. First level (country
+                 name code) is obligatory.
+             XU  UNCERTAINTY, ANALYTICAL ERROR, SAMPLE VARIANCE
+
+     Uncoded petrographic or geologic informatlon
+
+             XD  SPECIFIC GRAVITY INFORMATION
+             XG  AGE INFORMATION
+             XL  INFORMATION ABOUT SPECIMEN LOCALITY, FIELD RELATIONS
+             XM  MODAL ANALYSIS
+             XX  REFRACTIVE INDEX INFORMATION
+
+     General Comments (Use sparingly: essentially non-sortable)
+
+             XA  AUTHOR'S COMMENT (NOT INCLUDED ELSEWHERE)
+             XC  CONTRIBUTOR'S COMMENT
+             XE  EDITOR'S OR DATA TRANSFER OPERATOR'S COMMENT
+
+    
+         TABLE A7.   IGBA Version of FIPS 2-Level Place Codes corrected     
+                     trough Apr-89. (NB - Ocean codes specific to IGBA)    
+                     
+                                                                           
+AA   ARUBA               HA08 Grand' Anse         PO13 Leiria              
+AC   ANTIGUAAND BARBUDA  HA09 Nord                PO14 Lisboa              
+AC03 Saint George        HA10 Nord-Est            PO15 Ponta Delgada       
+AC04 Saint John          HA11 Ouest               PO16 Portalegre          
+AC05 Saint Mary          HA12 Sud                 PO17 Porto               
+AC06 Saint Paul          HA13 Sud-Est             PO18 Santarem            
+AC07 Saint Peter         HK   HONG KONG           PO19 Setubal             
+AC08 Saint Philip        HM   HEARD AND MCDONALD IPO20 Viana do Castelo    
+AF   AFGHANISTAN         HO   HONDURAS            PO21 Vila Real           
+AF01 Badahshan           HO01 Atlantida           PO22 Viseu               
+AF02 Badghisat           HO02 Choluteca           PP   PAPUA NEW GUINEA    
+AF03 Baghlan             HO03 Colon               PP01 Central             
+AF04 Balkh               HO04 Comayagua           PP02 Gulf                
+AF05 Bamian              HO05 Copan               PP03 Milne Bay           
+AF06 Farah               HO06 Cortes              PP04 Northern            
+AF07 Faryab              HO07 El Paraiso          PP05 Southern Highlands  
+AF08 Ghazni              HO08 Francisco Morazan   PP06                     
+AF09 Ghowr               HO09 Gracias a Dios      PP06 Western             
+AF10 Helmand             HO10 Intibuca            PP07 North Solomons      
+AF11 Herat               HO11 Islas de la Bahia   PP08 Chimbu              
+AF12 Jowzjan             HO12 La Paz              PP09 Eastern Highlands   
+AF13 Kabul               HO13 Lempira             PP10 East New Britain    
+AF16 Laghman             HO14 Ocotepeque          PP11 East Sepik          
+AF17 Lowgar              HO15 Olancho             PP12 Madang              
+AF18 Nangarhar           HO16 Santa Barbara       PP13 Manus               
+AF19 Nimruz              HO17 Valle               PP14 Morobe              
+AF20 Oruzgan             HO18 Yoro                PP15 New Ireland         
+AF21 Paktia              HQ   HOWLAND ISLAND      PP16 Western Highlands   
+AF22 Parvan              HU   HUNGARY             PP17 West New Britain    
+AF23 Qandahar            HU01 Bacs-Kiskun         PP18 Sandaun             
+AF24 Qonduz              HU02 Baranya             PP19 Enga                
+AF25 Samangan            HU03 Bekes               PP20 National Capital    
+AF26 Takhar              HU04 Borsod-Abauj-ZemplenPU   GUINEA-BISSAU       
+AF27 Vardak              HU05 Budapest            PU01 Bafata              
+AF28 Zabol               HU06 Csongrad            PU02 Buba                
+AG   ALGERIA             HU07 Debrecen            PU03 Bissau              
+AG01 Alger               HU08 Fejer               PU04 Oio                 
+AG02 Annaba              HU09 Gyor-Sopron         PU05 Bolama              
+AG03 Batna               HU10 Hajdu-Bihar         PU06 Cacheu              
+AG04 Constantine         HU11 Heves               PU07 Tombali             
+AG05 El Asnam            HU12 Komarom             PU10 Gabu                
+AG06 Medea               HU13 Miskolc             QA   QATAR               
+AG07 Mostaganem          HU14 Nograd              RE   REUNION             
+AG09 Oran                HU15 Pecs                RO   ROMANIA             
+AG10 Saida               HU16 Pest                RO01 Alba                
+AG12 Setif               HU17 Somogy              RO02 Arad                
+AG13 Tiaret              HU18 Szabolcs-Szatmar    RO03 Arges               
+AG14 Tizi Ouzou          HU19 Szeged              RO04 Bacau               
+AG15 Tlemcen             HU20 Szolnok             RO05 Bihor               
+AG16 Adrar               HU21 Tolna               RO06 Bistrita-Nasaud     
+AG17 Bechar              HU22 Vas                 RO07 Botosani            
+AG18 Bejaia              HU23 Veszprem            RO08 Braila              
+AG19 Biskra              HU24 Zala                RO09 Brasov              
+AG20 Blida               HU25 Gyor                RO10 Bucuresti           
+AG21 Bouira              Ha07 Centre              RO11 Buzau               
+AG22 Djelfa              IC   ICELAND             RO12 Caras-Severin       
+AG23 Guelma              IC01 Akranes             RO13 Cluj                
+AG24 Jijel               IC02 Akureyri            RO14 Constanta           
+AG25 Laghouat            IC03 Arnessysla          RO15 Covasna             
+AG26 Mascara             IC04 Austur-BardastrandarRO16 Dimbovita           
+AG27 Msila               IC05 Austur-HunavatnssyslRO17 Dolj                
+AG28 Ouargla             IC06 Austur-SkaftafellssyRO18 Galati              
+AG29 Oum el Bouaghi      IC07 Borgarfjardarsysla  RO19 Gorj                
+AG30 Sidi Bel Abbes      IC08 Dalasysla           RO20 Harghita            
+AG31 Skikda              IC09 Eyjafjardarsysla    RO21 Hunedoara           
+AG32 Tamanrasset         IC10 Gullbringusysla     RO22 Ialomita            
+AG33 Tebessa             IC11 Hafnarfjordur       RO23 Iasi                
+AL   ALBANIA             IC12 Husavik             RO24 Ilfov               
+AL01 Berat               IC13 Isafjordur          RO25 Maramures           
+AL02 Dibre               IC14 Keflavik            RO26 Mehedinti           
+AL03 Durres              IC15 Kjosarsysla         RO27 Mures               
+AL04 Elbasan             IC16 Kopavogur           RO28 Neamt               
+AL05 Fier                IC17 Myrasysla           RO29 Olt                 
+AL06 Gjirokaster         IC18 Neskaupstadur       RO30 Prahova             
+AL07 Gramsh              IC19 Nordur-IsafjardarsysRO31 Salaj               
+AL08 Kolonje             IC20 Nordur-Mulasysla    RO32 Satu Mare           
+AL09 Korce               IC21 Nordur-TingeyjarsyslRO33 Sibiu               
+AL10 Kruje               IC22 Olafsfjordur        RO34 Suceava             
+AL11 Kukes               IC23 Rangarvallasysla    RO35 Teleorman           
+AL12 Lezhe               IC24 Reykjavik           RO36 Timis               
+AL13 Librazhd            IC25 Saudarkrokur        RO37 Tulcea              
+AL14 Lushnje             IC26 Seydisfjordur       RO38 Vaslui              
+AL15 Mat                 IC27 Siglufjordur        RO39 Vilcea              
+AL16 Mirdite             IC28 Skagafjardarsysla   RO40 Vrancea             
+AL17 Permet              IC29 Snafellsnes         RO41 Calarasi            
+AL18 Pogradec            IC30 Strandasysla        RO42 Giurgiu             
+AL19 Puke                IC31 Sudur-Mulasysla     RP   PHILIPPINES         
+AL20 Sarande             IC32 Sudur-TingeyjarsyslaRP01 Abra                
+AL21 Shkoder             IC33 Vestmannaeyjar      RP02 Agusan del Norte    
+AL22 Skrapar             IC34 Vestur-BarhastrandarRP03 Agusan del Sur      
+AL23 Tepelene            IC35 Vestur-HunavatnssyslRP04 Aklan               
+AL24 Tirane              IC36 Vestur-IsafjardarsysRP05 Albay               
+AL25 Tirane              IC37 Vestur-SkaftafellssyRP06 Antique             
+AL26 Tropoje             ID   INDONESIA           RP07 Bataan              
+AL27 Vlore               ID01 Aceh                RP08 Batanes             
+AN   ANDORRA             ID02 Bali                RP09 Batangas            
+AN01 Andorra             ID03 Bengkulu            RP10 Benguet             
+AN02 Canillo             ID04 Jakarta Raya        RP11 Bohol               
+AN03 Encamp              ID05 Jambi               RP12 Bukidnon            
+AN04 La Massana          ID06 Jawa Barat          RP13 Bulacan             
+AN05 Ordino              ID07 Jawa Tengah         RP14 Cagayan             
+AN06 Sant Julia de Loria ID08 Jawa Timur          RP15 Camarines Norte     
+AO   ANGOLA              ID09 Irian Jaya          RP16 Camarines Sur       
+AO01 Benguela            ID10 Yogyakarta          RP17 Camiguin            
+AO02 Bie                 ID11 Kalimantan Barat    RP18 Capiz               
+AO03 Cabinda             ID12 Kalimantan Selatan  RP19 Catanduanes         
+AO04 Cuando Cubango      ID13 Kalimantan Tengah   RP20 Cavite              
+AO05 Cuanza Norte        ID14 Kalimantan Timur    RP21 Cebu                
+AO06 Cuanza Sul          ID15 Lampung             RP22 Basilan             
+AO07 Cunene              ID16 Maluku              RP23 Eastern Samar       
+AO08 Huambo              ID17 Nusa Tenggara Barat RP24 Davao               
+AO09 Huila               ID18 Nusa Tenggara Timur RP25 Davao del Sur       
+AO10 Luanda              ID19 Riau                RP26 Davao Oriental      
+AO12 Malange             ID20 Sulawesi Selatan    RP27 Ifugao              
+AO13 Mocamedes           ID21 Sulawesi Tengah     RP28 Ilocos Norte        
+AO14 Moxico              ID22 Sulawesi Tenggara   RP29 Ilocos Sur          
+AO15 Uige                ID23 Sulawesi Utara      RP30 Iloilo              
+AO16 Zaire               ID24 Sumatera Barat      RP31 Isabela             
+AO17 Lunda Norte         ID25 Sumatera Selatan    RP32 Kalinga-Apayao      
+AO18 Lunda Sul           ID26 Sumatera Utara      RP33 Laguna              
+AQ   AMERICAN SAMOA      ID27 Timor Timur         RP34 Lanao del Norte     
+AR   ARGENTINA           IM   MAN, ISLE OF        RP35 Lanao del Sur       
+AR01 Buenos Aires        IN   INDIA               RP36 La Union            
+AR02 Catamarca           IN01 Andaman & Nicobar IsRP37 Leyte               
+AR03 Chaco               IN02 Andhra Pradesh      RP38 Marinduque          
+AR04 Chubut              IN03 Assam               RP39 Masbate             
+AR05 Cordoba             IN04 Bihar               RP40 Mindoro Occidental  
+AR06 Corrientes          IN05 Chandigarh          RP41 Mindoro Oriental    
+AR07 Distrito Federal    IN06 Dadra and Nagar HaveRP42 Misamis Occidental  
+AR08 Entre Rios          IN07 Delhi               RP43 Misamis Oriental    
+AR09 Formosa             IN08 Goa, Daman, andDiu  RP44 Mountain            
+AR10 Jujuy               IN09 Gujarat             RP46 Negros Oriental     
+AR11 La Pampa            IN10 Haryana             RP47 Nueva Ecija         
+AR12 La Rioja            IN11 Himachal Pradesh    RP48 Nueva Vizcaya       
+AR13 Mendoza             IN12 Jammu and Kashmir   RP49 Palawan             
+AR14 Misiones            IN13 Kerala              RP50 Pampanga            
+AR15 Neuquen             IN14 Lakshadweep         RP51 Pangasinan          
+AR16 Rio Negro           IN15 Madhya Pradesh      RP52 Quezon              
+AR17 Salta               IN16 Maharashtra         RP53 Rizal               
+AR18 San Juan            IN17 Manipur             RP54 Romblon             
+AR19 San Luis            IN18 Meghalaya           RP55 Samar               
+AR20 Santa Cruz          IN19 Karnataka           RP56 Maguindanao         
+AR21 Santa Fe            IN20 Nagaland            RP57 North Cotabato      
+AR22 Santiago del Estero IN21 Orissa              RP58 Sorsogon            
+AR23 Tierra del F., AntarIN22 Pondicherry         RP59 Southern Leyte      
+AR24 Tucuman             IN23 Punjab              RP60 Sulu                
+AS   AUSTRALIA           IN24 Rajasthan           RP61 Surigao del Norte   
+AS01 Australian Capital TIN25 Tamil Nadu          RP62 Surigao del Sur     
+AS02 New South Wales     IN26 Tripura             RP63 Tarlac              
+AS03 Northern Territory  IN27 Uttar Pradesh       RP64 Zambales            
+AS04 Queensland          IN28 West Bengal         RP65 Zamboanga del Norte 
+AS05 South Australia     IN29 Sikkim              RP66 Zamboanga del Sur   
+AS06 Tasmania            IN30 Arunachal Pradesh   RP67 Northern Samar      
+AS07 Victoria            IN31 Mizoram             RP68 Quirino             
+AS08 Western Australia   IO   BRITISH IND.-OCEAN TRP69 Siquijor            
+AT   ASHMORE AND CARTIER IP   CLIPPERTON ISLAND   RP70 South Cotabato      
+AU   AUSTRIA             IR   IRAN                RP71 Sultan Kudarat      
+AU01 Burgenland          IR01 Azarbayjan-e BakhtarRP72 Tawitawi            
+AU02 Karnten             IR02 Azarbayjan-e KhavariRPA1 Angeles             
+AU03 Niederosterreich    IR03 Chahar Mahall va BakRPA2 Bacolod             
+AU04 Oberosterreich      IR04 Baluchestan va SistaRPA3 Bago                
+AU05 Salzburg            IR05 Bovir Ahmadi va KohkRPA4 Baguio              
+AU06 Steiermark          IR06 Esfahan             RPA5 Bais                
+AU07 Tirol               IR07 Fars                RPA6 Basilan City        
+AU08 Vorarlberg          IR08 Gilan               RPA7 Batangas City       
+AU09 Wien                IR09 Hamadan             RPA8 Butuan              
+AV   ANGUILLA            IR10 Ilam                RPA9 Cabanatuan          
+AY   ANTARCTICA          IR11 Hormozgan           RPB1 Cadiz               
+BA   BAHRAIN             IR12 Kerman              RPB2 Cagayan de Oro      
+BA01 Al Hadd             IR13 Bahktaran           RPB3 Calbayog            
+BA02 Al Manamah          IR14 Khorasan            RPB4 Caloocan            
+BA03 Al Muharraq         IR15 Khuzestan           RPB5 Canlaon             
+BA04 Ar Rifa Ash Sharqi  IR16 Kordestan           RPB6 Cavite City         
+BA05 Jidd Hafs           IR17 Mazandaran          RPB7 Cebu City           
+BA06 Sitrah              IR18 Semnam              RPB8 Cotabato            
+BB   BARBADOS            IR19 Markazi             RPB9 Dagupan             
+BB01 Christ Church       IR20 Yazd                RPC1 Danao               
+BB02 Saint Andrew        IR21 Zanjan              RPC2 Dapitan             
+BB03 Saint George        IR22 Bushehr             RPC3 Davao City          
+BB04 Saint James         IR23 Lorestan            RPC4 Dipolog             
+BB05 Saint John          IR24 Markazi             RPC5 Dumaguete           
+BB06 Saint Joseph        IR25 Semnam              RPC6 General Santos      
+BB07 Saint Lucy          IR26 Tehran              RPC7 Gingoog             
+BB08 Saint Michael       IR27 Zanjan              RPC8 Iligan              
+BB09 Saint Peter         IR28 Esfahan             RPC9 Iloilo City         
+BB10 Saint Philip        IR29 Kerman              RPD1 Iriga               
+BB11 Saint Thomas        IR30 Khorasan            RPD2 La Carlota          
+BC   BOTSWANA            IR31 Yazd                RPD3 Laoag               
+BC01 Central             IS   ISRAEL              RPD4 Lapu-Lapu           
+BC02 Chobe               IS01 HaDarom             RPD5 Legaspi             
+BC03 Ghanzi              IS02 HaMerkaz            RPD6 Lipa                
+BC04 Kgalagadi           IS03 HaZafon             RPD7 Lucena              
+BC05 Kgatleng            IS04 Hefa                RPD8 Mandaue             
+BC06 Kweneng             IS05 Tel Aviv            RPD9 Manila              
+BC07 Ngamiland           IS06 Yerushalayim        RPE1 Marawi              
+BC08 North-East          IT   ITALY               RPE2 Naga                
+BC09 South-East          IT01 Abruzzi             RPE3 Olongapo            
+BC10 Southern            IT02 Basilicata          RPE4 Ormoc               
+BD   BERMUDA             IT03 Calabria            RPE5 Oroquieta           
+BD01 Devonshire          IT04 Campania            RPE6 Ozamis              
+BD02 Hamilton            IT05 Emilia-Romagna      RPE7 Pagadian            
+BD04 Paget               IT06 Friuli-Venezia GiuliRPE8 Palayan             
+BD05 Pembroke            IT07 Lazio               RPE9 Pasay               
+BD06 Saint George        IT08 Liguria             RPF1 Puerto Princesa     
+BD07 Saint Georges       IT09 Lombardia           RPF2 Quezon City         
+BD08 Sandys              IT10 Marche              RPF3 Roxas               
+BD09 Smiths              IT11 Molise              RPF4 San Carlos, Negros O
+BD10 Southampton         IT12 Piemonte            RPF5 San Carlos, Pangasin
+BD11 Warwick             IT13 Puglia              RPF6 San Jose            
+BE   BELGIUM             IT14 Sardegna            RPF7 San Pablo           
+BE01 Antwerpen           IT15 Sicilia             RPF8 Silay               
+BE02 Brabant             IT16 Toscana             RPF9 Surigao             
+BE03 Hainaut             IT17 Trentino-Alto Adige RPG1 Tacloban            
+BE04 Liege               IT18 Umbria              RPG2 Tagaytay            
+BE05 Limburg             IT19 Valle d'Aosta       RPG3 Tagbilaran          
+BE06 Luxembourg          IT20 Veneto              RPG4 Tangub              
+BE07 Namur               IV   IVORY COAST         RPG5 Toledo              
+BE08 Oost-Vlaanderen     IV01 Abengourou          RPG6 Trece Martires      
+BE09 West-Vlaanderen     IV04 Aboisso             RPG7 Zamboanga           
+BF   BAHAMAS, THE        IV05 Adzope              RPH3 Negros Occidental   
+BF01 Abaco               IV06 Agboville           RQ   PUERTO RICO         
+BF02 Acklins Island      IV07 Biankouma           RW   RWANDA              
+BF03 Andros Island       IV11 Bouna               RW01 Butare              
+BF04 Berry Islands       IV12 Boundiali           RW02 Byumba              
+BF05 Biminis             IV13 Daloa               RW03 Cyangugu            
+BF06 Cat Island          IV14 Danane              RW04 Gikongoro           
+BF07 Cay Lobos           IV16 Divo                RW05 Gisenyi             
+BF08 Crooked Island      IV17 Ferkessedougou      RW06 Gitarama            
+BF09 Eleuthera           IV18 Gagnoa              RW07 Kibungo             
+BF10 Exuma               IV20 Katiola             RW08 Kibuye              
+BF11 Grand Bahama        IV21 Korhogo             RW09 Rigali              
+BF12 Harbour Island      IV23 Odienne             RW10 Ruhengeri           
+BF13 Inagua              IV25 Seguela             SA   SAUDI ARABIA        
+BF14 Long Cay            IV26 Touba               SA02 Al Bahah            
+BF15 Long Island         IV27 Bongouanou          SA03 Al Jawf             
+BF16 Mayaguana           IV28 Issia               SA05 Al Madinah          
+BF17 New Providence      IV29 Lakota              SA06 Ash Sharqiyah       
+BF18 Ragged Island       IV30 Mankono             SA08 Al Qasim            
+BF19 Rum Cay             IV31 Oume                SA09 Al Qurayyat         
+BF20 San Salvador        IV32 Soubre              SA10 Ar Riyad            
+BF21 Spanish Wells       IV33 Tingrela            SA11 Asir                
+BG   BANGLADESH          IV34 Zuenoula            SA13 Hail                
+BG01 Barisal             IV35 Abidjan             SA14 Makkah              
+BG02 Bogra               IV36 Bangolo             SA15 Al Hudud ash Shamali
+BG03 Chittagong          IV37 Beoumi              SA16 Najran              
+BG04 Bandarban           IV38 Bondoukou           SA17 Jizan               
+BG05 Comilla             IV39 Bouafle             SA19 Tabuk               
+BG06 Dacca               IV40 Bouake              SB   ST. PIERRE AND MIQUE
+BG07 Dinajpur            IV41 Dabakala            SC   ST. KITTS AND NEVIS 
+BG08 Faridpur            IV42 Daoukro             SC01 Christ Ch. Nichola T
+BG09 Jessore             IV43 Dimbokro            SC02 Saint Anne Sandy Poi
+BG10 Khulna              IV44 Duekoue             SC03 Saint George Bassete
+BG11 Kushtia             IV45 Grand-Lahou         SC04 Saint George Gingerl
+BG12 Mymensingh          IV46 Guiglo              SC05 Saint James Windward
+BG13 Noakhali            IV47 Man                 SC06 Saint John Capisterr
+BG14 Pabna               IV48 Mbahiakro           SC07 Saint John Figtree  
+BG15 Patuakhali          IV49 Sakassou            SC08 Saint Mary Cayon    
+BG16 Rajshahi            IV50 San Pedro           SC09 Saint Paul Capisterr
+BG17 Rangpur             IV51 Sassandra           SC10 Saint Paul Charlesto
+BG18 Sylhet              IV52 Sinfra              SC11 Saint Peter Basseter
+BG19 Tangail             IV53 Tabou               SC12 Saint Thomas Lowland
+BG20 Ramgarh             IV54 Tandra              SC13 Saint Thomas Middle 
+BG21 Rangamati           IV55 Tiassale            SC15 Trinity Palmetto Poi
+BH   BELIZE              IV56 Toumodi             SE   SEYCHELLES          
+BH01 Belize              IV57 Vavoua              SF   SOUTH AFRICA        
+BH02 Cayo                IV58 Yamoussoukro        SF01 Cape Province       
+BH03 Corozal             IY   IRAQ-SAUDI ARAB. NEUSF02 Natal               
+BH04 Orange Walk         IZ   IRAQ                SF03 Orange Free State   
+BH05 Stann Creek         IZ01 Al Anbar            SF04 Transvaal           
+BH06 Toledo              IZ02 Al Basrah           SG   SENEGAL             
+BL   BOLIVIA             IZ03 Al Muthanna         SG01 Dakar               
+BL01 Chuquisaca          IZ04 Al Qadisiyah        SG03 Diourbel            
+BL02 Cochabamba          IZ05 As Sulaymaniyah     SG04 St. Louis           
+BL03 El Beni             IZ06 Babil               SG05 Tambacounda         
+BL04 La Paz              IZ07 Baghdad             SG07 Thies               
+BL05 Oruro               IZ08 Dahuk               SG08 Louga               
+BL06 Pando               IZ09 Dhi Qar             SG09 Fatick              
+BL07 Potosi              IZ10 Diyala              SG10 Kaolack             
+BL08 Santa Cruz          IZ11 Irbil               SG11 Kolda               
+BL09 Tarija              IZ12 Karbala             SG12 Ziguinchor          
+BM   BURMA               IZ13 At Tamin            SH   ST. HELENA          
+BM01 Rakhine             IZ14 Maysan              SH01 Ascension           
+BM02 Chin State          IZ15 Ninawa              SH02 Saint Helena        
+BM03 Irrawaddy           IZ16 Wasit               SH03 Tristan da Cunha    
+BM04 Kachin State        IZ17 An Najaf            SL   SIERRA LEONE        
+BM05 Karan State         IZ18 Salah ad Din        SL01 Eastern             
+BM06 Kayah State         JA   JAPAN               SL02 Northern            
+BM07 Magwe               JA01 Aichi               SL03 Southern            
+BM08 Mandalay            JA02 Akita               SL04 Western Area        
+BM09 Pegu                JA03 Aomori              SM   SAN MARINO          
+BM10 Sagaing             JA04 Chiba               SM01 Acquaviva           
+BM11 Shan State          JA05 Ehime               SM02 Chiesanuova         
+BM12 Tenasserim          JA06 Fukui               SM03 Domagnano           
+BM13 Mon State           JA07 Fukuoka             SM04 Faetano             
+BM14 Rangoon             JA08 Fukushima           SM05 Fiorentino          
+BN   BENIN               JA09 Gifu                SM08 Monte Giardino      
+BN01 Atakora             JA10 Gumma               SM09 Serravalle          
+BN02 Atlantique          JA11 Hiroshima           SN   SINGAPORE           
+BN03 Borgou              JA12 Hokkaido            SO   SOMALIA             
+BN04 Mono                JA13 Hyogo               SO01 Bakool              
+BN05 Oueme               JA14 Ibaraki             SO02 Banaadir            
+BN06 Zou                 JA15 Ishikawa            SO03 Bari                
+BP   SOUTHERN SOLOMON ISLJA16 Iwate               SO04 Bay                 
+BP03 Malaita             JA17 Kagawa              SO05 Galguduud           
+BP04 Western             JA18 Kagoshima           SO06 Gedo                
+BP05 Central             JA19 Kanagawa            SO07 Hiiraan             
+BP06 Guadalcanal         JA20 Kochi               SO08 Jubbada Dhexe       
+BP07 Isabel              JA21 Kumamoto            SO09 Jubbada Hoose       
+BP08 Makira              JA22 Kyoto               SO10 Mudug               
+BP09 Temotu              JA23 Mie                 SO11 Nugaal              
+BQ   NAVASSA ISLAND      JA24 Miyagi              SO12 Sanaag              
+BR   BRAZIL              JA25 Miyazaki            SO13 Shabeellaha Dhexe   
+BR01 Acre                JA26 Nagano              SO14 Shabeellaha Hoose   
+BR02 Alagoas             JA27 Nagasaki            SO15 Togdheer            
+BR03 Amapa               JA28 Nara                SO16 Woqooyi Galbeed     
+BR04 Amazonas            JA29 Niigata             SP   SPAIN               
+BR05 Bahia               JA30 Oita                SP01 Alava               
+BR06 Ceara               JA31 Okayama             SP02 Albacete            
+BR07 Distrito Federal    JA32 Osaka               SP03 Alicante            
+BR08 Espirito Santo      JA33 Saga                SP04 Almeria             
+BR09 Fernando de Noronha JA34 Saitama             SP05 Avila               
+BR10 Goias               JA35 Shiga               SP06 Badajoz             
+BR11 Mato Grosso do Sul  JA36 Shimane             SP07 Baleares            
+BR13 Maranhao            JA37 Shizuoka            SP08 Barcelona           
+BR14 Mato Grosso         JA38 Tochigi             SP09 Burgos              
+BR15 Minas Gerais        JA39 Tokushima           SP10 Caceres             
+BR16 Para                JA40 Tokyo               SP11 Cadiz               
+BR17 Paraiba             JA41 Tottori             SP12 Castellon           
+BR18 Parana              JA42 Toyama              SP13 Ciudad Real         
+BR19 Pernambuco          JA43 Wakayama            SP14 Cordoba             
+BR20 Piaui               JA44 Yamagata            SP15 Cuenca              
+BR21 Rio de Janeiro      JA45 Yamaguchi           SP16 Gerona              
+BR22 Rio Grande do Norte JA46 Yamanashi           SP17 Granada             
+BR23 Rio Grande do Sul   JA47 Okinawa             SP18 Guadalajara         
+BR24 Rondonia            JE   JERSEY              SP19 Guipuzcoa           
+BR25 Roraima             JM   JAMAICA             SP20 Huelva              
+BR26 Santa Catarina      JM01 Clarendon           SP21 Huesca              
+BR27 Sao Paulo           JM02 Hanover             SP22 Jaen                
+BR28 Sergipe             JM04 Manchester          SP23 La Coruna           
+BS   BASSAS DA INDIA     JM07 Portland            SP24 Canary Islands, Las 
+BT   BHUTAN              JM08 Saint Andrew        SP25 Leon                
+BT01 Central Bhutan      JM09 Saint Ann           SP26 Lerida              
+BT02 Eastern Bhutan      JM10 Saint Catherine     SP27 Logrono             
+BT03 Southern Bhutan     JM11 Saint Elizabeth     SP28 Lugo                
+BT04 Western Bhutan      JM12 Saint James         SP29 Madrid              
+BU   BULGARIA            JM13 Saint Mary          SP30 Malaga              
+BU29 Burgas              JM14 Saint Thomas        SP31 Murcia              
+BU30 Grad Sofiya         JM15 Trelawny            SP32 Navarra             
+BU31 Khaskovo            JM16 Westmoreland        SP33 Orense              
+BU32 Lovech              JM17 Kingston            SP34 Oviedo              
+BU33 Mikhaylovgrad       JN   JAN MAYEN           SP35 Palencia            
+BU34 Plovdiv             JO   JORDAN              SP36 Pontevedra          
+BU35 Razgrad             JO02 Al Balqa            SP37 Salamanca           
+BU36 Sofiya              JO04 Al Khalil           SP38 Canary Islands, Sant
+BU37 Varna               JO05 Al Quds             SP39 Santander           
+BV   BOUVET ISLAND       JO07 Maan                SP40 Segovia             
+BX   BRUNEI              JO08 Nabulus             SP41 Sevilla             
+BX01 Belait              JO09 Al Karak            SP42 Soria               
+BX02 Brunei and Muara    JO10 Al Mafraq           SP43 Tarragona           
+BX03 Temburong           JO11 Amman               SP44 Teruel              
+BX04 Tutong              JO12 At Tafiah           SP45 Toledo              
+BY   BURUNDI             JO13 Az Zarqa            SP46 Valencia            
+BY02 Bujumbura           JO14 Irbid               SP47 Valladolid          
+BY05 Muramvya            JQ   JOHNSTON ATOLL      SP48 Vizcaya             
+BY09 Bubanza             JU   JUAN DE NOVA ISLAND SP49 Zamora              
+BY10 Bururi              KE   KENYA               SP50 Zaragoza            
+BY11 Cankuzo             KE01 Central             SP51 Balearic Islands    
+BY12 Cibitoke            KE02 Coast               ST   ST. LUCIA           
+BY13 Gitega              KE03 Eastern             ST01 Anse-la-Raye        
+BY14 Karuzi              KE05 Nairobi Area        ST02 Dauphin             
+BY15 Kayanza             KE06 North-Eastern       ST03 Castries            
+BY16 Kirunndo            KE07 Nyanza              ST04 Choiseul            
+BY17 Makamba             KE08 Rift Valley         ST05 Dennery             
+BY18 Muyinga             KE09 Western             ST06 Gros-Islet          
+BY19 Ngozi               KN   KOREA, DEM. PEOPLE'SST07 Laborie             
+BY20 Rutana              KN01 Chagang-do          ST08 Micoud              
+BY21 Ruyigi              KN02 Chongjin-si         ST09 Soufriere           
+BZ   BERLIN, GERMANY     KN03 Hamgyong-namdo      ST10 Vieux-Fort          
+CA   CANADA              KN04 Hamgyong-bukto      ST11 Praslin             
+CA01 Alberta             KN06 Hwanghae-namdo      SU   SUDAN               
+CA02 British Columbia    KN07 Hwanghae-bukto      SU01 Al Buhayrah         
+CA03 Manitoba            KN08 Kaesong-chigu       SU02 Al Istiwaiyah al Gha
+CA04 New Brunswick       KN09 Kangwon-do          SU03 Al Istiwaiyah ash Sh
+CA05 Newfoundland        KN11 Pyongan-pukto       SU04 Junqali             
+CA06 Northwest TerritorieKN12 Pyongyang-tukpyolsi SU11 Aali an Nil         
+CA07 Nova Scotia         KN13 Yanggang-do         SU12 Al Bahr al Abyad    
+CA08 Ontario             KN14 Namp 'o - si        SU13 Al Bahr al Ahmar    
+CA09 Prince Edward IslandKN15 P'yongan-namdo      SU15 Al Jazirah          
+CA10 Quebec              KQ   KINGMAN REEF        SU16 Al Khartum          
+CA11 Saskatchewan        KR   KIRIBATI            SU17 An Nil              
+CA12 Yukon Territory     KR01 Gilbert Islands     SU18 An Nil al Azraq     
+CB   CAMBODIA            KR02 Line Islands        SU19 Ash Shamaliyah      
+CB01 Batdambang          KS   KOREA, REPUBLIC OF  SU20 Bahr al Ghazal      
+CB02 Kampong Cham        KS01 Cheju-do            SU21 Darfur al Janubiyah 
+CB03 Kampong Chhnang     KS02 Cholla-namdo        SU22 Darfu               
+CB04 Kampong Spoe        KS03 Cholla-bukto        SU23 Kassala             
+CB05 Kampong Thum        KS04 Chungchong-namdo    SU24 Kurdufan al Janubiya
+CB06 Kampot              KS05 Chungchong-bukto    SU25 Kurdufan ash Shamali
+CB07 Kandal              KS06 Kangwon-do          SV   SVALBARD            
+CB08 Kaoh Kong           KS08 Kyongsang-namdo     SW   SWEDEN              
+CB09 Kracheh             KS09 Kyongsang-pukto     SW01 Alvsborgs Lan       
+CB10 Mondol Kiri         KS10 Pusan-jhikalsi      SW02 Blekinge Lan        
+CB11 Phnum Penh          KS11 Soul-t'ukpyolsi     SW03 Gavleborgs Lan      
+CB12 Pouthisat           KS12 Inch'on - jikhalsi  SW04 Goteborgs och Bohus 
+CB13 Preah Vihear        KS13 Kyonggi-do          SW05 Gotlands Lan        
+CB14 Prey Veng           KS15 Taegu - jikhalsi    SW06 Hallands Lan        
+CB15 Rotanokiri          KT   CHRISTMAS ISLAND    SW07 Jamtlands Lan       
+CB16 Siemreab-Otdar MeancKU   KUWAIT              SW08 Jonkopings Lan      
+CB17 Stong Treng         KU01 Al Ahmadi           SW09 Kalmar Lan          
+CB18 Svay Rieng          KU02 Al Kuwayt           SW10 Kopparbergs Lan     
+CB19 Takev               KU03 Hawalli             SW11 Kristianstads Lan   
+CD   CHAD                LA   LAOS                SW12 Kronobergs Lan      
+CD01 Batha               LA01 Attapu              SW13 Malmohus Lan        
+CD02 Biltine             LA02 Champasak           SW14 Norrbottens Lan     
+CD03 Borkou-Ennedi-TibestLA03 Houaphan            SW15 Orebro Lan          
+CD04 Chari-Baguirmi      LA04 Khammouan           SW16 Ostergotlands Lan   
+CD05 Guera               LA05 Louang Namtha       SW17 Skaraborgs Lan      
+CD06 Kanem               LA06 Louangphrabang      SW18 Sodermanlands Lan   
+CD07 Lac                 LA07 Oudomxai            SW21 Uppsala Lan         
+CD08 Logone Occidental   LA08 Phongsali           SW22 Varmlands Lan       
+CD09 Logone Oriental     LA09 Saravan             SW23 Vasterbottens Lan   
+CD10 Mayo Kebbi          LA10 Savannakhet         SW24 Vasternorrlands Lan 
+CD11 Moyen-Chari         LA11 Vientiane           SW25 Vastmanlands Lan    
+CD12 Ouaddai             LA13 Xaignabouri         SW26 Stockholms Lan      
+CD13 Salamat             LA14 Xiangkhoang         SY   SYRIA               
+CD14 Tandjile            LE   LEBANON             SY01 Al Hasakah          
+CE   SRI LANKA           LE01 Al Biqa             SY02 Al Ladhiqiyah       
+CE01 Amparai             LE02 Al Janub            SY03 Al Qunaytirah       
+CE02 Anuradhapura        LE03 Ash Shamal          SY04 Ar Raqqah           
+CE03 Badulla             LE04 Bayrut              SY05 As Suwayda          
+CE04 Batticaloa          LE05 Jabal Lubnan        SY06 Dara                
+CE06 Galle               LI   LIBERIA             SY07 Dayr az Zawr        
+CE07 Hambantota          LI01 Bong                SY08 Dimashq             
+CE09 Kalutara            LI02 Grand Jide          SY09 Halab               
+CE10 Kandy               LI03 Grand Bassa         SY10 Hamah               
+CE11 Kegalla             LI04 Grand Cape Mount    SY11 Hims                
+CE12 Kurunegala          LI05 Lofa                SY12 Idlib               
+CE14 Matale              LI06 Maryland            SY13 Madinat Dimashq     
+CE15 Matara              LI07 Monrovia            SY14 Tartus              
+CE16 Moneragala          LI08 Montserrado         SZ   SWITZERLAND         
+CE17 Nuwara Eliya        LI09 Nimba               SZ01 Aargau              
+CE18 Polonnaruwa         LI10 Sino                SZ02 Ausser-Rhoden       
+CE19 Puttalam            LQ   PALMYRA ATOLL       SZ03 Basel-Landschaft    
+CE20 Ratnapura           LS   LIECHTENSTEIN       SZ04 Basel-Stadt         
+CE21 Trincomalee         LS01 Balzers             SZ05 Bern                
+CE23 Colombo             LS02 Eschen              SZ06 Fribourg            
+CE24 Gampaha             LS03 Gamprin             SZ07 Geneve              
+CE25 Jaffna              LS04 Mauren              SZ08 Glarus              
+CE26 Mannar              LS05 Planken             SZ09 Graubunden          
+CE27 Mullaittivu         LS06 Ruggell             SZ10 Inner-Rhoden        
+CE28 Vavuniya            LS07 Schaan              SZ11 Luzern              
+CF   CONGO               LS08 Schellenberg        SZ12 Neuchatel           
+CF01 Bouenza             LS09 Triesen             SZ13 Nidwalden           
+CF03 Cuvette             LS10 Triesenberg         SZ14 Obwalden            
+CF04 Kouilou             LS11 Vaduz               SZ15 Sankt Gallen        
+CF05 Lekoumou            LT   LESOTHO             SZ16 Schaffhausen        
+CF06 Likouala            LT01 Berea               SZ17 Schwyz              
+CF07 Niari               LT02 Butha-Buthe         SZ18 Solothurn           
+CF08 Plateaux            LT03 Leribe              SZ19 Thurgau             
+CF09 Pool                LT04 Mafeteng            SZ20 Ticino              
+CF10 Sangha              LT05 Maseru              SZ21 Uri                 
+CG   ZAIRE               LT06 Mohales Hoek        SZ22 Valais              
+CG01 Bandundu            LT07 Mokhotlong          SZ23 Vaud                
+CG02 Equateur            LT08 Qachas Nek          SZ24 Zug                 
+CG03 Kasai-Occidental    LT09 Quthing             SZ25 Zurich              
+CG04 Kasai-Oriental      LU   LUXEMBOURG          SZ26 Jura                
+CG05 Shaba               LU01 Diekirch            TC   UNITED ARAB EMIRATES
+CG06 Kinshasa            LU02 Grevenmacher        TC01 Abu Zaby            
+CG07 Kivu                LU03 Luxembourg          TC02 Ajman               
+CG08 Bas-Zaire           LY   LIBYA               TC03 Dubayy              
+CG09 Haut-Zaire          LY01 Ajdabiya            TC04 Al Fujayrah         
+CH   CHINA               LY02 Al Abyar            TC05 Ras al Khaymah      
+CH01 Anhui               LY03 Al Aziziyah         TC06 Ash Shariqah        
+CH02 Zhejiang            LY04 Al Bayda            TC07 Umm al Qaywayn      
+CH03 Jiangxi             LY05 Al Jufrah           TD   TRINIDAD AND TOBAGO 
+CH04 Jiangsu             LY06 Al Jumayl           TD01 Arima               
+CH05 Jilin               LY07 Al Khums            TD02 Caroni              
+CH06 Qinghai             LY08 Al Kufrah           TD03 Mayaro              
+CH07 Fujian              LY09 Al Marj             TD04 Nariva              
+CH08 Heilongjiang        LY10 Al Qarabulli        TD05 Port-of-Spain       
+CH09 Henan               LY11 Al Qubbah           TD06 Saint Andrew        
+CH10 Hebei               LY12 Al Ujaylat          TD07 Saint David         
+CH11 Hunan               LY13 Ash Shati           TD08 Saint George        
+CH12 Hubei               LY14 Awbari              TD09 Saint Patrick       
+CH13 Xinjiang            LY15 Az Zahra            TD10 San Fernando        
+CH14 Xizang              LY16 Az Zawiyah          TD11 Tobago              
+CH15 Gansu               LY17 Banghazi            TD12 Victoria            
+CH16 Guangxi             LY18 Bani Walid          TE   TROMELIN ISLAND     
+CH18 Guizhou             LY19 Bin Jawwad          TH   THAILAND            
+CH19 Liaoning            LY20 Darnah              TH01 MaeHong Son         
+CH20 Nei Mongol          LY21 Ghadamis            TH02 Chiang Mai          
+CH21 Ningxia             LY22 Gharyan             TH03 Chiang Rai          
+CH22 Beijing             LY23 Ghat                TH04 Nan                 
+CH23 Shanghai            LY24 Jadu                TH05 Lamphun             
+CH24 Shanxi              LY25 Jalu                TH06 Lampang             
+CH25 Shandong            LY26 Janzur              TH07 Phrae               
+CH26 Shaanxi             LY27 Masallytah          TH08 Tak                 
+CH27 Sichuan             LY28 Misratah            TH09 Sukhothai           
+CH28 Tianjin             LY29 Mizdah              TH10 Uttaradit           
+CH29 Yunnan              LY30 Murzuq              TH11 Kamphaeng Phet      
+CH30 Guangdong           LY31 Nalut               TH12 Phitsanulok         
+CH31 Hainan              LY32 Qaminis             TH13 Phichit             
+CI   CHILE               LY33 Qasr Bin Ghashir    TH14 Phetchabun          
+CI01 Valparaiso          LY34 Sabha               TH15 Uthai Thani         
+CI02 Aisen del General CaLY35 Sabratah            TH16 Nakhon Sawan        
+CI03 Antofagasta         LY36 Shahhat             TH17 Nong Khai           
+CI04 Araucania           LY37 Surman              TH18 Loei                
+CI05 Atacama             LY38 Surt                TH19 Udon Thani          
+CI06 Biobio              LY39 Tajura              TH20 Sakon Nakhon        
+CI07 Coquimbo            LY40 Tarabulus           TH21 Nakhon Phanom       
+CI08 Libertador Gen. O'HiLY41 Tarhunah            TH22 Khon Kaen           
+CI09 Los Lagos           LY42 Tubruq              TH23 Kalasin             
+CI10 Magallanes, Antart. LY43 Tukrah              TH24 Maha Sarakham       
+CI11 Maule               LY44 Yafran              TH25 Roi Et              
+CI12 Metropolitana       LY45 Zlitan              TH26 Chaiyaphum          
+CI13 Tarapaca            LY46 Zuwarah             TH27 Nakhon Ratchasima   
+CI14 Isla de Pascua      MA   MADAGASCAR          TH28 Buriram             
+CI15 Arch. Juan FernandezMA01 Antsiranana         TH29 Surin               
+CI16 Isla San Felix      MA02 Fianarantsoa        TH30 Sisaket             
+CI17 Isla Sala y Gomez   MA03 Mahajanga           TH31 Narathiwat          
+CJ   CAYMAN ISLANDS      MA04 Toamasina           TH32 Chai Nat            
+CJ01 Creek               MA05 Antananarivo        TH33 Sing Buri           
+CJ02 Eastern             MA06 Toliara             TH34 Lop Buri            
+CJ03 Midland             MB   MARTINIQUE          TH35 Ang Thong           
+CJ04 South Town          MC   MACAU               TH36 Phra Nakhon Si Ayutt
+CJ05 Spot Bay            MC01 Ilhas               TH37 Saraburi            
+CJ06 Stake Bay           MC02 Macau               TH38 Nonthaburi          
+CJ07 West End            MF   MAYOTTE             TH39 Pathum Thani        
+CJ08 Western             MG   MONGOLIA            TH40 Krung Thep          
+CK   COCOS (KEELING) ISLAMG01 Arhangay            TH41 Phayao              
+CM    CAMEROON           MG02 Bayanhongor         TH42 Samut Prakan        
+CM04 Est                 MG03 Bayan-Olgiy         TH43 Nakhon Nayok        
+CM05 Littoral            MG05 Darhan              TH44 Chachoengsao        
+CM13 Nord                MG06 Dornod              TH45 Prachin Buri        
+CM07 Nord-Ouest          MG07 Dornogovi           TH46 Chon Buri           
+CM08 Ouest               MG08 Dundgovi            TH47 Rayong              
+CM09 Sud-Ouest           MG09 Dzavhan             TH48 Chanthaburi         
+CM10 Adamaoua            MG10 Govi-Altay          TH49 Trat                
+CM11 Centre              MG11 Hentiy              TH50 Kanchanaburi        
+CM12 Extreme-Nord        MG12 Hovd                TH51 Suphan Buri         
+CM14 Sud                 MG13 Hovsgol             TH52 Ratchaburi          
+CN   COMOROS             MG14 Omnogovi            TH53 Nakhon Pathom       
+CO   COLOMBIA            MG15 Ovorhangay          TH54 Samut Songkhram     
+CO01 Amazonas            MG16 Selenge             TH55 Samut Sakhon        
+CO02 Antioquia           MG17 Suhbaatar           TH56 Phetchaburi         
+CO03 Arauca              MG18 Tov                 TH57 Prachuap Khiri Khan 
+CO04 Atlantico           MG19 Uvs                 TH58 Chumphon            
+CO05 Bolivar             MG20 Ulaanbaatar         TH59 Ranong              
+CO06 Boyaca              MG21 Bulgan              TH60 Surat Thani         
+CO07 Caldas              MG22 Erdenet             TH61 Phangnga            
+CO08 Caqueta             MH   MONTSERRAT          TH62 Phuket              
+CO09 Cauca               MH01 Saint Anthony       TH63 Krabi               
+CO10 Cesar               MH02 Saint Georges       TH64 Nakhon Si Thammarat 
+CO11 Choco               MH03 Saint Peter         TH65 Trang               
+CO12 Cordoba             MI   MALAWI              TH66 Phatthalung         
+CO13 Cundinamarca        MI01 Blantyre            TH67 Satun               
+CO14 Guaviare            MI02 Chikwawa            TH68 Songkhla            
+CO15 Guainia             MI03 Chiradzulu          TH69 Pattani             
+CO16 Huila               MI04 Chitipa             TH70 Yala                
+CO17 La Guajira          MI05 Cholo               TH71 Ubon Ratchathani    
+CO18 Magdalena           MI06 Dedza               TH72 Yasothon            
+CO19 Meta                MI07 Dowa                TK   TURKS AND CAICOS ISL
+CO20 Narino              MI08 Karonga             TL   TOKELAU             
+CO21 Norte de Santander  MI09 Kasungu             TN   TONGA               
+CO22 Putumayo            MI10 Machinga            TN01 Ha'apai             
+CO23 Quindio             MI11 Lilongwe            TN02 Tongatapu           
+CO24 Risaralda           MI12 Mangochi            TN03 Vava'u              
+CO25 San Andres y ProvideMI13 Mchinji             TO   TOGO                
+CO26 Santander           MI14 Mulanje             TO01 Amlame              
+CO27 Sucre               MI15 Mzimba              TO02 Aneho               
+CO28 Tolima              MI16 Ncheu               TO03 Atakpame            
+CO29 Valle del Cauca     MI17 Nkhata Bay          TO04 Bafilo              
+CO30 Vaupes              MI18 Nkhota Kota         TO05 Bassar              
+CO31 Vichada             MI19 Nsanje              TO06 Dapaong             
+CO32 Casanare            MI20 Ntchisi             TO07 Kante               
+CQ   NORTHERN MARIANA ISLMI21 Rumphi              TO08 Klouto              
+CR   CORAL SEA ISLANDS   MI22 Salima              TO09 Lama-Kara           
+CS   COSTA RICA          MI23 Zomba               TO10 Lome                
+CS01 Alajuela            ML   MALI                TO11 Mango               
+CS02 Cartago             ML01 Bamako              TO12 Niamtougou          
+CS03 Guanacaste          ML02 Gao                 TO13 Notse               
+CS04 Heredia             ML03 Kayes               TO14 Kpagouda            
+CS06 Limon               ML04 Mopti               TO15 Badou               
+CS07 Puntarenas          ML05 Segou               TO16 Sotouboua           
+CS08 San Jose            ML06 Sikasso             TO17 Tabligbo            
+CT   CENTRAL AFRICAN REPUML07 Koulikoro           TO18 Tsevie              
+CT01 Bamingui-Bangoran   ML08 Tombouctou          TO19 Tchamba             
+CT02 Basse-Kotto         MN   MONACO              TO20 Tchaoudjo           
+CT03 Haute-Kotto         MN01 La Condamine        TO21 Vogan               
+CT04 Haute-Sangha        MN02 Monaco              TP   SAO TOME AND PRINCIP
+CT05 Haut-Mbomou         MN03 Monte-Carlo         TP01 Principe            
+CT06 Kemo-Gribingui      MO   MOROCCO             TP02 Sao Tome            
+CT07 Lobaye              MO01 Agadir              TS   TUNISIA             
+CT08 Mbomou              MO02 Al Hoceima          TS02 Al Qasrayn          
+CT09 Nana-Mambere        MO03 Azilal              TS03 Al Qayrawan         
+CT10 Ombella-Mpoko       MO04 Ben Slimane         TS06 Jundubah            
+CT11 Ouaka               MO05 Beni Mellal         TS10 Qafsah              
+CT12 Ouham               MO06 Boulemane           TS14 Al Kaf              
+CT13 Ouham-Pende         MO07 Casablanca          TS15 Al Mahdiyah         
+CT14 Vakaga              MO08 Chaouen             TS16 Al Munastir         
+CT15 Gribingui           MO09 El Jadida           TS17 Bajah               
+CT16 Sangha              MO10 El Kelaa des SrarhnaTS18 Banzart             
+CU   CUBA                MO11 Er Rachidia         TS19 Nabul               
+CU01 Pinar del Rio       MO12 Essaouira           TS22 Silyanah            
+CU02 La Habana           MO13 Fes                 TS23 Susah               
+CU03 Matanzas            MO14 Figuig              TS25 Tunis al Janubiyah  
+CU04 Isla de la Juventud MO15 Kenitra             TS26 Aryanah             
+CU05 Camaguey            MO16 Khemisset           TS27 Bin 'Arus           
+CU07 Ciego de Avila      MO17 Khenifra            TS28 Madanin             
+CU08 Cienfuegos          MO18 Khouribga           TS29 Qabis               
+CU09 Granma              MO19 Marrakech           TS31 Qibili              
+CU10 Guantanamo          MO20 Meknes              TS32 Safaqis             
+CU11 La Habana           MO21 Nador               TS33 Sidi Bu Zayd        
+CU12 Holguin             MO22 Ouarzazate          TS34 Tatawin             
+CU13 Las Tunas           MO23 Oujda               TS35 Tawzar              
+CU14 Sancti Spiritus     MO24 Rabat-Sale          TS36 Tunis               
+CU15 Santiago de Cuba    MO25 Safi                TS37 Zaghwan             
+CU16 Villa Clara         MO26 Settat              TU   TURKEY              
+CV   CAPE VERDE          MO27 Tanger              TU01 Adana               
+CV01 Boa Vista           MO29 Tata                TU02 Adiyaman            
+CV02 Brava               MO30 Taza                TU03 Afyon               
+CV03 Fogo                MO31 Tetouan             TU04 Agri                
+CV04 Maio                MO32 Tiznit              TU05 Amasya              
+CV05 Paul                MO33 Guelmim             TU06 Ankara              
+CV06 Praia               MO34 Ifrane              TU07 Antalya             
+CV07 Ribeira Grande      MO35 Laayouje            TU08 Artvin              
+CV08 Sal                 MO36 Tan-Tan             TU09 Aydin               
+CV09 Santa Catarina      MO37 Taounate            TU10 Balikesir           
+CV10 Sao Nicolau         MP   MAURITIUS           TU11 Bilecik             
+CV11 Sao Vicente         MP02 Beau Bassin-Rose HilTU12 Bingol              
+CV12 Tarrafal            MP04 Curepipe            TU13 Bitlis              
+CW   COOK ISLANDS        MP05 Moka-Flacq          TU14 Bolu                
+CY   CYPRUS              MP06 North               TU15 Burdur              
+CY01 Famagusta           MP07 Port Louis          TU16 Bursa               
+CY02 Kyrenia             MP08 Quatre Bornes       TU17 Canakkale           
+CY03 Larnaca             MP10 South               TU18 Cankiri             
+CY04 Nicosia             MP11 Vacoas-Phoenix      TU19 Corum               
+CY05 Limassol            MQ   MIDWAY ISLANDS      TU20 Denizli             
+CY06 Paphos              MR   MAURITANIA          TU21 Diyarbakir          
+CZ   CZECHOSLOVAKIA      MR01 Hodh Ech Chargui    TU22 Edirne              
+CZ01 Ceska Soc. Rep.     MR02 Hodh El Gharbi      TU23 Elazig              
+CZ02 Slovenska Soc. Rep. MR03 El-Acaba                  TU24 Erzincan       
+    
+DA   DENMARK             MR04 Gorgol              TU25 Erzurum             
+DA01 Arhus               MR05 Brakna              TU26 Eskisehir           
+DA02 Bornholm            MR06 Trarza              TU27 Gaziantep           
+DA03 Frederiksborg       MR07 Adrar               TU28 Giresun             
+DA04 Fyn                 MR08 Dakhlet Nouadhibou  TU29 Gumushane           
+DA05 Kobenhavn           MR09 Tagant              TU30 Hakkari             
+DA06 Staden Kobenhavn    MR10 Guidimaka           TU31 Hatay               
+DA07 Nordjylland         MR11 Tiris Zemmour       TU32 Icel                
+DA08 Ribe                MR12 Inchiri             TU33 Isparta             
+DA09 Ringkobing          MT   MALTA               TU34 Istanbul            
+DA10 Roskilde            MU   OMAN                TU35 Izmir               
+DA11 Sonderjylland       MV   MALDIVES            TU36 Kars                
+DA12 Storstrom           MV01 Seenu               TU37 Kastamonu           
+DA13 Vejle               MV02 Aliff               TU38 Kayseri             
+DA14 Vestsjalland        MV03 Laviyani            TU39 Kirklareli          
+DA15 Viborg              MV04 Waavu               TU40 Kirsehir            
+DJ   DJIBOUTI            MV05 Laamu               TU41 Kocaeli             
+DJ01 Ali Sahih           MV07 Haa Aliff           TU42 Konya               
+DJ02 Dikhil              MV08 Thaa                TU43 Kutahya             
+DJ03 Djibouti            MV12 Meemu               TU44 Malatya             
+DJ04 Obock               MV13 Raa                 TU45 Manisa              
+DJ05 Tadjoura            MV14 Faafu               TU46 Maras               
+DO   DOMINICA            MV17 Daalu               TU47 Mardin              
+DO02 Saint Andrew        MV20 Baa                 TU48 Mugla               
+DO03 Saint David         MV23 Haa Daalu           TU49 Mus                 
+DO04 Saint George        MV24 Shaviyani           TU50 Nevsehir            
+DO05 Saint John          MV25 Noonu               TU51 Nigde               
+DO06 Saint Joseph        MV26 Kaafu               TU52 Ordu                
+DO07 Saint Luke          MV27 Gaafu Aliff         TU53 Rize                
+DO08 Saint Mark          MV28 Gaafu Daalu         TU54 Sakarya             
+DO09 Saint Patrick       MV29 Naviyani            TU55 Samsun              
+DO10 Saint Paul          MX   MEXICO              TU56 Siirt               
+DO11 Saint Peter         MX01 Aguascalientes      TU57 Sinop               
+DQ   JARVIS ISLAND       MX02 Baja California NortTU58 Sivas               
+DR   DOMINICAN REPUBLIC  MX03 Baja California Sur TU59 Tekirdag            
+DR01 Azua                MX04 Campeche            TU60 Tokat               
+DR02 Baoruco             MX05 Chiapas             TU61 Trabzon             
+DR03 Barahona            MX06 Chihuahua           TU62 Tunceli             
+DR04 Dajabon             MX07 Coahuila de ZaragozaTU63 Urfa                
+DR05 Distrito Nacional   MX08 Colima              TU64 Usak                
+DR06 Duarte              MX09 Distrito Federal    TU65 Van                 
+DR07 El Seibo            MX10 Durango             TU66 Yozgat              
+DR08 Espaillat           MX11 Guanajuato          TU67 Zonguldak           
+DR09 Independencia       MX12 Guerrero            TV   TUVALU              
+DR10 La Altagracia       MX13 Hidalgo             TW   TAIWAN              
+DR11 Elias Pina          MX14 Jalisco             TW01 Fu-chien            
+DR12 La Romana           MX15 Mexico              TW02 Kao-hsiung          
+DR13 La Vega             MX16 Michoacan de Ocampo TW03 T'ai-pei            
+DR14 Maria Trinidad SanchMX17 Morelos             TW04 T'ai-wan            
+DR15 Monte Cristi        MX18 Nayarit             TZ T ANZANIA, UNITED REP.
+DR16 Pedernales          MX19 Nuevo Leon          TZ01 Arusha              
+DR17 Peravia             MX20 Oaxaca              TZ02 Pwani               
+DR18 Puerto Plata        MX21 Puebla              TZ03 Dodoma              
+DR19 Salcedo             MX22 Queretaro de ArteagaTZ04 Iringa              
+DR20 Samana              MX23 Quintana Roo        TZ05 Kigoma              
+DR21 Sanchez Ramirez     MX24 San Luis Potosi     TZ06 Kilimanjaro         
+DR22 San Cristobal       MX25 Sinaloa             TZ07 Lindi               
+DR23 San Juan            MX26 Sonora              TZ08 Mara                
+DR24 San Pedro De MacorisMX27 Tabasco             TZ09 Mbeya               
+DR25 Santiago            MX28 Tamaulipas          TZ10 Morogoro            
+DR26 Santiago Rodriguez  MX29 Tlaxcala            TZ11 Mtwara              
+DR27 Valverde            MX30 Veracruz-Llave      TZ12 Mwanza              
+EC   ECUADOR             MX31 Yucatan             TZ13 Pemba North         
+EC01 Galapagos           MX32 Zacatecas           TZ14 Ruvuma              
+EC02 Azuay               MY   MALAYSIA            TZ15 Shinyanga           
+EC03 Bolivar             MY01 Johor               TZ16 Singida             
+EC04 Canar               MY02 Kedah               TZ17 Tabora              
+EC05 Carchi              MY03 Kelantan            TZ18 Tanga               
+EC06 Chimborazo          MY04 Melaka              TZ19 Ziwa Magharibi      
+EC07 Cotopaxi            MY05 Negeri Sembilan     TZ20 Pemba South         
+EC08 El Oro              MY06 Pahang              TZ21 Zanzibar Central/Sou
+EC09 Esmeraldas          MY07 Perak               TZ22 Zanzibar North      
+EC10 Guayas              MY08 Perlis              TZ23 Dar es Salaam       
+EC11 Imbabura            MY09 Pulau Pinang        TZ24 Rukwa               
+EC12 Loja                MY10 Sabah               TZ25 Zanzibar Urban/West 
+EC13 Los Rios            MY11 Sarawak             UG   UGANDA              
+EC14 Manabi              MY12 Selangor            UG05 Busoga              
+EC15 Morona-Santiago     MY13 Terengganu          UG08 Karamoja            
+EC16 Napo                MY14 Wilayah Persekutuan UG12 South Buganda       
+EC17 Pastaza             MZ   MOZAMBIQUE          UG18 Central             
+EC18 Pichincha           MZ01 Cabo Delgado        UG20 Eastern             
+EC19 Tungurahua          MZ02 Gaza                UG21 Nile                
+EC20 Zamora-Chinchipe    MZ03 Inhambane           UG22 North Buganda       
+EG   EGYPT               MZ04 Maputo              UG23 Northern            
+EG01 Ad Daqahliyah       MZ05 Sofala              UG24 Southern            
+EG02 Al Bahr al Ahmar    MZ06 Nampula             UG25 Western             
+EG03 Al Buhayrah         MZ07 Niassa              UK   UNITED KINGDOM      
+EG04 Al Fayyum           MZ08 Tete                UK01 Avon                
+EG05 Al Gharbiyah        MZ09 Zambezia            UK02 Bedford             
+EG06 Al Iskandariyah     MZ10 Manica              UK03 Berkshire           
+EG07 Al Ismailiyah       NA   NETHERLANDS ANTILLESUK04 Buckingham          
+EG08 Al Jizah            NC   NEW CALEDONIA       UK05 Cambridge           
+EG09 Al Minufiyah        NE   NIUE                UK06 Chester             
+EG10 Al Minya            NF   NORFOLK ISLAND      UK07 Cleveland           
+EG11 Al Qahirah          NG   NIGER               UK08 Cornwall            
+EG12 Al Qalyubiyah       NG01 Agadez              UK09 Cumbria             
+EG13 Al Wadi al Jadid    NG02 Diffa               UK10 Derby               
+EG14 Ash Sharqiyah       NG03 Dosso               UK11 Devon               
+EG15 As Suways           NG04 Maradi              UK12 Dorset              
+EG16 Aswan               NG05 Niamey              UK13 Durham              
+EG17 Asyut               NG06 Tahoua              UK14 East Sussex         
+EG18 Bani Suwayf         NG07 Zinder              UK15 Essex               
+EG19 Bur Said            NH   VANUATU             UK16 Gloucester          
+EG20 Dumyat              NH01 Central District NumUK17 Greater London      
+EG21 Kafr ash Shaykh     NH02 Central District NumUK18 Greater Manchester  
+EG22 Matruh              NH03 Northern            UK19 Hampshire           
+EG23 Qina                NH04 Southern            UK20 Hereford and Worcest
+EG24 Suhaj               NI   NIGERIA             UK21 Hertford            
+EG25 Sina                NI01 Benue               UK22 Humberside          
+EI   IRELAND             NI02 Anambra             UK23 Isle of Wight       
+EI01 Carlow              NI03 Kano                UK24 Kent                
+EI02 Cavan               NI04 Kwara               UK25 Lancaster           
+EI03 Clare               NI05 Lagos               UK26 Leicester           
+EI04 Cork                NI06 Bauchi              UK27 Lincoln             
+EI06 Donegal             NI07 Bendel              UK28 Merseyside          
+EI07 Dublin              NI08 Borno               UK29 Norfolk             
+EI10 Galway              NI09 Cross River         UK30 North Yorkshire     
+EI11 Kerry               NI10 Rivers              UK31 Northampton         
+EI12 Kildare             NI11 Federal Capital TerrUK32 Northumberland      
+EI13 Kilkenny            NI12 Gongola             UK33 Nottingham          
+EI14 Leitrim             NI13 Imo                 UK34 Oxford              
+EI15 Laois               NI14 Kaduna              UK35 Salop               
+EI16 Limerick            NI15 Niger               UK36 Somerset            
+EI18 Longford            NI16 Ogun                UK37 South Yorkshire     
+EI19 Louth               NI17 Ondo                UK38 Stafford            
+EI20 Mayo                NI18 Oyo                 UK39 Suffolk             
+EI21 Meath               NI19 Plateau             UK40 Surrey              
+EI22 Monaghan            NI20 Sokoto              UK41 Tyne and Wear       
+EI23 Offaly              NL   NETHERLANDS         UK42 Warwick             
+EI24 Roscommon           NL01 Drenthe             UK43 West Midlands       
+EI25 Sligo               NL02 Friesland           UK44 West Sussex         
+EI26 Tipperary           NL03 Gelderland          UK45 West Yorkshire      
+EI27 Waterford           NL04 Groningen           UK46 Wiltshire           
+EI29 Westmeath           NL05 Limburg             UK52 Antrim              
+EI30 Wexford             NL06 Noord-Brabant       UK53 Ards                
+EI31 Wicklow             NL07 Noord-Holland       UK54 Armagh              
+EK   EQUATORIAL GUINEA   NL08 Overijssel          UK55 Ballymena           
+EK01 Bioko (Fernando Po) NL09 Utrecht             UK56 Ballymoney          
+EK02 Rio Muni            NL10 Zeeland             UK57 Banbridge           
+EK03 Annobon             NL11 Zuid-Holland        UK58 Belfast             
+EK04 Corisco             NL12 Dronten             UK59 Carrickfergus       
+EK05 Islas de Elobey     NL13 Zuidelijke IjsselmeeUK60 Castlereagh         
+ES   EL SALVADOR         NL14 Lelystad            UK61 Coleraine           
+ES01 Ahuachapan          NO   NORWAY              UK62 Cookstown           
+ES02 Cabanas             NO01 Akershus            UK63 Craigavon           
+ES03 Chalatenango        NO02 Aust-Agder          UK64 Down                
+ES04 Cuscatlan           NO04 Buskerud            UK65 Dungannon           
+ES05 La Libertad         NO05 Finnmark            UK66 Fermanagh           
+ES06 La Paz              NO06 Hedmark             UK67 Larne               
+ES07 La Union            NO07 Hordaland           UK68 Limavady            
+ES08 Morazan             NO08 More og Romsdal     UK69 Lisburn             
+ES09 SanMiguel           NO09 Nordland            UK70 Londonderry         
+ES10 San Salvador        NO10 Nord-Trondelag      UK71 Magherafelt         
+ES11 Santa Ana           NO11 Oppland             UK72 Moyle               
+ES12 San Vicente         NO12 Oslo                UK73 Newry and Mourne    
+ES13 Sonsonate           NO13 Ostfold             UK74 Newtownabbey        
+ES14 Usulutan            NO14 Rogaland            UK75 North Down          
+ET   ETHIOPIA            NO15 Sogn og Fjordane    UK76 Omagh               
+ET01 Arsi                NO16 Sor-Trondelag       UK77 Strabane            
+ET02 Gonder              NO17 Telemark            UK78 Borders             
+ET03 Bale                NO18 Troms               UK79 Central             
+ET04 Eritrea             NO19 Vest-Agder          UK80 Dumfries and Gallowa
+ET05 Gamo Gofa           NO20 Vestfold            UK81 Fife                
+ET06 Gojam               NP   NEPAL               UK82 Grampian            
+ET07 Harerge             NP01 Bagmati             UK83 Highland            
+ET08 Ilubabor            NP02 Bheri               UK84 Lothian             
+ET09 Kefa                NP03 Dhawalagiri         UK85 Orkney              
+ET10 Shewa               NP04 Gandaki             UK86 Shetland            
+ET11 Sidamo              NP05 Janakpur            UK87 Strathclyde         
+ET12 Tigray              NP06 Karnali             UK88 Tayside             
+ET13 Welega              NP07 Kosi                UK89 Western Isles       
+ET14 Welo                NP08 Lumbini             UK90 Clwyd               
+EU   EUROPA ISLAND       NP09 Mahakali            UK91 Dyfed               
+FA   FALKLAND IS. (IS. MANP10 Mechi               UK92 Gwent               
+FG   FRENCH GUIANA       NP11 Narayani            UK93 Gwynedd             
+FI   FINLAND             NP12 Rapti               UK94 Mid Glamorgan       
+FI01 Ahvenanmaa          NP13 Sagarmatha          UK95 Powys               
+FI02 Hame                NP14 Seti                UK96 South Glamorgan     
+FI03 Keski-Suomi         PS   TRUST TERR. OF THE PUK97 West Glamorgan      
+FI04 Kuopio              RM   Marshall Islands    UR   UNION OF SOV. SOC. R
+FI05 Kymi                PW   Palau               UR01 Armyanskaya SSR     
+FI06 Lappi               NR   NAURU               UR02 Azerbaydzhanskaya SS
+FI07 Mikkeli             NR01 Aiwo                UR03 Belorusskaya SSR    
+FI08 Oulu                NR02 Anabar              UR04 Estonskaya SSR      
+FI09 Pohjois-Karjala     NR03 Anetan              UR05 Gruzinskaya SSR     
+FI10 Turku ja Pori       NR04 Anibare             UR06 Kazakhskaya SSR     
+FI11 Uusimaa             NR05 Baiti               UR07 Kirgizskaya SSR     
+FI12 Vaasa               NR06 Boe                 UR08 Latviyskaya SSR     
+FJ   FIJI                NR07 Buada               UR09 Litovskaya SSR      
+FJ01 Central             NR08 Denigomodu          UR10 Moldavskaya SSR     
+FJ02 Eastern             NR09 Ewa                 UR11 Rossiyskaya SFSR    
+FJ03 Northern            NR10 Ijuw                UR12 Tadzhikskaya SSR    
+FJ04 Rotuma              NR11 Meneng              UR13 Turkmenskaya SSR    
+FJ05 Western             NR12 Nibok               UR14 Ukrainskaya SSR     
+FM    Micronesia, Fdrtd. NR13 Uaboe               UR15 Uzbekskaya SSR      
+FM01 Kosrae              NR14 Yaren               US   UNITED STATES       
+FM02 Pohnpei             NS   SURINAME            US01 Alabama             
+FM03 Truk                NS10 Brokopondo          US02 Alaska              
+FM04 Yap                 NS11 Commewijne          US04 Arizona             
+FO   FAROE ISLANDS       NS12 Coronie             US05 Arkansas            
+FP   FRENCH POLYNESIA    NS13 Marowijne           US06 California          
+FQ   BAKER ISLAND        NS14 Nickerie            US08 Colorado            
+FR   FRANCE              NS15 Para                US09 Connecticut         
+FR01 Ain                 NS16 Paramaribo          US10 Delaware            
+FR02 Aisne               NS17 Saramacca           US11 District of Columbia
+FR03 Allier              NS18 Sipaliwini          US12 Florida             
+FR04 Alpes-Maritimes     NS19 Wanica              US13 Georgia             
+FR05 Ardeche             NU   NICARAGUA           US15 Hawaii              
+FR06 Ardennes            NU01 Boaco               US16 Idaho               
+FR07 Ariege              NU02 Carazo              US17 Illinois            
+FR08 Aube                NU03 Chinandega          US18 Indiana             
+FR09 Aude                NU04 Chontales           US19 Iowa                
+FR10 Aveyron             NU05 Esteli              US20 Kansas              
+FR11 Bas-Rhin            NU06 Granada             US21 Kentucky            
+FR12 Alpes-de-Haute-ProveNU07 Jinotega            US22 Louisiana           
+FR13 Pyrenees-AtlantiquesNU08 Leo(n               US23 Maine               
+FR14 Territoire de BelforNU09 Madriz              US24 Maryland            
+FR15 Bouches-du-Rhone    NU10 Managua             US25 Massachusetts       
+FR16 Calvados            NU11 Masaya              US26 Michigan            
+FR17 Cantal              NU12 Matagalpa           US27 Minnesota           
+FR18 Charente            NU13 Nueva Segovia       US28 Mississippi         
+FR19 Charente-Maritime   NU14 Rio San Juan        US29 Missouri            
+FR20 Cher                NU15 Rivas               US30 Montana             
+FR21 Correze             NU16 Zelaya              US31 Nebraska            
+FR22 Cote-d'Or           NZ   NEW ZEALAND         US32 Nevada              
+FR23 Cotes-du-Nord       NZ01 Akaroa              US33 New Hampshire       
+FR24 Creuse              NZ02 Akitio              US34 New Jersey          
+FR25 Deux-Sevres         NZ03 Amuri               US35 New Mexico          
+FR26 Dordogne            NZ04 Ashburton           US36 New York            
+FR27 Doubs               NZ05 Ashley              US37 North Carolina      
+FR28 Drome               NZ06 Awatere             US38 North Dakota        
+FR29 Eure                NZ07 Bay of Islands      US39 Ohio                
+FR30 Eure-et-Loir        NZ08 Bruce               US40 Oklahoma            
+FR31 Finistere           NZ09 Buller              US41 Oregon              
+FR32 Gard                NZ10 Chatham Islands     US42 Pennyslvania        
+FR33 Gers                NZ11 Cheviot             US44 Rhode Island        
+FR34 Gironde             NZ12 Clifton             US45 South Carolina      
+FR35 Haute-Garonne       NZ13 Clutha              US46 South Dakota        
+FR36 Haute-Loire         NZ14 Cook                US47 Tennessee           
+FR37 Haute-Marne         NZ15 Coromandel          US48 Texas               
+FR38 Hautes-Alpes        NZ16 Dannevirke          US49 Utah                
+FR39 Haute-Saone         NZ17 Egmont              US50 Vermont             
+FR40 Haute-Savoie        NZ18 Eketahuna           US51 Virginia            
+FR41 Hautes-Pyrenees     NZ19 Ellesmere           US53 Washington          
+FR42 Haute-Vienne        NZ20 Eltham              US54 West Virginia       
+FR43 Haut-Rhin           NZ21 Eyre                US55 Wisconsin           
+FR44 Herault             NZ22 Featherston         US56 Wyoming             
+FR45 Ille-et-Vilaine     NZ23 Fiord               UV   BURKINA FASO        
+FR46 Indre               NZ24 Franklin            UV15 Bam                 
+FR47 Indre-et-Loire      NZ25 Geraldine           UV16 Bazega              
+FR48 Isere               NZ26 Golden Bay          UV17 Bougouriba          
+FR49 Jura                NZ27 Great Barrier IslandUV18 Boulgou             
+FR50 Landes              NZ28 Grey                UV19 Boulkiemde          
+FR51 Loire               NZ29 Hauraki Plains      UV20 Ganzourgou          
+FR52 Loire-Atlantique    NZ30 Hawera              UV21 Gnagna              
+FR53 Loiret              NZ31 Hawkes Bay          UV22 Gourma              
+FR54 Loir-et-Cher        NZ32 Heathcote           UV23 Houet               
+FR55 Lot                 NZ33 Hobson              UV24 Kadiogo             
+FR56 Lot-et-Garonne      NZ34 Hokianga            UV25 Kenedougou          
+FR57 Lozere              NZ35 Horowhenua          UV26 Komoe               
+FR58 Maine-et-Loire      NZ36 Hutt                UV27 KMossi              
+FR59 Manche              NZ37 Inangahua           UV28 Kouritenga          
+FR60 Marne               NZ38 Inglewood           UV29 Mouhoun             
+FR61 Mayenne             NZ39 Kaikoura            UV30 Namentenga          
+FR62 Meurthe-et-Moselle  NZ40 Kairanga            UV31 Naouri              
+FR63 Meuse               NZ41 Kiwitea             UV32 Oubritenga          
+FR64 Morbihan            NZ42 Kowai               UV33 Oudalan             
+FR65 Moselle             NZ43 Lake                UV34 Passore             
+FR66 Nievre              NZ44 Levels              UV35 PoniUV36 Sanguie    
+FR67 Nord                NZ45 Mackenzie           UV37 Sanmatenga          
+FR68 Oise                NZ46 Malvern             UV38 Sena                
+FR69 Orne                NZ47 Manawatu            UV39 Sissili             
+FR70 Pas-de-Calais       NZ48 Mangonui            UV40 Soum                
+FR71 Puy-de-Dome         NZ49 Maniototo           UV41 Sourou              
+FR72 Pyrenees-Orientales NZ50 Marlborough         UV42 Tapoa               
+FR73 Rhone               NZ51 Masterton           UV43 Yatenga             
+FR74 Saone-et-Loire      NZ52 Matamata            UV44 Zoundweogo          
+FR75 Sarthe              NZ53 Mount Herbert       UY   URUGUAY             
+FR76 Savoie              NZ54 Ohinemuri           UY01 Artigas             
+FR77 Hauts-de-Seine      NZ55 Opotiki             UY02 Canelones           
+FR78 Seine-et-Marne      NZ56 Oroua               UY03 Cerro Largo         
+FR79 Essonne             NZ57 Otamatea            UY04 Colonia             
+FR80 Seine-Maritime      NZ58 Otorohanga          UY05 Durazno             
+FR81 Somme               NZ59 Oxford              UY06 Flores              
+FR82 Tarn                NZ60 Pahiatua            UY07 Florida             
+FR83 Tarn-et-Garonne     NZ61 Paparua             UY08 Lavalleja           
+FR84 Var                 NZ62 Patangata           UY09 Maldonado           
+FR85 Vaucluse            NZ63 Patea               UY10 Montevideo          
+FR86 Vendee              NZ64 Peninsula           UY11 Paysandu            
+FR87 Vienne              NZ65 Piako               UY12 Rio Negro           
+FR88 Vosges              NZ66 Pohangina           UY13 Rivera              
+FR89 Yonne               NZ67 Raglan              UY14 Rocha               
+FR90 Corse-du-Sud        NZ68 Rangiora            UY15 Salto               
+FR91 Seine-Saint-Denis   NZ69 Rangitikei          UY16 San Jose            
+FR92 Val-de-Marne        NZ70 Rodney              UY17 Soriano             
+FR93 Val-d'Oise          NZ71 Rotorua             UY18 Tacuarembo          
+FR94 Ville de Paris      NZ72 Southland           UY19 Treinta y Tres      
+FR95 Yvelines            NZ73 Stewart Island      VC   ST. VINCENT & GRENAD
+FR96 Haute-Corse         NZ74 Stratford           VC01 Charlotte           
+FS   FRENCH SOUTH. & ANTANZ75 Taieri              VC02 Saint Andrew        
+GA   GAMBIA, THE         NZ76 Taranaki            VC03 Saint David         
+GA01 Banjul, Gambia      NZ77 Taumarunui          VC04 Saint George        
+GA02 Lower River, Gambia NZ78 Taupo               VC05 Saint Patrick       
+GA03 MacCarthy Island, GaNZ79 Tauranga            VE   VENEZUELA           
+GA04 Upper River, Gambia NZ80 Thames              VE01 Amazonas            
+GA05 Western, Gambia     NZ81 Tuapeka             VE02 Anzoategui          
+GA07 North Bank,Gambia   NZ82 Vincent             VE03 Apure               
+GB   GABON               NZ83 Waiapu              VE04 Aragua              
+GB01 Estuaire            NZ84 Waihemo             VE05 Barinas             
+GB02 Haut-Ogooue         NZ85 Waikato             VE06 Bolivar             
+GB03 Moyen-Ogooue        NZ86 Waikohu             VE07 Carabobo            
+GB04 Ngounie             NZ87 Waikouaiti          VE08 Cojedes             
+GB05 Nyanga              NZ88 Waimairi            VE09 Delta Amacuro       
+GB06 Ogooue-Ivindo       NZ89 Waimarino           VE10 Distrito Federal    
+GB07 Ogooue-Lolo         NZ90 Waimate             VE11 Falcon              
+GB08 Ogooue-Maritime     NZ91 Waimate West        VE12 Guarico             
+GB09 Woleu-Ntem          NZ92 Waimea              VE13 Lara                
+GC   GERMAN DEMOCRATIC RENZ93 Waipa               VE14 Merida              
+GC01 Cottbus             NZ94 Waipara             VE15 Miranda             
+GC02 Dresden             NZ95 Waipawa             VE16 Monagas             
+GC03 Erfurt              NZ96 Waipukurau          VE17 Nueva Esparta       
+GC04 Frankfurt           NZ97 Wairarapa South     VE18 Portuguesa          
+GC05 Gera                NZ98 Wairewa             VE19 Sucre               
+GC06 Halle               NZ99 Wairoa              VE20 Tachira             
+GC07 Karl-Marx-Stadt     NZA1 Whangarei           VE21 Trujillo            
+GC08 Leipzig             NZA2 Whangaroa           VE22 Yaracuy             
+GC09 Magdeburg           NZA3 Woodville           VE23 Zulia               
+GC10 Neubrandenburg      NZA4 Waitaki             VE24 Dependencias Federal
+GC12 Potsdam             NZA5 Waitemata           VI   BRITISH VIRGIN ISLAN
+GC13 Rostock             NZA6 Waitomo             VM   VIETNAM             
+GC14 Schwerin            NZA7 Weber               VM01 An Giang            
+GC15 Suhl                NZA8 Waitotara           VM02 Bac Thai            
+GE   GERMAN FEDERAL REPUBNZA9 Wallace             VM03 Ben Tre             
+GE01 Baden-Wurttemberg   NZB1 Whangamomona        VM04 Binh Tri Thien      
+GE02 Bayern              NZB2 Wanganui            VM05 Cao Bang            
+GE03 Bremen              NZB3 Westland            VM06 Cuu Long            
+GE04 Hamburg             NZB4 Whakatane           VM07 Dac Lac             
+GE05 Hessen              NZB5 Castlepoint         VM09 Dong Thap           
+GE06 Niedersachsen       NZB6 Collingwood         VM10 Gia Lai-Kon Tum     
+GE07 Nordrhein-Westfalen NZB7 Eden                VM11 Ha Bac              
+GE08 Rheinland-Pfalz     NZB8 Halswell            VM12 Hai Hung            
+GE09 Saarland            NZB9 Kaitieke            VM13 Hai Phong           
+GE10 Schleswig-Holstein  NZC1 Kawhia              VM14 Ha Nam Ninh         
+GH   GHANA               NZC2 Makara              VM15 Ha Noi              
+GH01 Greater Accra       NZC3 Matakaoa            VM16 Ha Son Binh         
+GH02 Ashanti             NZC4 Mauriceville        VM17 Ha Tuyen            
+GH03 Brong-Ahafo         NZC5 Murchison           VM19 Hoang Lien Son      
+GH04 Central             NZC6 Ohura               VM20 Ho Chi Minh         
+GH05 Eastern             NZC7 Selwyn              VM21 Kien Giang          
+GH06 Northern            NZC8 Sounds              VM22 Lai Chau            
+GH07 Upper               NZC9 Springs             VM23 Lam Dong            
+GH08 Volta               NZD1 Takaka              VM24 Long An             
+GH09 Western             NZD2 Tawera              VM25 Minh Hai            
+GI   GIBRALTAR           NZD3 Uawa                VM26 Nghe Tinh           
+GJ   GRENADA             PA   PARAGUAY            VM27 Nghia Binh          
+GK   GUERNSEY            PA01 Alto Parana         VM28 Phu Khanh           
+GL   GREENLAND           PA02 Amambay             VM29 Quang Nam-Da Nang   
+GL01 Nordgronland        PA03 Boqueron            VM30 Quang Ninh          
+GL02 Ostgronland         PA04 Caaguazu            VM31 Song Be             
+GL03 Vestgronland        PA05 Caazapa             VM32 Son La              
+GO   GLORIOSO ISLANDS    PA06 Central             VM33 Tay Ninh            
+GP   GUADELOUPE          PA07 Concepcion          VM34 Thanh Hoa           
+GQ   GUAM                PA08 Cordillera          VM35 Thai Binh           
+GR   GREECE              PA10 Guaira              VM36 Thuan Hai           
+GR01 Evros               PA11 Itapua              VM37 Tien Giang          
+GR02 Rodhopi             PA12 Misiones            VM38 Vinh Phu            
+GR03 Xanthi              PA13 Neembucu            VM39 Lang Son            
+GR04 Drama               PA15 Paraguari           VM40 Dong Nai            
+GR05 Serrai              PA16 Presidente Hayes    VM41 Hau Giang           
+GR06 Kilkis              PA17 San Pedro           VM42 Vung Tao - Con Dao  
+GR07 Pella               PA18 Alto Paraguay       VQ   VIRGIN ISLANDS      
+GR08 Florina             PA19 Canendiyu           VT   VATICAN CITY        
+GR09 Kastoria            PA20 Chaco               WA   NAMIBIA             
+GR10 Grevena             PA21 Nueva Asuncion      WA01 Bethanien           
+GR11 Kozani              PC   PITCAIRN ISLANDS    WA02 Caprivi Oos         
+GR12 Imathia             PE   PERU                WA03 Boesmanland         
+GR13 Thessaloniki        PE01 Amazonas            WA04 Gobabis             
+GR14 Kavala              PE02 Ancash              WA05 Grootfontein        
+GR15 Khalkidhiki         PE03 Apurimac            WA06 Kaokoland           
+GR16 Pieria              PE04 Arequipa            WA07 Karibib             
+GR17 Ioannina            PE05 Ayacucho            WA08 Keetmanshoop        
+GR18 Thesprotia          PE06 Cajamarca           WA09 Luderitz            
+GR19 Preveza             PE07 Callao              WA10 Maltahohe           
+GR20 Arta                PE08 Cusco               WA11 Okahandja           
+GR21 Larisa              PE09 Huancavelica        WA12 Omaruru             
+GR22 Trikala             PE10 Huanuco             WA13 Otjiwarongo         
+GR23 Kardhitsa           PE11 Ica                 WA14 Outjo               
+GR24 Magnisia            PE12 Junin               WA15 Owambo              
+GR25 Kerkira             PE13 La Libertad         WA16 Rehoboth            
+GR26 Levkas              PE14 Lambayeque          WA17 Swakopmund          
+GR27 Kefallinia          PE15 Lima                WA18 Tsumeb              
+GR28 Zakinthos           PE16 Loreto              WA20 Karasburg           
+GR29 Fthiotis            PE17 Madre de Dios       WA21 Windhoek            
+GR30 Evritania           PE18 Moquegua            WA22 Damaraland          
+GR31 Aitolia kai AkarnaniPE19 Pasco               WA23 Hereroland Oos      
+GR32 Fokis               PE20 Piura               WA24 Hereroland Wes      
+GR33 Voiotia             PE21 Puno                WA25 Kavango             
+GR34 Evvoia              PE22 San Martin          WA26 Mariental           
+GR35 Attiki              PE23 Tacna               WA27 Namaland            
+GR36 Argolis             PE24 Tumbes              WE   WEST BANK           
+GR37 Korinthia           PE25 Ucayali             WF   WALLIS AND FUTUNA   
+GR38 Akhaia              PF   PARACEL ISLANDS     WI   WESTERN SAHARA      
+GR39 Ilia                PG   SPRATLY ISLANDS     WQ   WAKE ISLAND         
+GR40 Messinia            PK   PAKISTAN            WS   WESTERN SAMOA       
+GR41 Arkadhia            PK01 Fed. Admin. Tribal AWS01 Aana                
+GR42 Lakonia             PK02 Baluchistan         WS02 Aiga-i-le-Tai       
+GR43 Khania              PK03 North-West Frontier WS03 Atua                
+GR44 Rethimni            PK04 Punjab              WS04 Faasaleleaga        
+GR45 Iraklion            PK05 Sind                WS05 Gagaemauga          
+GR46 Lasithi             PL   POLAND              WS06 Vaa-o-Fonoti        
+GR47 Dhodhekanisos       PL23 Biala Podlaska      WS07 Gagaifomauga        
+GR48 Samos               PL24 Bialystok           WS08 Palauli             
+GR49 Kikladhes           PL25 Bielsko             WS09 Satupaitea          
+GR50 Khios               PL26 Bydgoszcz           WS10 Tuamasaga           
+GR51 Lesvos              PL27 Chelm               WS11 Vaisigano           
+GT   GUATEMALA           PL28 Ciechanow           WZ   SWAZILAND           
+GT01 Alta Verapaz        PL29 Czestochowa         WZ01 Hhohho              
+GT02 Baja Verapaz        PL30 Elblag              WZ02 Lubombo             
+GT03 Chimaltenango       PL31 Gdansk              WZ03 Manzini             
+GT04 Chiquimula          PL32 Gorzow              WZ04 Shiselweni          
+GT05 El Progreso         PL33 Jelenia Gora        WZ05 Praslin             
+GT06 Escuintla           PL34 Kalisz              YE   YEMEN (SANAA)       
+GT07 Guatemala           PL35 Katowice            YE01 Al Bayda            
+GT08 Huehuetenango       PL36 Kielce              YE02 Al Hudaydah         
+GT09 Izabal              PL37 Konin               YE03 Hajjah              
+GT10 Jalapa              PL38 Koszalin            YE04 Ibb                 
+GT11 Jutiapa             PL39 Krakow              YE05 Sa'dah              
+GT12 Peten               PL40 Krosno              YE06 San'a               
+GT13 Quetzaltenango      PL41 Legnica             YE07 Ta'izz              
+GT14 Quiche              PL42 Leszno              YE08 Al Mahwit           
+GT15 Retalhuleu          PL43 Lodz                YE09 Dhamar              
+GT16 Sacatepequez        PL44 Lomza               YE10 Ma'rib              
+GT17 San Marcos          PL45 Lublin              YE11 Al Jawf             
+GT18 Santa Rosa          PL46 Nowy Sacz           YO   YUGOSLAVIA          
+GT19 Solola              PL47 Olsztyn             YO01 Bosna i Hercegovina 
+GT20 Suchitepequez       PL48 Opole               YO02 Crna Gora           
+GT21 Totonicapan         PL49 Ostroleka           YO03 Hrvatska            
+GT22 Zacapa              PL50 Pila                YO05 Makedonija          
+GV   GUINEA              PL51 Piotrkow            YO06 Slovenija           
+GV01 Beyla               PL52 Plock               YO07 Srbija              
+GV02 Boffa               PL53 Poznan              YS   YEMEN (ADEN)        
+GV03 Boke                PL54 Przemysl            YS01 'Adan               
+GV04 Conakry             PL55 Radom               YS02 Lahij               
+GV05 Dabola              PL56 Rzeszow             YS03 Abyan               
+GV06 Dalaba              PL57 Siedlce             YS04 Shabwah             
+GV07 Dinguiraye          PL58 Sieradz             YS05 Hadramawt           
+GV08 Dubreka             PL59 Skierniewice        YS06 Al Mahrah           
+GV09 Faranah             PL60 Slupsk              ZA   ZAMBIA              
+GV10 Forecariah          PL61 Suwalki             ZA01 Western             
+GV11 Fria                PL62 Szczecin            ZA02 Central             
+GV12 Gaoual              PL63 Tarnobrzeg          ZA03 Eastern             
+GV13 Gueckedou           PL64 Tarnow              ZA04 Luapula             
+GV14 Kankan              PL65 Torun               ZA05 Northern            
+GV15 Kerouane            PL66 Walbrzych           ZA06 North-Western       
+GV16 Kindia              PL67 Warszawa            ZA07 Southern            
+GV17 Kissidougou         PL68 Wloclawek           ZA08 Copperbelt          
+GV18 Koundara            PL69 Wroclaw             ZA09 Lusaka              
+GV19 Kouroussa           PL70 Zamosc              ZI   ZIMBABWE            
+GV20 Labe                PL71 Zielona Gora        ZI01 Manicaland          
+GV21 Macenta             PM   PANAMA              ZI02 Midlands            
+GV22 Mali                PM01 Bocas del Toro      ZI03 Mashonaland Central 
+GV23 Mamou               PM02 Chiriqui            ZI04 Mashonaland East    
+GV24 Nzerekore           PM03 Cocle               ZI05 Mashonaland West    
+GV25 Pita                PM04 Colon               ZI06 Matabeleland North  
+GV26 Siguiri             PM05 Darien              ZI07 Matabeleland South  
+GV27 Telimele            PM06 Herrera             ZI08 Victoria            
+GV28 Tougue              PM07 Los Santos          ZZ   OCEANS              
+GV29 Yomou               PM08 Panama              ZZ01 Northwest Pacific   
+GY   GUYANA              PM09 San Blas            ZZ05 Northeast Pacific   
+GY10 Barima-Waini        PM10 Veraguas            ZZ10 Southwest Pacific   
+GY11 Guyuni-Mazarumi     PO   PORTUGAL            ZZ15 Southeast Pacific   
+GY12 Demarara-Mahaica    PO01 Angra do Heroismo   ZZ20 North Atlantic      
+GY13 East Berbice-CorentyPO02 Aveiro              ZZ25 South Atlantic      
+GY14 Essequibo I.-W.DemerPO03 Beja                ZZ30 Caribbean           
+GY15 Mahaica-Berbice     PO04 Braga               ZZ35 Mediterranean       
+GY16 Pomeroon-Supenaam   PO05 Braganca            ZZ40 Northern Indian     
+GY17 Potaro-Siparuni     PO06 Castelo Branco      ZZ41 Southern Indian     
+GY18 Upper Demerara-BerbiPO07 Coimbra             ZZ45 China (Seas)        
+GY19 U.Takutu-U.EssequiboPO08 Evora               ZZ50 Arctic              
+GZ   GAZA STRIP          PO09 Faro                ZZ55 Antarctic           
+HA   HAITI               PO10 Funchal             
+HA03 Nord-Ouest          PO11 Guarda              
+HA06 Artibonite          PO12 Horta               
+    
+                        Appendix
+
+Example for IGBA format card-image data file: a group head and one specimen
+description
+
+DNS  1TATIKA GROUP BASALT LAVAS (HUNGARY
+DNS  2     47N 17EEMBEY-ISZTIN 5040 5041 5042 5043 5044 5045
+DNSABA 26900N 17300EOLIVINE BASALT           LAZ-HEGY, UZSABANYA
+DNSABB  1 4828 1991509 197 740   7 682 887 371 255  87     287    1059   530
+DNSABC1C,2F,2I,3E,4D:NI=126P6;CR=146P6;V =18P6;CU=47P6;ZN=97P6;ZR=362P6;SC=22P6;
+DNSABDBA=791P6;SR=903P6;RB=95P6;NB=86P6;Y =24P6:PLIO,2;341E4-KAR7WR,3:AP,AY,EU,D
+DNSABEB:NL,RG,SA,VA:((XP HU23)):
+
+Character Position 1.......6 Card identification field
+Character Position 7......80 Card text Field
+
+Explanation of the Identification field:
+DNS :              Group Identifier
+AB  :              Specimen Identifier (within group)
+1,2,A,......       Card Identifiers (within group head or specimen)
+
+Explantion of the Card text Field             
+Card 6 position
+Identifier CharacterTextMeaning1TATIKAGroup Title247N 17E
+EMBEY
+5040 5041Group Locality Latitude and longitude in Degree
+Contributor
+Reference ListA46900N
+17300E
+OLIVINE BASALT
+Laz-HegyLatitude of the specimen in 0.001 degree
+Longitude of specimen in 0.001 degree
+Literal rock name
+Geological UnitB1
+4828 1991509.....
+
+10059
+530Data are taken from first reference
+SiO2,TiO2,Al2O3,Fe2O3,FeO,MnO,MgO,CaO,Na2O,K2O,P2O5,  
+CO2,H2O+,H2O-
+Authorr's total in 0.01%
+Rock name Code NumberC1C,2F,2I,3E
+:
+NI=126P6Status Symbol list
+Field Limiter
+Trace element listDBA=..............
+:
+PLIO,2;
+341E4-
+KAR/WR
+,3 
+:
+AP,AY,EU,IContinuation trace element list
+Field limiter
+Stratigraphic age taken from second reference
+Isotopic age
+Determined by K-Ar method on whole rock
+taken from third reference
+field delimiter
+Petrographic descriptor list
+EB:
+NL,RG,SA,VA
+:
+((XP HU23))End of Petr. descriptor list and field limiter
+Mineral list
+Field limiter
+Additional Information list                                
