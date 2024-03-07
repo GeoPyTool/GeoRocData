@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import csv
 import re
-import os
+import os       
+import platform
 import pandas as pd
 import statistics
 from fitter import Fitter
@@ -26,20 +27,20 @@ from matplotlib.path import Path
 from matplotlib.font_manager import FontProperties
 from urllib.parse import quote
 
+# Set the font for plots
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams['svg.fonttype'] = 'none'
 
+# Get the absolute path of the current file
+current_file_name = os.path.abspath(__file__)
 
+# Get the directory of the current file
+current_directory = os.path.dirname(current_file_name)
 
-# 获取当前文件的绝对路径
-current_file_path = os.path.abspath(__file__)
-
-# 获取当前文件的目录
-current_directory = os.path.dirname(current_file_path)
-
-# 改变当前工作目录
+# Change the current working directory
 os.chdir(current_directory)
+
 
 # 创建一个宽高比为2:1的figure
 fig = plt.figure(figsize=(10, 5))     
