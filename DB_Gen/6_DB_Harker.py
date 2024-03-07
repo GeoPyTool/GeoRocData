@@ -53,29 +53,30 @@ def generate_harker_diagram(filename, rock_type, major_oxides,output_dir):
                     "MGO(WT%)", "MNO(WT%)", "K2O(WT%)", "NA2O(WT%)", "P2O5(WT%)","ROCK TYPE"]]
 
     # Filter rows where "ROCK TYPE" is rock_type and "SIO2(WT%)" is not 0
-    used_df = selected_columns[(selected_columns["ROCK TYPE"] == rock_type) & (selected_columns["SIO2(WT%)"] != 0)]
+    tag_df = selected_columns[(selected_columns["ROCK TYPE"] == rock_type) & (selected_columns["SIO2(WT%)"] != 0)]
 
     # Output the count of "Type" values
-    print(used_df["Type"].value_counts())
-    type_counts = used_df["Type"].value_counts()
+    print(tag_df["Type"].value_counts())
+    type_counts = tag_df["Type"].value_counts()
     type_counts.to_csv(output_dir + '/'+'Harker_'+rock_type+'.csv')
 
     # Create bi-variant plots
     fig, axes = plt.subplots(3, 3, figsize=(9, 9))
 
-    # Check if used_color_dict.json file exists
-    if os.path.exists(output_dir + '/'+rock_type+'_color_dict.json'):
-        # If it exists, read used_color_dict from the file
-        with open(output_dir + '/'+rock_type+'_color_dict.json', 'r') as f:
-            used_color_dict = json.load(f)
+    # Check if tag_color_dict.json file exists
+    # 检查是否存在tag_color_dict.json文件
+    if os.path.exists('Color_Config/'+rock_type+'_color_dict.json'):
+        # 如果存在，从文件中读取tag_color_dict
+        with open('Color_Config/'+rock_type+'_color_dict.json', 'r') as f:
+            tag_color_dict = json.load(f)
     else:
-        # If it doesn't exist, create a new used_color_dict and save it to the file
-        type_set = set(used_df['Type'].unique())
-        # cmap = cm.get_cmap('rainbow', len(type_set))
-        cmap = plt.get_cmap('rainbow', len(type_set))
-        used_color_dict = {type: cmap(i) for i, type in enumerate(type_set)}
-        with open(output_dir + '/'+rock_type+'_color_dict.json', 'w') as f:
-            json.dump(used_color_dict, f)
+        # 如果不存在，创建新的tag_color_dict并保存到文件中
+        type_set = set(tag_df['Type'].unique())
+        cmap = cm.get_cmap('rainbow', len(type_set))
+        tag_color_dict = {type: cmap(i) for i, type in enumerate(type_set)}
+        with open('Color_Config/'+rock_type+'_color_dict.json', 'w') as f:
+            json.dump(tag_color_dict, f) 
+
 
     # Draw Harker scatter plots
     for i, oxide in enumerate(major_oxides):
@@ -84,9 +85,9 @@ def generate_harker_diagram(filename, rock_type, major_oxides,output_dir):
         col = i % 3
 
         # Create scatter plot
-        grouped = used_df.groupby('Type')
+        grouped = tag_df.groupby('Type')
         for label, group in grouped:
-            axes[row, col].scatter(group ['SIO2(WT%)'], group [oxide], alpha=0.15, label=label, color=used_color_dict[label], edgecolors='none')
+            axes[row, col].scatter(group ['SIO2(WT%)'], group [oxide], alpha=0.15, label=label, color=tag_color_dict[label], edgecolors='none')
 
         newoxide =  oxide.replace('(WT%)',' wt%')
         axes[row, col].set_xlabel('SiO2 wt%', fontsize=7)
@@ -94,12 +95,12 @@ def generate_harker_diagram(filename, rock_type, major_oxides,output_dir):
         ax = axes[row, col]
 
         # Calculate the 1% and 9999% quantiles of the y-axis data
-        q1 = used_df[oxide].quantile(0.01)
-        q3 = used_df[oxide].quantile(0.9999)
+        q1 = tag_df[oxide].quantile(0.01)
+        q3 = tag_df[oxide].quantile(0.9999)
         # Calculate the interquartile range
         iqr = q3 - q1
         # Calculate the most concentrated range
-        lower_bound = min(used_df[oxide])
+        lower_bound = min(tag_df[oxide])
         upper_bound = q3 + 0.1 * iqr
 
         # Limit the y-axis to the most concentrated range
@@ -112,8 +113,8 @@ def generate_harker_diagram(filename, rock_type, major_oxides,output_dir):
         ylim = ax.get_ylim()
 
         # Calculate the number of data points within the view range
-        visible_points = used_df[(used_df['SIO2(WT%)'] >= xlim[0]) & (used_df['SIO2(WT%)'] <= xlim[1]) & 
-                                (used_df[oxide] >= ylim[0]) & (used_df[oxide] <= ylim[1])]
+        visible_points = tag_df[(tag_df['SIO2(WT%)'] >= xlim[0]) & (tag_df['SIO2(WT%)'] <= xlim[1]) & 
+                                (tag_df[oxide] >= ylim[0]) & (tag_df[oxide] <= ylim[1])]
 
         num_visible_points = len(visible_points)
 
@@ -134,6 +135,9 @@ def generate_harker_diagram(filename, rock_type, major_oxides,output_dir):
 # Set the parameters
 filename = 'GeoRoc.db'
 rock_type = 'VOL'
+color_config_dir = 'Color_Config'
+if not os.path.exists(color_config_dir):
+    os.makedirs(color_config_dir)
 output_dir = 'Harker'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
