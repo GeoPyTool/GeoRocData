@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import csv
 import re
-import os
+import os       
+import platform
 import pandas as pd
 import statistics
 from fitter import Fitter
@@ -24,41 +25,40 @@ import matplotlib.patches as mpatches
 import matplotlib.cm as cm
 from matplotlib.path import Path
 from matplotlib.font_manager import FontProperties
+from urllib.parse import quote
 
-
+# Set the font for plots
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams['svg.fonttype'] = 'none'
 
-
-
-# 获取当前文件的绝对路径
+# Get the absolute path of the current file
 current_file_name = os.path.abspath(__file__)
 
-# 获取当前文件的目录
+# Get the directory of the current file
 current_directory = os.path.dirname(current_file_name)
 
-# 改变当前工作目录
+# Change the current working directory
 os.chdir(current_directory)
 
-
+# Funtion to split the CSV file into three separate files
 def split_csv(file_path):
 
-    # 拆分路径和文件名
+    # Split the path and filename
     dir_path, file_name = os.path.split(file_path)
 
     print("Dir Path:", dir_path)
     print("Filename:", file_name)
 
-    # 获取output_dir的上层目录
+    # Get the parent directory of output_dir
     parent_dir = os.path.dirname(dir_path)
 
-    # 连接上层目录和'Splited'这个文件夹
+    # Join the parent directory and the 'Splited' folder
     splited_data_dir = os.path.join(parent_dir, 'Splited_Data')
     splited_abbreviations_dir = os.path.join(parent_dir, 'Splited_Abbreviations')
     splited_references_dir = os.path.join(parent_dir, 'Splited_References')
 
-    # 检查splited_dir是否存在，如果不存在，创建它
+    # Check if splited_dir exists, if not, create it
     for i in [splited_data_dir, splited_abbreviations_dir, splited_references_dir]:
         if not os.path.exists(i):
             os.makedirs(i)
@@ -80,18 +80,20 @@ def split_csv(file_path):
     df_abbreviations = pd.read_csv(file_path, skiprows=start_line_abbreviations, nrows=end_line_abbreviations-start_line_abbreviations, encoding='ISO-8859-1', engine='python', on_bad_lines='warn')
     df_references = pd.read_csv(file_path, skiprows=start_line_references, nrows=end_line_references-start_line_references, encoding='ISO-8859-1', engine='python', on_bad_lines='warn')
 
-    # df_data = pd.read_csv(file_path, skiprows=start_line_main, nrows=end_line_main-start_line_main, encoding='ISO-8859-1', low_memory=False)
-    # df_abbreviations = pd.read_csv(file_path, skiprows=start_line_abbreviations, nrows=end_line_abbreviations-start_line_abbreviations, encoding='ISO-8859-1', low_memory=False)
-    # df_references = pd.read_csv(file_path, skiprows=start_line_references, nrows=end_line_references-start_line_references, encoding='ISO-8859-1', low_memory=False)
-
-
     # Write each DataFrame to a separate CSV file
     df_data.to_csv(splited_data_dir+'/'+file_name.replace('.csv','')+'_data.csv', index=False)
     df_abbreviations.to_csv(splited_abbreviations_dir+'/'+file_name.replace('.csv','')+ '_abbreviations.csv', index=False)
     df_references.to_csv(splited_references_dir+'/'+file_name.replace('.csv','')+ '_references.csv', index=False)
 
+    # Open the directory in the file explorer
+    if platform.system() == "Windows":
+        os.startfile(os.path.abspath(splited_data_dir))
+    elif platform.system() == "Darwin":
+        os.system(f'open "{os.path.abspath(splited_data_dir)}"')
+    else:
+        os.system(f'xdg-open "{os.path.abspath(splited_data_dir)}"')
 
-# 设定目标路径名称
+# Set the target directory name
 target_dir = 'GEOROC Compilation Rock Types'
 
 # Get all files in target_dir

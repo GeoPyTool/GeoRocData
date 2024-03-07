@@ -42,6 +42,7 @@ current_directory = os.path.dirname(current_file_name)
 os.chdir(current_directory)
 
 # Function to monitor the download progress
+start_time = time.time()
 def download_progress(count, block_size, total_size):
     global start_time
     duration = time.time() - start_time
