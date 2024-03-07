@@ -370,3 +370,10 @@ DB_Gen/GeoRoc.db
 DB_Gen/GeoRoc_imported_files.txt
 DB_Gen/Ref.db
 DB_Gen/Ref_imported_files.txt
+DB_Gen/Db_Stats/PLU_List.csv
+DB_Gen/Db_Stats/PLU_Stats.jpg
+DB_Gen/Db_Stats/PLU_Stats.svg
+DB_Gen/Db_Stats/VOL_List.csv
+DB_Gen/Db_Stats/VOL_Stats.jpg
+DB_Gen/Db_Stats/VOL_Stats.svg
+DB_Gen/GeoRoc.zip
