@@ -60,10 +60,11 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
 
     result_list = [['Label','Probability']]
     
-    fig, ax_list = plt.subplots(2, 2, figsize=(10, 10))
 
-    for ax in ax_list.flat:
-        ax.set_aspect('equal', 'box')
+    # Suppose you want a 2x2 grid of subplots
+    fig, ax_list = plt.subplots(2, 2, figsize=(10, 10), sharex=False, sharey=False)
+
+    plt.tight_layout()
     # 设置axes的宽高比为3:2
     # ax.set_aspect(2/3)
 
@@ -182,12 +183,22 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
                     ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
                     ax.set_xlabel(target_x, fontsize=14)
                     ax.set_ylabel(target_y, fontsize=14)
-                    ax.set_xlim(limit_x[0],limit_x[1])
-                    ax.set_ylim(limit_y[0],limit_y[1])
-                    ax.set_aspect('equal', adjustable='box')  # Add this line
-                    ax.tick_params(axis='both', labelsize=12)                    
+
+
+                    # Calculate the 5th and 95th percentiles of x and y data
+                    x_lower, x_upper = np.percentile(x, [5, 95])
+                    y_lower, y_upper = np.percentile(y, [5, 95])
+
+                    # Set the limits of x and y axes
+                    ax.set_xlim(x_lower, x_upper)
+                    ax.set_ylim(y_lower, y_upper)
+
+                    # ax.set_xlim(limit_x[0],limit_x[1])
+                    # ax.set_ylim(limit_y[0],limit_y[1])                
                     ax.set_xscale('log')
                     ax.set_yscale('log')
+                    ax.set_aspect('equal', adjustable='box') 
+                    ax.tick_params(axis='both', labelsize=12)    
                     # 旋转y轴的标签
                     ax.yaxis.set_tick_params(rotation=90)
 
@@ -283,7 +294,7 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
             # xlim = ax.get_xlim()
             # ylim = ax.get_ylim()
 
-            # 计算在视域范围内的数据点的数量
+            # 计算在视域范围内的数据点·的数量
             # visible_points = tag_df[(tag_df["Y(PPM)"] >= xlim[0]) & 
             #                         (tag_df["Y(PPM)"] <= xlim[1]) & 
             #                         (tag_df['ALL_Alkaline'] >= ylim[0]) & 
@@ -296,6 +307,7 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
             ax.text(0.05, 0.95, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top',fontsize=14)
 
         fig.tight_layout()
+            
 
         with open(output_dir+'/'+'Pearce_Base_' + Type + '_Withlines.pkl', 'wb') as f:
             pickle.dump(fig, f)
