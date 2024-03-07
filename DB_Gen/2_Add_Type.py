@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import csv
 import re
-import os
+import os       
+import platform
 import pandas as pd
 import statistics
 from fitter import Fitter
@@ -24,42 +25,47 @@ import matplotlib.patches as mpatches
 import matplotlib.cm as cm
 from matplotlib.path import Path
 from matplotlib.font_manager import FontProperties
+from urllib.parse import quote
 
-
+# Set the font for plots
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
 plt.rcParams['svg.fonttype'] = 'none'
 
+# Get the absolute path of the current file
+current_file_name = os.path.abspath(__file__)
 
-# 获取当前文件的绝对路径
-current_file_path = os.path.abspath(__file__)
+# Get the directory of the current file
+current_directory = os.path.dirname(current_file_name)
 
-# 获取当前文件的目录
-current_directory = os.path.dirname(current_file_path)
-
-# 改变当前工作目录
+# Change the current working directory
 os.chdir(current_directory)
 
-# 设定目标路径名称
+# Set the target directory name
 target_dir = 'Splited_Data'
 
+# Add the filename as a new column to the CSV file
 def add_filename_as_column(file_path):    
+    """
+    This function adds the filename as a new column to the CSV file.
+    """
 
-    # 拆分路径和文件名
+    # Split the file path into directory path and file name
     dir_path, file_name = os.path.split(file_path)
 
-    print("Dir Path:", dir_path)
+    print("Directory Path:", dir_path)
     print("Filename:", file_name)
 
-    # 获取output_dir的上层目录
+    # Get the parent directory of the output_dir
     parent_dir = os.path.dirname(dir_path)
 
-    # 连接上层目录和'Type_Added'这个文件夹
+    # Join the parent directory with the 'Type_Added' folder
     output_dir = os.path.join(parent_dir, 'Type_Added')
 
-    # 检查output_dir是否存在，如果不存在，创建它
+    # Check if output_dir exists, if not, create it
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+
     # Create a new file path for the modified data
     output_path = os.path.join(output_dir, file_name.replace('.csv', '') + '_type_added.csv')
 
@@ -69,10 +75,10 @@ def add_filename_as_column(file_path):
         processed_file = split_file[1].capitalize()
     else:
         pass  # Skip this file if it doesn't contain an underscore
+
     # Remove '.csv' from the processed filename
     processed_file = processed_file.replace('.csv', '')
 
-    encoding='utf-8'
     # Try to read the file with different encodings
     try:
         data = pd.read_csv(file_path, encoding='utf-8', engine='python', on_bad_lines='warn')
@@ -90,13 +96,8 @@ def add_filename_as_column(file_path):
         # Add 'Type' to the first column
         data.insert(0, 'Type', processed_file)
 
-
     # Write the data back to a new file
     data.to_csv(output_path, index=False, encoding=encoding)
-
-        
-# 设定目标路径名称
-target_dir = 'Splited_Data'
 
 # Get all files in target_dir
 files = os.listdir(target_dir)
