@@ -114,7 +114,7 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
 
     target_x_list = ['Y+Nb(PPM)','Yb+Ta(PPM)','Y(PPM)','Yb(PPM)']
     target_y_list = ['Rb(PPM)','Rb(PPM)','Nb(PPM)','Ta(PPM)']   
-    limit_x_lit=[[1,2000],[0.5 , 200],[0 , 1000],[0.1 , 100]]
+    limit_x_lit=[[0.1,2500],[0 , 300],[0 , 1000],[0.05 , 100]]
     limit_y_lit=[[1,9884],[1 , 8136],[1 , 2040],[0.05 , 100]]
     
 
@@ -159,8 +159,6 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
             for label, group in grouped:
                 x = group[target_x]
                 y = group[target_y]
-                ax_location = np.where(ax_list.flatten()== ax)
-                print(ax_location ,label,len(x))
                 center_x = x.mean()
                 center_y = y.mean()
                 
@@ -185,19 +183,30 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
                     ax.set_ylabel(target_y, fontsize=14)
 
 
-                    # Calculate the 5th and 95th percentiles of x and y data
-                    x_lower, x_upper = np.percentile(x, [5, 95])
-                    y_lower, y_upper = np.percentile(y, [5, 95])
+                    # Remove NaN and Inf values
+                    x = x[~np.isnan(x) & ~np.isinf(x)]
+                    y = y[~np.isnan(y) & ~np.isinf(y)]
 
-                    # Set the limits of x and y axes
-                    ax.set_xlim(x_lower, x_upper)
-                    ax.set_ylim(y_lower, y_upper)
+                    # # Check the number of unique values
+                    # if len(np.unique(x)) > 1:
+                    #     x_lower, x_upper = np.percentile(x, [5, 95])
+                    # else:
+                    #     x_lower, x_upper = x[0] - 1, x[0] + 1
 
-                    # ax.set_xlim(limit_x[0],limit_x[1])
-                    # ax.set_ylim(limit_y[0],limit_y[1])                
+                    # if len(np.unique(y)) > 1:
+                    #     y_lower, y_upper = np.percentile(y, [5, 95])
+                    # else:
+                    #     y_lower, y_upper = y[0] - 1, y[0] + 1
+
+                    # # Set the limits of x and y axes
+                    # ax.set_xlim(x_lower, x_upper)
+                    # ax.set_ylim(y_lower, y_upper)
+
+                    ax.set_xlim(limit_x[0],limit_x[1])
+                    ax.set_ylim(limit_y[0],limit_y[1])                
                     ax.set_xscale('log')
                     ax.set_yscale('log')
-                    ax.set_aspect('equal', adjustable='box') 
+                    ax.set_aspect('equal') 
                     ax.tick_params(axis='both', labelsize=12)    
                     # 旋转y轴的标签
                     ax.yaxis.set_tick_params(rotation=90)
