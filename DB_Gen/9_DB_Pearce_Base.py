@@ -115,7 +115,7 @@ def Pearce_base(filename = 'GeoRoc.db',Type = 'Granite',output_dir='Pearce'):
     target_x_list = ['Y+Nb(PPM)','Yb+Ta(PPM)','Y(PPM)','Yb(PPM)']
     target_y_list = ['Rb(PPM)','Rb(PPM)','Nb(PPM)','Ta(PPM)']   
     limit_x_lit=[[0.1,2500],[0 , 300],[0 , 1000],[0.05 , 100]]
-    limit_y_lit=[[1,9884],[1 , 8136],[1 , 2040],[0.05 , 100]]
+    limit_y_lit=[[0.5,9884],[1 , 7000],[0.5 , 2040],[0.05 , 100]]
     
 
 
