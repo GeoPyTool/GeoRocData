@@ -194,7 +194,7 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
         ax.set_xlabel("SiO2", fontsize=14)
         ax.set_ylabel("Na2O+K2O", fontsize=14)
-        ax.set_title("Extended TAS Diagram", fontsize=14)
+        ax.set_title("TAS-PFS Diagram", fontsize=14)
         ax.set_xlim(35,80)
         # ax.set_ylim(0,17.647826086956513)  
         # 在 y=17.647826086956513 的位置画一条横线
@@ -220,8 +220,8 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
         num_visible_points = len(visible_points)
 
         # 在图上显示可见的数据点的数量
-        ax.text(0.05, 0.95, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top',fontsize=14)
-
+        ax.text(0.75, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
+        
         fig.tight_layout()
 
         with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl', 'wb') as f:
