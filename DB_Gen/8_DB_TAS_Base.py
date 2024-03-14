@@ -28,7 +28,7 @@ plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['pdf.fonttype'] =  'truetype'
 
 
-def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
+def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     result_list = [['Label','Probability']]
     
@@ -50,10 +50,8 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
     # 改变当前工作目录
     os.chdir(current_directory)
 
-
     with open(current_directory+'/Plot_Json/tas_cord.json', 'r', encoding='utf-8') as file:
         cord = json.load(file)
-
 
     # 连接到数据库
     conn = sqlite3.connect(filename)
@@ -65,7 +63,7 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     # 筛选'ROCK TYPE'为tag的行，并且去掉不含SiO2的行
     tag_df = selected_columns[(selected_columns["ROCK TYPE"] == rock_type) & (selected_columns["SIO2(WT%)"] != 0)]
-    tag_df['ALL_Alkaline']= tag_df["NA2O(WT%)"]+tag_df["K2O(WT%)"]
+    tag_df["ALL_Alkaline(WT%)"]= tag_df["NA2O(WT%)"]+tag_df["K2O(WT%)"]
 
     # 检查是否存在tag_color_dict.json文件
     if os.path.exists('Color_Config/'+rock_type+'_color_dict.json'):
@@ -105,7 +103,7 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
         for label, group in grouped:
             x = group["SIO2(WT%)"]
-            y = group['ALL_Alkaline']
+            y = group["ALL_Alkaline(WT%)"]
             center_x = x.mean()
             center_y = y.mean()
             
@@ -214,8 +212,8 @@ def TAS_base(filename = 'GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
         # 计算在视域范围内的数据点的数量
         visible_points = tag_df[(tag_df["SIO2(WT%)"] >= xlim[0]) & 
                                 (tag_df["SIO2(WT%)"] <= xlim[1]) & 
-                                (tag_df['ALL_Alkaline'] >= ylim[0]) & 
-                                (tag_df['ALL_Alkaline'] <= ylim[1])]
+                                (tag_df["ALL_Alkaline(WT%)"] >= ylim[0]) & 
+                                (tag_df["ALL_Alkaline(WT%)"] <= ylim[1])]
 
         num_visible_points = len(visible_points)
 

@@ -127,7 +127,16 @@ def Remove_LOI(filename = 'GeoRoc.db',output_dir='Corrected'):
 
     
     # # 创建新的列"RAW_SUM"，其值为所有转换后的列的和
-    selected_df['RAW_SUM'] = selected_df[Calculate_List].sum(axis=1)
+    # selected_df['RAW_SUM'] = selected_df[Calculate_List].sum(axis=1)
+    # 'FE2O3(WT%)','FEO(WT%)','FEOT(WT%)'
+    # 这里求和得到“RAW_SUM"的部分做一个筛选，其中除了'FE2O3(WT%)','FEO(WT%)','FEOT(WT%)'外，先加起来其他所有列；对于'FE2O3(WT%)','FEO(WT%)','FEOT(WT%)'这三列，如果'FEOT(WT%)'这一列不等于零就只用这一列加上其他的数据，而排除掉'FE2O3(WT%)','FEO(WT%)'；如果'FEOT(WT%)'等于零，就用'FE2O3(WT%)','FEO(WT%)'一起加进其他列的求和
+    def calculate_sum(row):
+        if row['FEOT(WT%)'] != 0:
+            return row.drop(['FE2O3(WT%)', 'FEO(WT%)']).sum()
+        else:
+            return row.sum()
+
+    selected_df['RAW_SUM'] = selected_df.apply(calculate_sum, axis=1)
 
     def normalize_row(row):
         divisor = row['RAW_SUM']
@@ -156,18 +165,18 @@ def Remove_LOI(filename = 'GeoRoc.db',output_dir='Corrected'):
     # print(selected_df['RAW_SUM'])
     print(selected_df)
 
-    def title_except_in_parentheses(s):
-        parts = s.split('(')
-        return parts[0].title() + '(' + parts[1].upper() if len(parts) > 1 else parts[0].title()
+    # def title_except_in_parentheses(s):
+    #     parts = s.split('(')
+    #     return parts[0].title() + '(' + parts[1].upper() if len(parts) > 1 else parts[0].title()
 
-    selected_df = selected_df.rename(columns=title_except_in_parentheses)
+    # selected_df = selected_df.rename(columns=title_except_in_parentheses)
 
     selected_df[other_columns] = df[other_columns]
     # 将数据写入数据库
     
     # 连接到数据库
     conn_out= sqlite3.connect(output_dir+'/Remove_LOI_'+filename)
-    selected_df.to_sql('Remove_LOI_Data', conn_out, if_exists='replace', index=False)
+    selected_df.to_sql('Current_Data', conn_out, if_exists='replace', index=False)
 
     all_end_time = time.time()
 
