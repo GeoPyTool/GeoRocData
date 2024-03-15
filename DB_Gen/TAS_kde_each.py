@@ -247,8 +247,9 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     num_visible_points = len(visible_points)
 
                     # 在图上显示可见的数据点的数量
-                    ax.text(0.05, 0.95, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top')
-
+                    ax.text(0.8, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top')
+                    # ax.text(0.75, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
+        
                     fig.tight_layout()
                     # 保存图，包含图例
                     # 创建存图的文件夹
