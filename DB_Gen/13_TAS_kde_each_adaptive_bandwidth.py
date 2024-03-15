@@ -212,9 +212,16 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     ax.clabel(contour, inline=True, fontsize=7)
 
                     # 定义一个基数，这个基数可以根据具体需求来调整
-                    base = 0.08
-                    # 计算透明度
-                    alpha = base / np.log10(data_amount/10)                  
+                    base = 0.28
+                    # # 计算透明度
+                    # alpha = base / np.log10(data_amount/10)        
+
+                    # 计算数据规模和数据范围
+                    data_scale = len(x) * len(y)
+                    data_range = (max(x) - min(x)) * (max(y) - min(y))
+
+                    # 根据数据规模和数据范围调整alpha的值
+                    alpha = base / (np.log10(data_scale / 10) * np.log10(data_range / 10))          
                     
                     # ax.scatter(x, y, c=probs, label=label, cmap='terrain', edgecolors='none')
                     ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
@@ -256,8 +263,8 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     #     y_center = sum(y_coords) / len(y_coords)
                     #     ax.text(x_center, y_center, label, ha='center', va='center', bbox=dict(facecolor='white', alpha=0.3), fontsize=9)
 
-                    ax.set_xlabel(r"$SiO2$", fontsize=9)
-                    ax.set_ylabel(r"$Na2O+K2O$", fontsize=9)
+                    ax.set_xlabel(r"$SiO_2$", fontsize=9)
+                    ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=9)
                     ax.set_title(r"TAS Diagram", fontsize=9)
                     ax.set_xlim(35,80)
                     ax.set_ylim(0,17.647826086956513)  
