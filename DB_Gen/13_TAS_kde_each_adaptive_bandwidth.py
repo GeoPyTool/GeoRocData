@@ -6,7 +6,8 @@ import os
 import pickle
 import platform
 import sqlite3
-import time
+import time  
+import colorsys
 
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
@@ -114,10 +115,9 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
         
         if label not in labelled_groups:
             if 35 <= center_x <= 80 and 0 <= center_y <= 17.6478:
-                ax.text(center_x, center_y, label, fontsize=9)
                 data_amount = len(x)
                 print(label, data_amount)
-                if(data_amount>=964):          
+                if(data_amount>964):          
                     # Construct the file path
                     data = np.column_stack((x, y))
                     file_path = rock_type + '_GMS_kde/'+label+'_kde.pkl'
@@ -166,22 +166,49 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     max_probs = max(probs)
 
                     # Normalize probabilities
-                    probs/= max_probs 
+                    # probs/= max_probs 
 
-                    # 获取原始颜色
+                    # # 获取原始颜色
                     # original_color =  mcolors.to_rgba(tag_color_dict[label])
-
-                    # # 将原始颜色与白色混合，使颜色更浅
-                    # lighter_color = (0.6 * np.array(mcolors.to_rgba('white')) + 0.5 * np.array(original_color)).tolist()
-                    # # 将原始颜色与灰色混合，使颜色更深
-                    # darker_color = (0.6 * np.array(mcolors.to_rgba('gray')) + 0.5 * np.array(original_color)).tolist()                        
-                    # cmap = mcolors.LinearSegmentedColormap.from_list('custom', [lighter_color,darker_color], N=64)
-
                     # 获取原始颜色
                     original_color = to_rgba(tag_color_dict[label])
 
+
+                    # 定义一个基数，这个基数可以根据具体需求来调整
+                    base = 0.28
+                    # # 计算透明度
+                    # alpha = base / np.log10(data_amount/10)        
+
+                    # 计算数据规模和数据范围
+                    data_scale = len(x) * len(y)
+                    data_range = (max(x) - min(x)) * (max(y) - min(y))
+
+                    # 根据数据规模和数据范围调整alpha的值
+                    alpha = base / (np.log10(data_scale / 10) * np.log10(data_range / 10))        
+
+                    # # 将RGBA颜色转换为HSL颜色
+                    # h, l, s = colorsys.rgb_to_hls(original_color[0], original_color[1], original_color[2])
+                    # # 计算互补色
+                    # h_complementary = (h + 0.5) % 1
+                    # # 将HSL颜色转换回RGBA颜色
+                    # r_complementary, g_complementary, b_complementary = colorsys.hls_to_rgb(h_complementary, l, s)
+                    # complementary_color = (r_complementary, g_complementary, b_complementary, original_color[3])
+                    
+                    # ax.scatter(x, y, c=probs, label=label, cmap='terrain', edgecolors='none')
+                    ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
+
+
+                    
+                    # # 将原始颜色与白色混合，使颜色更浅
+                    # lighter_color = (0.6 * np.array(mcolors.to_rgba('white')) + 0.5 * np.array(original_color)).tolist()
+                    # # 将原始颜色与灰色混合，使颜色更深
+                    darker_color = (0.6 * np.array(mcolors.to_rgba('gray')) + 0.5 * np.array(original_color)).tolist()                        
+                    # cmap = mcolors.LinearSegmentedColormap.from_list('custom', [lighter_color,darker_color], N=64)
+
+
                     # 创建一个从完全透明到original_color的颜色列表
-                    colors = [(original_color[0], original_color[1], original_color[2], i) for i in np.linspace(0, 1, 100)]
+                    # colors = [(original_color[0], original_color[1], original_color[2], i) for i in np.linspace(0, 1, 100)]
+                    colors = [(darker_color[0], darker_color[1], darker_color[2], i) for i in np.linspace(0, 1, 100)]
 
                     # 创建自定义的colormap
                     cmap = LinearSegmentedColormap.from_list('custom', colors, N=256)
@@ -200,7 +227,9 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     log_prob_grid = kde.score_samples(grid_points)
 
                     # 将对数概率密度转换为概率密度, 将每个概率密度除以峰值，进行归一化
-                    prob_grid = np.exp(log_prob_grid)/max_probs
+                    # prob_grid = np.exp(log_prob_grid)/max_probs
+                    print(max_probs)
+                    prob_grid = np.exp(log_prob_grid)
 
                     # 将概率密度重新塑形为网格的形状
                     prob_grid = prob_grid.reshape(x_grid.shape)
@@ -210,21 +239,6 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
 
                     # 在等高线上添加概率密度的值
                     ax.clabel(contour, inline=True, fontsize=7)
-
-                    # 定义一个基数，这个基数可以根据具体需求来调整
-                    base = 0.28
-                    # # 计算透明度
-                    # alpha = base / np.log10(data_amount/10)        
-
-                    # 计算数据规模和数据范围
-                    data_scale = len(x) * len(y)
-                    data_range = (max(x) - min(x)) * (max(y) - min(y))
-
-                    # 根据数据规模和数据范围调整alpha的值
-                    alpha = base / (np.log10(data_scale / 10) * np.log10(data_range / 10))          
-                    
-                    # ax.scatter(x, y, c=probs, label=label, cmap='terrain', edgecolors='none')
-                    ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
 
                     # Record the end time
                     end_time = time.time()
@@ -263,6 +277,7 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     #     y_center = sum(y_coords) / len(y_coords)
                     #     ax.text(x_center, y_center, label, ha='center', va='center', bbox=dict(facecolor='white', alpha=0.3), fontsize=9)
 
+                    ax.text(center_x, center_y, label, fontsize=9)
                     ax.set_xlabel(r"$SiO_2$", fontsize=9)
                     ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=9)
                     ax.set_title(r"TAS Diagram", fontsize=9)
@@ -312,4 +327,4 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
     conn.close()
 
 TAS_each('Corrected/Remove_LOI_GeoRoc.db','VOL')
-# TAS_each('Corrected/Remove_LOI_GeoRoc.db','PLU')
+TAS_each('Corrected/Remove_LOI_GeoRoc.db','PLU')
