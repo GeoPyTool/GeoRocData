@@ -593,7 +593,7 @@ class TAS_GS(QMainWindow):
             color_setting = self.color_setting
 
             # 'TAS_Base_VOL_Nolines.pkl'
-            pkl_filename='TAS_Base_'+tag+'_'+setting+color_setting+'.pkl'
+            pkl_filename='TAS/TAS_Base_'+tag+'_'+setting+color_setting+'.pkl'
             # Remove the old canvas from the layout        
             # self.canvas.figure.clear()
             self.right_layout.removeWidget(self.canvas)

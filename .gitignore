@@ -539,3 +539,13 @@ DB_Gen/VOL_GMS_svg/Tholeiite.svg
 DB_Gen/VOL_GMS_svg/Trachyandesite.svg
 DB_Gen/VOL_GMS_svg/Trachybasalt.svg
 DB_Gen/VOL_GMS_svg/Trachyte.svg
+DB_Gen/TAS/TAS_Base_PLU_Nolines.jpg
+DB_Gen/TAS/TAS_Base_PLU_Nolines.pkl
+DB_Gen/TAS/TAS_Base_PLU_Nolines.svg
+DB_Gen/TAS/TAS_Base_VOL_Nolines.jpg
+DB_Gen/TAS/TAS_Base_VOL_Nolines.pkl
+DB_Gen/TAS/TAS_Base_VOL_Nolines.svg
+DB_Gen/TAS/TAS_type_counts_PLU.csv
+DB_Gen/TAS/TAS_type_counts_VOL.csv
+DB_Gen/TAS_Base_PLU_Withlines.pkl
+DB_Gen/TAS_Base_VOL_Withlines.pkl
