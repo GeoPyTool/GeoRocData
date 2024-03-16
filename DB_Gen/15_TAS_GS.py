@@ -358,7 +358,7 @@ class TAS_GS(QMainWindow):
         self.data_path = ''
     def init_ui(self):
         # 设置窗口标题和尺寸
-        self.setWindowTitle('TAS-PF: TAS Diagram extended with Probabilistic Field ')
+        self.setWindowTitle('TAS-GS: TAS with Gaussian KDE and SoftMax Probabilistic Discrimination')
         self.resize(1024, 600)
 
         # 创建工具栏
