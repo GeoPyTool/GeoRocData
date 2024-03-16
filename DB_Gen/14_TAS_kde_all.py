@@ -304,4 +304,4 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
     conn.close()
 
 TAS_each('Corrected/Remove_LOI_GeoRoc.db','VOL')
-TAS_each('Corrected/Remove_LOI_GeoRoc.db','PLU')
+# TAS_each('Corrected/Remove_LOI_GeoRoc.db','PLU')

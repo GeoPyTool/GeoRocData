@@ -734,8 +734,8 @@ class TAS_GS(QMainWindow):
             # 将type_list内容转换为DataFrame，设置列名为'TAS as VOL'
             tas_df = pd.DataFrame({'TAS as VOL': type_list})
 
-            # 设置文件路径，根据self.tag变量拼接字符串得到 '_GMM_kde' 后缀的文件名部分
-            file_path = self.tag + '_GMM_kde'
+            # 设置文件路径，根据self.tag变量拼接字符串得到 '_GMS_kde' 后缀的文件名部分
+            file_path = self.tag + '_GMS_kde'
 
             # Check if the path exists
             # 检查文件路径是否存在
