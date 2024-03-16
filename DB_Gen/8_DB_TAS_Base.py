@@ -407,7 +407,7 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=14)
         ax.set_title(r"TAS Diagram", fontsize=14)
         ax.set_xlim(35,80)
-        # ax.set_ylim(0,17.647826086956513)  
+        ax.set_ylim(0,17.647826086956513)  
         ax.tick_params(axis='both', labelsize=9)
         # 在 y=17.647826086956513 的位置画一条横线
         ax.axhline(17.647826086956513, linestyle='-', color='black', linewidth=0.3)
