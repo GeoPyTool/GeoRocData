@@ -218,7 +218,7 @@ def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',outpu
         num_visible_points = len(visible_points)
 
         # 在图上显示可见的数据点的数量
-        ax.text(0.75, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
+        ax.text(0.05, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
         
         fig.tight_layout()
 
@@ -432,7 +432,7 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         num_visible_points = len(visible_points)
 
         # 在图上显示可见的数据点的数量
-        ax.text(0.75, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
+        ax.text(0.05, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
         
         fig.tight_layout()
 
@@ -646,11 +646,14 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
         # num_visible_points = len(visible_points)
 
         # # 在图上显示可见的数据点的数量
-        # ax.text(0.75, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
+        # ax.text(0.05, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
         
         fig.tight_layout()
 
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.pkl', 'wb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines_Nocolors.pkl', 'wb') as f:
+            pickle.dump(fig, f)
+
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_Nocolors.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
@@ -660,9 +663,9 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
 
     # 保存图，包含图例
     # 创建存图的文件夹
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.svg')
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines_Nocolors.svg')
     # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.pdf')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.jpg', dpi=600)
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines_Nocolors.jpg', dpi=600)
     
     conn.close()
     print(f"All time taken: {all_time_taken:.3f} seconds")
