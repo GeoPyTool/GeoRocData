@@ -832,20 +832,20 @@ class TAS_GS(QMainWindow):
 
                 # kde_result_divided_max_df = kde_result_divided_max_df.apply(probability_proportional_scaling, axis=1)
 
-                print(kde_result_df)
+                # print(kde_result_df)
 
                 # 创建新的DataFrame来存储分类结果（最高概率对应的目标类型）
                 kde_Type_df = pd.DataFrame(kde_result_df.idxmax(axis=1), columns=['Soft-Max Classification'])
 
                 # 创建新的DataFrame来存储最大概率值
-                kde_Probs_df = pd.DataFrame(kde_result_df.max(axis=1), columns=['Soft-Max Probability'])
+                kde_Probs_df = pd.DataFrame(kde_result_df.max(axis=1).round(6), columns=['Soft-Max Probability'])
 
 
                 # 创建新的DataFrame来存储分类结果（最高概率对应的目标类型）
                 kde_Type_divided_max_df = pd.DataFrame(kde_result_divided_max_df.idxmax(axis=1), columns=['Max_Ratio Classification'])
 
                 # 创建新的DataFrame来存储最大概率值
-                kde_Probs_divided_max_df = pd.DataFrame(kde_result_divided_max_df.max(axis=1), columns=['Max_Ratio Probability'])
+                kde_Probs_divided_max_df = pd.DataFrame(kde_result_divided_max_df.max(axis=1).round(6), columns=['Max_Ratio Probability'])
 
                 # 将分类结果DataFrame、概率最大值DataFrame以及其它两个预先存在的DataFrame tas_df和self.df沿列方向拼接在一起
                 df = pd.concat([kde_Type_divided_max_df,kde_Probs_divided_max_df, kde_Type_df, kde_Probs_df, tas_df, self.df], axis=1)

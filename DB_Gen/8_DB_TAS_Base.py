@@ -192,7 +192,7 @@ def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',outpu
 
         ax.set_xlabel("SiO2", fontsize=14)
         ax.set_ylabel("Na2O+K2O", fontsize=14)
-        ax.set_title("TAS-PFS Diagram", fontsize=14)
+        ax.set_title("TAS Diagram", fontsize=14)
         ax.set_xlim(35,80)
         # ax.set_ylim(0,17.647826086956513)  
         # 在 y=17.647826086956513 的位置画一条横线
