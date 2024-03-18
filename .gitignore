@@ -549,3 +549,15 @@ DB_Gen/TAS/TAS_type_counts_PLU.csv
 DB_Gen/TAS/TAS_type_counts_VOL.csv
 DB_Gen/TAS_Base_PLU_Withlines.pkl
 DB_Gen/TAS_Base_VOL_Withlines.pkl
+DB_Gen/sampled_TAS_data.csv
+DB_Gen/sampled_TAS_data_evaluated.csv
+DB_Gen/sampled_TAS_data_evaluated_result.csv
+DB_Gen/TAS Result_1000Samples.csv
+DB_Gen/TAS/TAS_Base_PLU_Nolines_Nocolors.jpg
+DB_Gen/TAS/TAS_Base_PLU_Nolines_Nocolors.pkl
+DB_Gen/TAS/TAS_Base_PLU_Nolines_Nocolors.svg
+DB_Gen/TAS/TAS_Base_PLU_Withlines_Nocolors.pkl
+DB_Gen/TAS/TAS_Base_VOL_Nolines_Nocolors.jpg
+DB_Gen/TAS/TAS_Base_VOL_Nolines_Nocolors.pkl
+DB_Gen/TAS/TAS_Base_VOL_Nolines_Nocolors.svg
+DB_Gen/TAS/TAS_Base_VOL_Withlines_Nocolors.pkl

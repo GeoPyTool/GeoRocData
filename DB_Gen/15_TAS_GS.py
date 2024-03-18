@@ -742,6 +742,8 @@ class TAS_GS(QMainWindow):
             if os.path.exists(file_path):
                 # 遍历目录下的所有文件
                 kde_result = {}
+                kde_result_divided_max = {}
+
                 # 将x和y数据合并为二维数组data_test
                 data_test = np.column_stack((x, y))
 
@@ -770,26 +772,83 @@ class TAS_GS(QMainWindow):
                     # 将测试数据集的对数概率密度转换为原始概率密度
                     test_probabilities = np.exp(test_densities)
 
+                    # 存储每种类型的目标对应的测试概率到字典kde_result中
+                    kde_result[type_target] = test_probabilities.round(3)
+
                     # 计算训练集和测试集中的最大概率密度，取两者中较大的一个作为归一化基准
                     max_prob_density = max(np.max(prob_density), np.max(test_probabilities))
 
                     # 对测试数据集的概率密度进行归一化处理，使得所有概率密度值在0到1之间
                     test_probabilities /= max_prob_density
 
-                    # 存储每种类型的目标对应的测试概率到字典kde_result中
-                    kde_result[type_target] = test_probabilities.round(3)
+                    # 这里先最大值归一化，然后比值得到概率值，留待后续作SoftMax函数处理                    
+                    kde_result_divided_max[type_target] = test_probabilities.round(3)
 
                 # 将字典kde_result转化为DataFrame格式
                 kde_result_df = pd.DataFrame(kde_result)
+                kde_result_divided_max_df = pd.DataFrame(kde_result_divided_max)
+                # 定义归一化函数
+
+                # Min-Max Scaling
+                def min_max_scaling(x):
+                    return (x - np.min(x)) / (np.max(x) - np.min(x))
+
+                # Z-score Normalization
+                def z_score_normalization(x):
+                    return (x - np.mean(x)) / np.std(x)
+
+                # Decimal Scaling
+                def decimal_scaling(x):
+                    max_abs_val = np.max(np.abs(x))
+                    num_digits = np.floor(np.log10(max_abs_val) + 1)
+                    return x / (10 ** num_digits)
+
+                # Softmax Scaling
+                def softmax_scaling(x):
+                    e_x = np.exp(x - np.max(x))
+                    return e_x / e_x.sum()
+
+                # Simple Feature Scaling
+                def simple_feature_scaling(x):
+                    return x / np.max(x)
+
+                # Probability Proportional Scaling
+                def probability_proportional_scaling(x):
+                    return x / np.sum(x)
+                
+
+                # 指数函数
+                def exp_normalize(x):
+                    e_x = np.exp(x)
+                    return e_x / np.sum(e_x)
+
+                # 幂函数
+                def power_normalize(x, power):
+                    p_x = np.power(x, power)
+                    return p_x / np.sum(p_x)
+
+                # 对DataFrame的每一行应用归一化函数
+                kde_result_df = kde_result_df.apply(softmax_scaling, axis=1)
+
+                # kde_result_divided_max_df = kde_result_divided_max_df.apply(probability_proportional_scaling, axis=1)
+
+                print(kde_result_df)
 
                 # 创建新的DataFrame来存储分类结果（最高概率对应的目标类型）
-                kde_Type_df = pd.DataFrame(kde_result_df.idxmax(axis=1), columns=['Classification'])
+                kde_Type_df = pd.DataFrame(kde_result_df.idxmax(axis=1), columns=['Soft-Max Classification'])
 
                 # 创建新的DataFrame来存储最大概率值
-                kde_Probs_df = pd.DataFrame(kde_result_df.max(axis=1), columns=['Probability'])
+                kde_Probs_df = pd.DataFrame(kde_result_df.max(axis=1), columns=['Soft-Max Probability'])
+
+
+                # 创建新的DataFrame来存储分类结果（最高概率对应的目标类型）
+                kde_Type_divided_max_df = pd.DataFrame(kde_result_divided_max_df.idxmax(axis=1), columns=['Max_Ratio Classification'])
+
+                # 创建新的DataFrame来存储最大概率值
+                kde_Probs_divided_max_df = pd.DataFrame(kde_result_divided_max_df.max(axis=1), columns=['Max_Ratio Probability'])
 
                 # 将分类结果DataFrame、概率最大值DataFrame以及其它两个预先存在的DataFrame tas_df和self.df沿列方向拼接在一起
-                df = pd.concat([kde_Type_df, kde_Probs_df, tas_df, self.df], axis=1)
+                df = pd.concat([kde_Type_divided_max_df,kde_Probs_divided_max_df, kde_Type_df, kde_Probs_df, tas_df, self.df], axis=1)
 
             # 创建一个AppForm实例，用于展示结果数据
             self.result_show = AppForm(df=df, title='TAS Result')
