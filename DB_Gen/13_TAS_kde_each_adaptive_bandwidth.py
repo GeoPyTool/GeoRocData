@@ -280,7 +280,7 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                     ax.text(center_x, center_y, label, fontsize=9)
                     ax.set_xlabel(r"$SiO_2$", fontsize=9)
                     ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=9)
-                    ax.set_title(r"TAS Diagram", fontsize=9)
+                    ax.set_title(r"TAS Diagram with Adaptive bandwidth", fontsize=9)
                     ax.set_xlim(35,80)
                     ax.set_ylim(0,17.647826086956513)  
 

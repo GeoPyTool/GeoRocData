@@ -120,7 +120,7 @@ def TAS_silver(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
                 if(data_amount>964):          
                     # Construct the file path
                     data = np.column_stack((x, y))
-                    file_path = rock_type + '_GMS_kde/'+label+'_kde.pkl'
+                    file_path = rock_type + '_GM_silver_kde/'+label+'_silverman_kde.pkl'
                     # Check if the file exists
                     if os.path.exists(file_path):
                         pass
@@ -145,9 +145,9 @@ def TAS_silver(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
 
                         # 计算数据点的概率密度
                         # 将概率场KDE保存为文件
-                        os.makedirs(rock_type + '_GMS_kde', exist_ok=True)                            
+                        os.makedirs(rock_type + '_GM_silver_kde', exist_ok=True)                            
                         # Save the KDE object to a file
-                        with open(rock_type + '_GMS_kde/'+label+'_kde.pkl', 'wb') as f:
+                        with open(rock_type + '_GM_silver_kde/'+label+'_silverman_kde.pkl', 'wb') as f:
                             pickle.dump(kde, f)
         
                     
@@ -404,7 +404,7 @@ def TAS_median(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
                 if(data_amount>964):          
                     # Construct the file path
                     data = np.column_stack((x, y))
-                    file_path = rock_type + '_GMS_kde/'+label+'_kde.pkl'
+                    file_path = rock_type + '_GM_median_kde/'+label+'_median_kde.pkl'
                     # Check if the file exists
                     if os.path.exists(file_path):
                         pass
@@ -417,8 +417,6 @@ def TAS_median(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
                         n = len(data)
                         d = data.shape[1]
                         
-                        Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
-                        #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
                         
                         # 计算数据的两两距离
                         distances = pdist(data, metric='euclidean')
@@ -430,7 +428,7 @@ def TAS_median(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
                         median_bandwidth = median_dist / np.sqrt(2)
 
 
-                        bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
+                        bandwidth = median_bandwidth 
 
                         kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
                         # kde = KernelDensity(kernel='gaussian').fit(data)
@@ -438,9 +436,9 @@ def TAS_median(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',ou
 
                         # 计算数据点的概率密度
                         # 将概率场KDE保存为文件
-                        os.makedirs(rock_type + '_GMS_kde', exist_ok=True)                            
+                        os.makedirs(rock_type + '_GM_median_kde', exist_ok=True)                            
                         # Save the KDE object to a file
-                        with open(rock_type + '_GMS_kde/'+label+'_kde.pkl', 'wb') as f:
+                        with open(rock_type + '_GM_median_kde/'+label+'_median_kde.pkl', 'wb') as f:
                             pickle.dump(kde, f)
         
                     
