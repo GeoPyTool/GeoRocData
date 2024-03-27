@@ -23,6 +23,7 @@ from scipy.stats import gaussian_kde
 from scipy.spatial.distance import pdist, squareform
 from sklearn.mixture import GaussianMixture
 from sklearn.neighbors import KernelDensity
+from sklearn.preprocessing import MinMaxScaler
 
 plt.rcParams['font.family'] = 'serif'
 plt.rcParams['font.serif'] = ['Times New Roman'] + plt.rcParams['font.serif']
@@ -362,14 +363,28 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
                         bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
 
                         # 使用高斯核密度估计计算密度
-                        kde = KernelDensity(kernel='gaussian', bandwidth=0.2).fit(np.vstack([x, y]).T)
-                        density = np.exp(kde.score_samples(np.vstack([x, y]).T))
+                        kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
+
+                        density = np.exp(kde.score_samples(data))
 
                         # 归一化密度值到 [0, 1] 范围
                         density_norm = density / np.max(density)
 
+                        # 对 density_norm 进行对数变换
+                        density_log = np.log(density_norm + 1e-10)
+
+
+                        # 创建一个 MinMaxScaler 对象
+                        scaler = MinMaxScaler()
+
+                        # 使用 MinMaxScaler 对象对 density_log 进行缩放
+                        density_log_scaled = scaler.fit_transform(density_log.reshape(-1, 1))
+
+                        # 将 density_log_scaled 转换回一维数组
+                        density_log_scaled = density_log_scaled.ravel()
+
                         # 设置透明度
-                        alpha =  density_norm
+                        alpha = density_norm
                         
                         label_locations[label] = [center_x,center_y,original_color,alpha]
                         ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
