@@ -118,7 +118,12 @@ def Sample(sample_size = 100, name = 'sampled_TAS_data.csv'):
     sampled_df.to_csv(name, index=False)
 
 # Sample(sample_size = 100, name = 'sampled_TAS_data.csv')
+    
+output_dir = 'TAS_Sample_Repeatly'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 
 for i in range(100):
-    Sample(sample_size = 100, name = f'sampled_TAS_data_{i}.csv')
+    Sample(sample_size = 100, name = f'TAS_Sample_Repeatly/sampled_TAS_data_{i}.csv')
 

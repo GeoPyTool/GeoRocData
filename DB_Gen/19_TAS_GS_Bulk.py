@@ -362,8 +362,10 @@ def export_result(file_name = "Geochemistry.csv"):
 
     df.to_csv(file_name+"_TAS_Result.csv", index=True)
 
-
+# output_dir = 'TAS_Sample_Repeatly'
+# if not os.path.exists(output_dir):
+#     os.makedirs(output_dir)
 
 for i in range(100):
-    # plot_data(file_name = f'sampled_TAS_data_{i}.csv')
-    export_result(file_name = f'sampled_TAS_data_{i}.csv')
+    # plot_data(file_name = f'TAS_Sample_Repeatly/sampled_TAS_data_{i}.csv')
+    export_result(file_name = f'TAS_Sample_Repeatly/sampled_TAS_data_{i}.csv')

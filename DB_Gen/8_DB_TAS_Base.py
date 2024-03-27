@@ -15,10 +15,12 @@ import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 from matplotlib.path import Path
 from matplotlib.patches import ConnectionStyle
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 import scipy as sp
 from scipy.stats import gaussian_kde
+from scipy.spatial.distance import pdist, squareform
 from sklearn.mixture import GaussianMixture
 from sklearn.neighbors import KernelDensity
 
@@ -333,30 +335,45 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
                         original_color =  mcolors.to_rgba(tag_color_dict[label])
 
                         # 定义一个基数，这个基数可以根据具体需求来调整
-                        base = 0.08
-                        # 计算透明度
-                        alpha = base / np.log10(data_amount/10)             
+                        base = 0.8
+                        # 找到 x 和 y 中同时不是 NaN 的位置
+                        not_nan = ~np.isnan(x) & ~np.isnan(y)
+
+                        # 使用这些位置过滤 x 和 y
+                        x = x[not_nan]
+                        y = y[not_nan]
+                        data = np.column_stack((x, y))
+                        n = len(data)
+                        d = data.shape[1]
+                        
+                        Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
+                        #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
+                        
+                        # 计算数据的两两距离
+                        distances = pdist(data, metric='euclidean')
+
+                        # 计算距离的中位数
+                        median_dist = np.median(distances)
+
+                        # 使用中位数带宽因子
+                        median_bandwidth = median_dist / np.sqrt(2)
+
+
+                        bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
+
+                        # 使用高斯核密度估计计算密度
+                        kde = KernelDensity(kernel='gaussian', bandwidth=0.2).fit(np.vstack([x, y]).T)
+                        density = np.exp(kde.score_samples(np.vstack([x, y]).T))
+
+                        # 归一化密度值到 [0, 1] 范围
+                        density_norm = density / np.max(density)
+
+                        # 设置透明度
+                        alpha =  density_norm
                         
                         label_locations[label] = [center_x,center_y,original_color,alpha]
-                        # ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
-
-
-                        # 计算透明度
-                        alpha = base / np.log10(data_amount/10)            
-                        # 检查 x 和 y 中的 NaN 值
-                        mask = ~np.isnan(x) & ~np.isnan(y)
-
-                        # 使用 mask 过滤掉 NaN 值
-                        x = x[mask]
-                        y = y[mask]
-
-                        # 使用 hist2d 创建二维直方图
-                        heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50,50))
-
-                        # 使用 imshow 显示二维直方图
-                        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-                        ax.imshow(heatmap.T, extent=extent, origin='lower', cmap='hot', alpha=alpha)
-
+                        ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
+                   
                         # Record the end time
                         tmp_time = time.time()
 
@@ -364,10 +381,12 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
                         time_taken = tmp_time - start_time
                         start_time = tmp_time
 
-                        
-                        print(f"{label} Data amount is {data_amount}, Alpha is {alpha:.3f}, Time taken: {time_taken:.3f} seconds")
                     
-                        
+                        # 计算 alpha 的平均值
+                        alpha_mean = alpha.mean()
+
+                        # 打印结果
+                        print(f"{label} Data amount is {data_amount}, Alpha is {alpha_mean:.3f}, Time taken: {time_taken:.3f} seconds")
                 else:
                     # print(label+" Coordinates are out of bounds")
                     pass
@@ -464,7 +483,7 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
     # 保存图，包含图例
     # 创建存图的文件夹
     fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.svg')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.pdf')
+    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.pdf')
     fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.jpg', dpi=600)
     
     conn.close()
