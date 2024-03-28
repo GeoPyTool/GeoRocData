@@ -376,10 +376,11 @@ def TAS_base_refine(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL
                         kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
 
                         # 设置透明度
+                        # alpha = kde_scores_norm * 0.1
                         alpha = kde_scores_norm 
                         
                         label_locations[label] = [center_x,center_y,original_color,alpha]
-                        ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 1)
+                        ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 18)
                    
                         # Record the end time
                         tmp_time = time.time()
@@ -949,4 +950,4 @@ if not os.path.exists(output_dir):
 # TAS_No_Colors(filename, 'VOL', output_dir = 'TAS')
 # TAS_No_Colors(filename, 'PLU', output_dir = 'TAS')
 TAS_base_refine(filename, 'VOL', output_dir = 'TAS')
-TAS_base_refine(filename, 'PLU', output_dir = 'TAS')
+# TAS_base_refine(filename, 'PLU', output_dir = 'TAS')
