@@ -245,7 +245,7 @@ def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',outpu
     
 
 
-def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
+def TAS_base_refine(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     result_list = [['Label','Probability']]
     
@@ -296,9 +296,9 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
             json.dump(tag_color_dict, f)    
     
     # 检查是否存在'TAS_Base_' + tag + '_Withlines.pkl'文件
-    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_heat.pkl'):
+    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_refine.pkl'):
         # 如果存在，从文件中读取tag_color_dict
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_heat.pkl', 'rb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_refine.pkl', 'rb') as f:
             fig = pickle.load(f)
     else:
         pass
@@ -370,24 +370,16 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
                         # 归一化密度值到 [0, 1] 范围
                         density_norm = density / np.max(density)
 
-                        # 对 density_norm 进行对数变换
-                        density_log = np.log(density_norm + 1e-10)
+                        kde_scores = kde.score_samples(data)
 
-
-                        # 创建一个 MinMaxScaler 对象
-                        scaler = MinMaxScaler()
-
-                        # 使用 MinMaxScaler 对象对 density_log 进行缩放
-                        density_log_scaled = scaler.fit_transform(density_log.reshape(-1, 1))
-
-                        # 将 density_log_scaled 转换回一维数组
-                        density_log_scaled = density_log_scaled.ravel()
+                        # 将KDE分数归一化到0-1范围内
+                        kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
 
                         # 设置透明度
-                        alpha = density_norm
+                        alpha = kde_scores_norm 
                         
                         label_locations[label] = [center_x,center_y,original_color,alpha]
-                        ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
+                        ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 1)
                    
                         # Record the end time
                         tmp_time = time.time()
@@ -486,8 +478,8 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
         ax.text(0.05, 0.98, f'Used points: {num_visible_points}', transform=ax.transAxes, verticalalignment='top', horizontalalignment='left', fontsize=14)
         
         fig.tight_layout()        
-        fig.set_size_inches(16 , 16)
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_heat.pkl', 'wb') as f:
+        # fig.set_size_inches(10 , 10)
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_refine.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
@@ -497,9 +489,9 @@ def TAS_base_heat(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
 
     # 保存图，包含图例
     # 创建存图的文件夹
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.svg')
-    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.pdf')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_heat.jpg', dpi=600)
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_refine.svg')
+    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_refine.pdf')
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_refine.jpg', dpi=600)
     
     conn.close()
     print(f"All time taken: {all_time_taken:.3f} seconds")
@@ -956,5 +948,5 @@ if not os.path.exists(output_dir):
 # TAS_No_Lines(filename, 'PLU', output_dir = 'TAS')
 # TAS_No_Colors(filename, 'VOL', output_dir = 'TAS')
 # TAS_No_Colors(filename, 'PLU', output_dir = 'TAS')
-TAS_base_heat(filename, 'VOL', output_dir = 'TAS')
-TAS_base_heat(filename, 'PLU', output_dir = 'TAS')
+TAS_base_refine(filename, 'VOL', output_dir = 'TAS')
+TAS_base_refine(filename, 'PLU', output_dir = 'TAS')

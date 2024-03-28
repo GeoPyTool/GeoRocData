@@ -145,7 +145,6 @@ def TAS_each(filename = 'Corrected/Remove_LOI_GeoRoc.db', rock_type = 'VOL',outp
                         # 使用中位数带宽因子
                         median_bandwidth = median_dist / np.sqrt(2)
 
-
                         bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
 
                         kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
