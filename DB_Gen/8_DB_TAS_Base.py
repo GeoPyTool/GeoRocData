@@ -193,8 +193,8 @@ def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',outpu
             y_center = sum(y_coords) / len(y_coords)
             ax.text(x_center, y_center, label, ha='center', va='center', bbox=dict(facecolor='white', alpha=0.3), fontsize=14)
 
-        ax.set_xlabel("SiO2", fontsize=14)
-        ax.set_ylabel("Na2O+K2O", fontsize=14)
+        ax.set_xlabel(r"$SiO_2$", fontsize=14)
+        ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=14)
         ax.set_title("TAS Diagram", fontsize=14)
         ax.set_xlim(35,80)
         # ax.set_ylim(0,17.647826086956513)  
@@ -447,9 +447,9 @@ def TAS_base_refine(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL
             y_center = sum(y_coords) / len(y_coords)
             ax.text(x_center, y_center, label, ha='center', va='center', bbox=dict(facecolor='white', alpha=0.3), fontsize=14)
 
-        ax.set_xlabel("SiO2", fontsize=14)
-        ax.set_ylabel("Na2O+K2O", fontsize=14)
-        ax.set_title("TAS Diagram", fontsize=14)
+        ax.set_xlabel(r"$SiO_2$", fontsize=14)
+        ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=14)
+        ax.set_title(r"TAS Diagram with Adaptive bandwidth", fontsize=14)
         ax.set_xlim(35,80)
         # ax.set_ylim(0,17.647826086956513)  
         # 在 y=17.647826086956513 的位置画一条横线
