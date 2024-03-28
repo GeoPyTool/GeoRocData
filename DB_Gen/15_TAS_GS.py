@@ -664,10 +664,7 @@ class TAS_GS(QMainWindow):
                         num_points = child.get_sizes().size
                         # 根据当前透明度和数据点的数量设置新的透明度
                         if current_alpha is not None:
-                            if num_points <1000:  # 如果数据点的数量大于100
-                                child.set_alpha(min(current_alpha * 2, 0.3))  # 提高透明度，但不超过1
-                            elif num_points >3000:  # 如果数据点的数量小于50
-                                child.set_alpha(max(current_alpha / 2, 0.005))  # 降低透明度，但不低于0.01
+                            child.set_alpha(current_alpha * 0.5) 
 
                 def plot_group(group):
                     ax.scatter(group['x'], group['y'], c=group['color'], alpha=group['alpha'], s=group['size'], label=group.name,edgecolors='black')
