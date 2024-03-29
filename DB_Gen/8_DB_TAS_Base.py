@@ -348,7 +348,7 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
                         start_time = tmp_time
                     
                         # 计算 alpha 的平均值
-                        alpha_mean = alpha.mean()
+                        alpha_mean = 0.8
 
                         # 打印结果
                         print(f"{label} Data amount is {data_amount}, Alpha is {alpha_mean:.3f}, Time taken: {time_taken:.3f} seconds")
@@ -1034,7 +1034,7 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
         labelled_groups = set()
         grouped = tag_df.groupby('Type')
 
-        # label_locations = {}
+        label_locations = {}
         highest_y = 0
 
         for label, group in grouped:
@@ -1094,11 +1094,11 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
                         # # 将KDE分数归一化到0-1范围内
                         # kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
 
-                        # # 设置透明度
-                        # # alpha = kde_scores_norm * 0.1
-                        # alpha = density_norm * 0.3
+                        # 设置透明度
+                        # alpha = kde_scores_norm * 0.1
+                        alpha = 0.3
                         
-                        # label_locations[label] = [center_x,center_y,original_color,alpha]
+                        label_locations[label] = [center_x,center_y,original_color,alpha]
                         # ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 18)
                    
                         # Record the end time
@@ -1110,7 +1110,7 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
 
                     
                         # 计算 alpha 的平均值
-                        alpha_mean = alpha.mean()
+                        alpha_mean = np.mean(alpha)
 
                         # 打印结果
                         print(f"{label} Data amount is {data_amount}, Alpha is {alpha_mean:.3f}, Time taken: {time_taken:.3f} seconds")
