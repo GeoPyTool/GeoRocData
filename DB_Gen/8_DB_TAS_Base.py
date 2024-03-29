@@ -244,8 +244,6 @@ def TAS_base_old(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
     return(fig)
 
 
-
-
 def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     result_list = [['Label','Probability']]
@@ -457,7 +455,6 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
     print(f"All time taken: {all_time_taken:.3f} seconds")
     return(fig)
     
-
 
 def TAS_new(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
