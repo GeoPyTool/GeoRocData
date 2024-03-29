@@ -708,3 +708,7 @@ DB_Gen/VOL_GM_silver_svg/Tholeiite_silver.svg
 DB_Gen/VOL_GM_silver_svg/Trachyandesite_silver.svg
 DB_Gen/VOL_GM_silver_svg/Trachybasalt_silver.svg
 DB_Gen/VOL_GM_silver_svg/Trachyte_silver.svg
+/DB_Gen/TAS/Old
+*.jpg
+/DB_Gen/TAS_Sample_Repeatly
+*.svg
