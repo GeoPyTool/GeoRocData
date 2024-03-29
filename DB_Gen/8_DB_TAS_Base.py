@@ -31,7 +31,7 @@ plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['pdf.fonttype'] =  'truetype'
 
 
-def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
+def TAS_base_old(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     result_list = [['Label','Probability']]
     
@@ -333,14 +333,55 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
                     # print(label, data_amount)
                     if(data_amount>30):
 
+                        original_color =  mcolors.to_rgba(tag_color_dict[label])                       
+                        label_locations[label] = [center_x,center_y,original_color,alpha]
+
                         original_color =  mcolors.to_rgba(tag_color_dict[label])
 
                         # 定义一个基数，这个基数可以根据具体需求来调整
-                        base = 0.08
-                        # 计算透明度
-                        alpha = base / np.log10(data_amount/10)             
+                        base = 0.8
+                        # 找到 x 和 y 中同时不是 NaN 的位置
+                        not_nan = ~np.isnan(x) & ~np.isnan(y)
+
+                        # 使用这些位置过滤 x 和 y
+                        x = x[not_nan]
+                        y = y[not_nan]
+                        data = np.column_stack((x, y))
+                        n = len(data)
+                        d = data.shape[1]
                         
-                        label_locations[label] = [center_x,center_y,original_color,alpha]
+                        Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
+                        #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
+                        
+                        # 计算数据的两两距离
+                        distances = pdist(data, metric='euclidean')
+
+                        # 计算距离的中位数
+                        median_dist = np.median(distances)
+
+                        # 使用中位数带宽因子
+                        median_bandwidth = median_dist / np.sqrt(2)
+
+
+                        bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
+
+                        # 使用高斯核密度估计计算密度
+                        kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
+
+                        density = np.exp(kde.score_samples(data))
+
+                        # 归一化密度值到 [0, 1] 范围
+                        density_norm = density / np.max(density)
+
+                        kde_scores = kde.score_samples(data)
+
+                        # 将KDE分数归一化到0-1范围内
+                        kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
+
+                        # 设置透明度
+                        # alpha = kde_scores_norm * 0.1
+                        alpha = density_norm * 0.3
+
                         ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha)
 
                         # Record the end time
@@ -933,7 +974,7 @@ def TAS_base_refine(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL
     
 
 
-def TAS_base_renew(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
+def TAS_base(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output_dir='TAS'):
 
     result_list = [['Label','Probability']]
     
@@ -984,7 +1025,7 @@ def TAS_base_renew(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL'
             json.dump(tag_color_dict, f)    
     
     # 检查是否存在'TAS_Base_' + tag + '_Withlines.pkl'文件
-    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_renew.pkl'):
+    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl'):
         # 如果存在，从文件中读取tag_color_dict
         with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_refine.pkl', 'rb') as f:
             fig = pickle.load(f)
@@ -1138,7 +1179,7 @@ def TAS_base_renew(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL'
 
         ax.set_xlabel(r"$SiO_2$", fontsize=14)
         ax.set_ylabel(r"$Na_2O+K_2O$", fontsize=14)
-        ax.set_title(r"TAS Diagram with Adaptive bandwidth", fontsize=14)
+        ax.set_title(r"TAS Diagram Original", fontsize=14)
         ax.set_xlim(35,80)
         # ax.set_ylim(0,17.647826086956513)  
         # 在 y=17.647826086956513 的位置画一条横线
@@ -1168,7 +1209,7 @@ def TAS_base_renew(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL'
         
         fig.tight_layout()        
         # fig.set_size_inches(10 , 10)
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_renew.pkl', 'wb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
@@ -1178,9 +1219,9 @@ def TAS_base_renew(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL'
 
     # 保存图，包含图例
     # 创建存图的文件夹
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_renew.svg')
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.svg')
     # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_refine.pdf')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_renew.jpg', dpi=600)
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.jpg', dpi=600)
     
     conn.close()
     print(f"All time taken: {all_time_taken:.3f} seconds")
@@ -1198,13 +1239,11 @@ output_dir = 'TAS'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-# TAS_base(filename, 'VOL', output_dir = 'TAS')
-# TAS_base(filename, 'PLU', output_dir = 'TAS')
-# TAS_No_Lines(filename, 'VOL', output_dir = 'TAS')
-# TAS_No_Lines(filename, 'PLU', output_dir = 'TAS')
-# TAS_No_Colors(filename, 'VOL', output_dir = 'TAS')
-# TAS_No_Colors(filename, 'PLU', output_dir = 'TAS')
+TAS_base(filename, 'VOL', output_dir = 'TAS')
+TAS_base(filename, 'PLU', output_dir = 'TAS')
+TAS_No_Lines(filename, 'VOL', output_dir = 'TAS')
+TAS_No_Lines(filename, 'PLU', output_dir = 'TAS')
+TAS_No_Colors(filename, 'VOL', output_dir = 'TAS')
+TAS_No_Colors(filename, 'PLU', output_dir = 'TAS')
 TAS_base_refine(filename, 'VOL', output_dir = 'TAS')
-TAS_base_renew(filename, 'VOL', output_dir = 'TAS')
-# TAS_base_refine(filename, 'PLU', output_dir = 'TAS')
-TAS_base_renew(filename, 'PLU', output_dir = 'TAS')
+TAS_base_refine(filename, 'PLU', output_dir = 'TAS')
