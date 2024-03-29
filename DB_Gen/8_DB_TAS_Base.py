@@ -873,18 +873,18 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         values = list(np.arange(0, 7, 0.8))
         ha_list = ["left","right", "center", "left","right", "center"]
         va_list = ["bottom", "center", "top"]
-        # for i, (label, (center_x, center_y, original_color,alpha)) in enumerate(label_locations.items()):
-        #     # 根据索引在 values 中轮流取值
-        #     value = values[i % len(values)]
-        #     ha = ha_list[i % len(ha_list)]
-        #     va = va_list[i % len(va_list)]
-        #     if(label =='Phonotephrite'):
-        #         ha = 'left'
-        #     # 在图中绘制文本
-        #     used_x = center_x
-        #     used_y = 18+value
-        #     if highest_y <= used_y:
-        #         highest_y = used_y
+        for i, (label, (center_x, center_y, original_color,alpha)) in enumerate(label_locations.items()):
+            # 根据索引在 values 中轮流取值
+            value = values[i % len(values)]
+            ha = ha_list[i % len(ha_list)]
+            va = va_list[i % len(va_list)]
+            if(label =='Phonotephrite'):
+                ha = 'left'
+            # 在图中绘制文本
+            used_x = center_x
+            used_y = 18+value
+            if highest_y <= used_y:
+                highest_y = used_y
         #     ax.text(used_x, used_y, label, fontsize=11.5, color='k', 
         #         bbox=dict(facecolor=original_color, edgecolor=None, alpha= 0.3, pad=2),rotation = 0,
         #         horizontalalignment=ha, verticalalignment=va,
@@ -955,9 +955,9 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
 
     # 保存图，包含图例
     # 创建存图的文件夹
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.svg')
-    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_original.pdf')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.jpg', dpi=600)
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.svg')
+    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.pdf')
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_Nolines.jpg', dpi=600)
     
     conn.close()
     print(f"All time taken: {all_time_taken:.3f} seconds")
@@ -1023,122 +1023,122 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
         pass
 
         # 输出'Type'的取值个数
-        # print(tag_df['Type'].value_counts())
+        print(tag_df['Type'].value_counts())
         # 计算'Type'的取值个数
-        # type_counts = tag_df['Type'].value_counts()
-        # type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
+        type_counts = tag_df['Type'].value_counts()
+        type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
 
         # 绘制TAS图解散点图
-        # label = tag_df['Type']
+        label = tag_df['Type']
         # 假设df是包含'x', 'y', 'label'列的DataFrame
-        # labelled_groups = set()
-        # grouped = tag_df.groupby('Type')
+        labelled_groups = set()
+        grouped = tag_df.groupby('Type')
 
         # label_locations = {}
         highest_y = 0
 
-        # for label, group in grouped:
-        #     x = group["SIO2(WT%)"]
-        #     y = group["ALL_Alkaline(WT%)"]
-        #     center_x = x.mean()
-        #     center_y = y.mean()
+        for label, group in grouped:
+            x = group["SIO2(WT%)"]
+            y = group["ALL_Alkaline(WT%)"]
+            center_x = x.mean()
+            center_y = y.mean()
             
-        #     if label not in labelled_groups:            
-        #         labelled_groups.add(label)
+            if label not in labelled_groups:            
+                labelled_groups.add(label)
                 
-        #         if 35 <= center_x <= 80 and 0 <= center_y <= 17.6478:
+                if 35 <= center_x <= 80 and 0 <= center_y <= 17.6478:
                     
-        #             data_amount = len(x)
-        #             # print(label, data_amount)
-        #             if(data_amount>30):
+                    data_amount = len(x)
+                    # print(label, data_amount)
+                    if(data_amount>30):
 
-        #                 original_color =  mcolors.to_rgba(tag_color_dict[label])
+                        original_color =  mcolors.to_rgba(tag_color_dict[label])
 
-        #                 # 定义一个基数，这个基数可以根据具体需求来调整
-        #                 base = 0.8
-        #                 # 找到 x 和 y 中同时不是 NaN 的位置
-        #                 not_nan = ~np.isnan(x) & ~np.isnan(y)
+                        # 定义一个基数，这个基数可以根据具体需求来调整
+                        base = 0.8
+                        # 找到 x 和 y 中同时不是 NaN 的位置
+                        not_nan = ~np.isnan(x) & ~np.isnan(y)
 
-        #                 # 使用这些位置过滤 x 和 y
-        #                 x = x[not_nan]
-        #                 y = y[not_nan]
-        #                 data = np.column_stack((x, y))
-        #                 n = len(data)
-        #                 d = data.shape[1]
+                        # 使用这些位置过滤 x 和 y
+                        x = x[not_nan]
+                        y = y[not_nan]
+                        data = np.column_stack((x, y))
+                        n = len(data)
+                        d = data.shape[1]
                         
-        #                 Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
-        #                 #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
+                        # Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
+                        # #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
                         
-        #                 # 计算数据的两两距离
-        #                 distances = pdist(data, metric='euclidean')
+                        # # 计算数据的两两距离
+                        # distances = pdist(data, metric='euclidean')
 
-        #                 # 计算距离的中位数
-        #                 median_dist = np.median(distances)
+                        # # 计算距离的中位数
+                        # median_dist = np.median(distances)
 
-        #                 # 使用中位数带宽因子
-        #                 median_bandwidth = median_dist / np.sqrt(2)
+                        # # 使用中位数带宽因子
+                        # median_bandwidth = median_dist / np.sqrt(2)
 
 
-        #                 bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
+                        # bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
 
-        #                 # 使用高斯核密度估计计算密度
-        #                 kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
+                        # # 使用高斯核密度估计计算密度
+                        # kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
 
-        #                 density = np.exp(kde.score_samples(data))
+                        # density = np.exp(kde.score_samples(data))
 
-        #                 # 归一化密度值到 [0, 1] 范围
-        #                 density_norm = density / np.max(density)
+                        # # 归一化密度值到 [0, 1] 范围
+                        # density_norm = density / np.max(density)
 
-        #                 kde_scores = kde.score_samples(data)
+                        # kde_scores = kde.score_samples(data)
 
-        #                 # 将KDE分数归一化到0-1范围内
-        #                 kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
+                        # # 将KDE分数归一化到0-1范围内
+                        # kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
 
-        #                 # 设置透明度
-        #                 # alpha = kde_scores_norm * 0.1
-        #                 alpha = density_norm * 0.3
+                        # # 设置透明度
+                        # # alpha = kde_scores_norm * 0.1
+                        # alpha = density_norm * 0.3
                         
-        #                 label_locations[label] = [center_x,center_y,original_color,alpha]
-        #                 ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 18)
+                        # label_locations[label] = [center_x,center_y,original_color,alpha]
+                        # ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 18)
                    
-        #                 # Record the end time
-        #                 tmp_time = time.time()
+                        # Record the end time
+                        tmp_time = time.time()
 
-        #                 # Calculate the time taken
-        #                 time_taken = tmp_time - start_time
-        #                 start_time = tmp_time
+                        # Calculate the time taken
+                        time_taken = tmp_time - start_time
+                        start_time = tmp_time
 
                     
-        #                 # 计算 alpha 的平均值
-        #                 alpha_mean = alpha.mean()
+                        # 计算 alpha 的平均值
+                        alpha_mean = alpha.mean()
 
-        #                 # 打印结果
-        #                 print(f"{label} Data amount is {data_amount}, Alpha is {alpha_mean:.3f}, Time taken: {time_taken:.3f} seconds")
-        #         else:
-        #             # print(label+" Coordinates are out of bounds")
-        #             pass
+                        # 打印结果
+                        print(f"{label} Data amount is {data_amount}, Alpha is {alpha_mean:.3f}, Time taken: {time_taken:.3f} seconds")
+                else:
+                    # print(label+" Coordinates are out of bounds")
+                    pass
 
         
-        # # 根据 center_x 对 label_locations 进行排序
-        # label_locations = dict(sorted(label_locations.items(), key=lambda item: item[1][0]))
+        # 根据 center_x 对 label_locations 进行排序
+        label_locations = dict(sorted(label_locations.items(), key=lambda item: item[1][0]))
 
-        # # 定义一个列表，包含n个值
-        # # 定义一个列表，步长为0.8
-        # values = list(np.arange(0, 7, 0.8))
-        # ha_list = ["left","right", "center", "left","right", "center"]
-        # va_list = ["bottom", "center", "top"]
-        # for i, (label, (center_x, center_y, original_color,alpha)) in enumerate(label_locations.items()):
-        #     # 根据索引在 values 中轮流取值
-        #     value = values[i % len(values)]
-        #     ha = ha_list[i % len(ha_list)]
-        #     va = va_list[i % len(va_list)]
-        #     if(label =='Phonotephrite'):
-        #         ha = 'left'
-        #     # 在图中绘制文本
-        #     used_x = center_x
-        #     used_y = 18+value
-        #     if highest_y <= used_y:
-        #         highest_y = used_y
+        # 定义一个列表，包含n个值
+        # 定义一个列表，步长为0.8
+        values = list(np.arange(0, 7, 0.8))
+        ha_list = ["left","right", "center", "left","right", "center"]
+        va_list = ["bottom", "center", "top"]
+        for i, (label, (center_x, center_y, original_color,alpha)) in enumerate(label_locations.items()):
+            # 根据索引在 values 中轮流取值
+            value = values[i % len(values)]
+            ha = ha_list[i % len(ha_list)]
+            va = va_list[i % len(va_list)]
+            if(label =='Phonotephrite'):
+                ha = 'left'
+            # 在图中绘制文本
+            used_x = center_x
+            used_y = 18+value
+            if highest_y <= used_y:
+                highest_y = used_y
         #     ax.text(used_x, used_y, label, fontsize=11.5, color='k', 
         #         bbox=dict(facecolor=original_color, edgecolor=None, alpha= 0.3, pad=2),rotation = 0,
         #         horizontalalignment=ha, verticalalignment=va,
@@ -1209,9 +1209,9 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
 
     # 保存图，包含图例
     # 创建存图的文件夹
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.svg')
-    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_original.pdf')
-    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '.jpg', dpi=600)
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_No_Colors.svg')
+    # fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_No_Colors.pdf')
+    fig.savefig(output_dir+'/'+'TAS_Base_' + rock_type + '_No_Colors.jpg', dpi=600)
     
     conn.close()
     print(f"All time taken: {all_time_taken:.3f} seconds")
