@@ -81,10 +81,10 @@ def TAS_base_old(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         with open('Color_Config/'+rock_type+'_color_dict.json', 'w') as f:
             json.dump(tag_color_dict, f)    
     
-    # 检查是否存在'TAS_Base_' + tag + '_old.pkl'文件
-    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_old.pkl'):
+    # 检查是否存在'TAS_Base_' + tag + '_Withlines_old.pkl'文件
+    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_old.pkl'):
         # 如果存在，从文件中读取tag_color_dict
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_old.pkl', 'rb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_old.pkl', 'rb') as f:
             fig = pickle.load(f)
     else:
         pass
@@ -225,7 +225,7 @@ def TAS_base_old(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         
         fig.tight_layout()
 
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_old.pkl', 'wb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_old.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
@@ -294,10 +294,10 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         with open('Color_Config/'+rock_type+'_color_dict.json', 'w') as f:
             json.dump(tag_color_dict, f)    
     
-    # 检查是否存在'TAS_Base_' + tag + '.pkl'文件
-    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_original.pkl'):
+    # 检查是否存在'TAS_Base_' + tag + '_Withlines.pkl'文件
+    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_original.pkl'):
         # 如果存在，从文件中读取tag_color_dict
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_original.pkl', 'rb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_original.pkl', 'rb') as f:
             fig = pickle.load(f)
     else:
         pass
@@ -437,7 +437,7 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         
         fig.tight_layout()        
         # fig.set_size_inches(10 , 10)
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_original.pkl', 'wb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines_original.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
@@ -506,10 +506,10 @@ def TAS_new(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output
         with open('Color_Config/'+rock_type+'_color_dict.json', 'w') as f:
             json.dump(tag_color_dict, f)    
     
-    # 检查是否存在'TAS_Base_' + tag + '.pkl'文件
-    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '.pkl'):
+    # 检查是否存在'TAS_Base_' + tag + '_Withlines.pkl'文件
+    if os.path.exists(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl'):
         # 如果存在，从文件中读取tag_color_dict
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '.pkl', 'rb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl', 'rb') as f:
             fig = pickle.load(f)
     else:
         pass
@@ -684,7 +684,7 @@ def TAS_new(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',output
         
         fig.tight_layout()        
         # fig.set_size_inches(10 , 10)
-        with open(output_dir+'/'+'TAS_Base_' + rock_type + '.pkl', 'wb') as f:
+        with open(output_dir+'/'+'TAS_Base_' + rock_type + '_Withlines.pkl', 'wb') as f:
             pickle.dump(fig, f)
 
     all_end_time = time.time()
