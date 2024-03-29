@@ -92,8 +92,8 @@ def TAS_base_old(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         # 输出'Type'的取值个数
         # print(tag_df['Type'].value_counts())
         # 计算'Type'的取值个数
-        type_counts = tag_df['Type'].value_counts()
-        type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
+        # type_counts = tag_df['Type'].value_counts()
+        # type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
 
         # 绘制TAS图解散点图
         # label = tag_df['Type']
@@ -307,8 +307,8 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         # 输出'Type'的取值个数
         # print(tag_df['Type'].value_counts())
         # 计算'Type'的取值个数
-        type_counts = tag_df['Type'].value_counts()
-        type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
+        # type_counts = tag_df['Type'].value_counts()
+        # type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
 
         # 绘制TAS图解散点图
         # label = tag_df['Type']
@@ -336,49 +336,8 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
 
                         original_color =  mcolors.to_rgba(tag_color_dict[label])
 
-                        # 定义一个基数，这个基数可以根据具体需求来调整
-                        base = 0.8
-                        # 找到 x 和 y 中同时不是 NaN 的位置
-                        not_nan = ~np.isnan(x) & ~np.isnan(y)
-
-                        # 使用这些位置过滤 x 和 y
-                        x = x[not_nan]
-                        y = y[not_nan]
-                        data = np.column_stack((x, y))
-                        n = len(data)
-                        d = data.shape[1]
-                        
-                        Silverman_bandwidth = (n * (d + 2) / 4.)**(-1. / (d + 4))
-                        #用Silverman的规则来估计带宽。Silverman的规则是一种常用的带宽选择方法
-                        
-                        # 计算数据的两两距离
-                        distances = pdist(data, metric='euclidean')
-
-                        # 计算距离的中位数
-                        median_dist = np.median(distances)
-
-                        # 使用中位数带宽因子
-                        median_bandwidth = median_dist / np.sqrt(2)
-
-
-                        bandwidth = np.sqrt(median_bandwidth * Silverman_bandwidth)
-
-                        # 使用高斯核密度估计计算密度
-                        kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth).fit(data)
-
-                        density = np.exp(kde.score_samples(data))
-
-                        # 归一化密度值到 [0, 1] 范围
-                        density_norm = density / np.max(density)
-
-                        kde_scores = kde.score_samples(data)
-
-                        # 将KDE分数归一化到0-1范围内
-                        kde_scores_norm = (kde_scores - np.min(kde_scores)) / (np.max(kde_scores) - np.min(kde_scores))
-
                         # 设置透明度
-                        # alpha = kde_scores_norm * 0.1
-                        alpha = kde_scores_norm 
+                        alpha = 0.8
                         
                         label_locations[label] = [center_x,center_y,original_color,alpha]
                         ax.scatter(x, y, color = original_color, edgecolors='none',  alpha = alpha, s= 18)
@@ -389,7 +348,6 @@ def TAS_original(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
                         # Calculate the time taken
                         time_taken = tmp_time - start_time
                         start_time = tmp_time
-
                     
                         # 计算 alpha 的平均值
                         alpha_mean = alpha.mean()
@@ -816,8 +774,8 @@ def TAS_No_Lines(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',o
         # 输出'Type'的取值个数
         # print(tag_df['Type'].value_counts())
         # 计算'Type'的取值个数
-        type_counts = tag_df['Type'].value_counts()
-        type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
+        # type_counts = tag_df['Type'].value_counts()
+        # type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
 
         # 绘制TAS图解散点图
         # label = tag_df['Type']
@@ -1070,8 +1028,8 @@ def TAS_No_Colors(filename = 'Corrected/Remove_LOI_GeoRoc.db',rock_type = 'VOL',
         # 输出'Type'的取值个数
         # print(tag_df['Type'].value_counts())
         # 计算'Type'的取值个数
-        type_counts = tag_df['Type'].value_counts()
-        type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
+        # type_counts = tag_df['Type'].value_counts()
+        # type_counts.to_csv(output_dir+'/'+'TAS_type_counts_'+ rock_type +'.csv')
 
         # 绘制TAS图解散点图
         # label = tag_df['Type']
