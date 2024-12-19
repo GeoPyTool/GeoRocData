@@ -45,15 +45,18 @@ os.chdir(current_directory)
 with open(current_directory+'/Plot_Json/tas_cord.json', 'r', encoding='utf-8') as file:
     cord = json.load(file)
 
-# 创建一个宽高比为2:1的figure
-fig = plt.figure(figsize=(10, 5))     
-ax = fig.add_subplot(1, 1, 1)
-# 设置axes的宽高比为3:2
-ax.set_aspect(3/2)
 
 def TAS_all(filename, rock_type, output_dir):
     # 连接到数据库
     conn = sqlite3.connect(filename)
+    num_visible_points = 0
+
+    # 创建一个宽高比为2:1的figure
+    fig = plt.figure(figsize=(10, 5))     
+    ax = fig.add_subplot(1, 1, 1)
+    # 设置axes的宽高比为3:2
+    ax.set_aspect(3/2)
+
 
     # Read the data from the TAS_Data table
     df = pd.read_sql_query("SELECT * FROM Current_Data", conn)
@@ -126,7 +129,8 @@ def TAS_all(filename, rock_type, output_dir):
     ax.set_ylim(0,17.647826086956513)  
 
     ax.tick_params(axis='both', labelsize=12)
-    legend = ax.legend(loc='upper left', fontsize=4, bbox_to_anchor=(1, 1))
+    # legend = ax.legend(loc='upper left', fontsize=4, bbox_to_anchor=(1, 1))
+    legend = ax.legend(loc='upper left', fontsize=4, bbox_to_anchor=(1, 1), ncol=2)
 
     # 获取当前的视域范围
     xlim = ax.get_xlim()
@@ -146,7 +150,7 @@ def TAS_all(filename, rock_type, output_dir):
     fig.savefig(output_dir+'/TAS_figure'+rock_type+'.svg')
     fig.savefig(output_dir+'/TAS_figure'+rock_type+'.png', dpi=600)
     # plt.show()
-
+    
     conn.close()
 
 # 文件名
