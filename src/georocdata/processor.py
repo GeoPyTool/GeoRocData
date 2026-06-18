@@ -170,42 +170,59 @@ class GEOROCProcessor:
             print(f"  Data directory not found: {data_dir}")
             return
 
-        conn = sqlite3.connect(db_path)
-        imported = 0
-        imported_file = db_path.replace('.db', '_imported_files.txt')
-        imported_set = set()
-        if os.path.exists(imported_file):
-            with open(imported_file, 'r') as f:
-                imported_set = set(line.strip() for line in f)
+        csv_files = sorted(
+            f for f in os.listdir(data_dir) if f.lower().endswith('.csv')
+        )
+        if not csv_files:
+            print("  No CSV files found")
+            return
 
-        for file in sorted(os.listdir(data_dir)):
-            if not file.lower().endswith('.csv'):
-                continue
+        all_columns = []
+        file_dfs = []
+        print("  Scanning CSV files for schema...")
+        for i, file in enumerate(csv_files):
             file_path = os.path.join(data_dir, file)
-            if file_path in imported_set:
+            df = self._read_csv(file_path)
+            if df is None:
                 continue
-
-            print(f"  Importing: {file}")
-            data = self._read_csv(file_path)
-            if data is None:
-                continue
-
             if HAS_PANDAS:
-                data = data.drop_duplicates()
+                df = df.drop_duplicates()
+            all_columns.extend(c for c in df.columns if c not in all_columns)
+            file_dfs.append((file, file_path, df))
+            if (i + 1) % 50 == 0 or i + 1 == len(csv_files):
+                print(f"    Scanned {i+1}/{len(csv_files)} files, {len(all_columns)} unique columns")
+
+        print(f"  Total unique columns: {len(all_columns)}")
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        col_defs = ', '.join(f'[{c}] TEXT' for c in all_columns)
+        cursor.execute(f'CREATE TABLE IF NOT EXISTS [{table_name}] ({col_defs})')
+        conn.commit()
+
+        imported = 0
+        total = len(file_dfs)
+        for i, (file, file_path, df) in enumerate(file_dfs):
+            missing_cols = [c for c in all_columns if c not in df.columns]
+            for c in missing_cols:
+                df[c] = None
+            df = df[all_columns]
 
             try:
-                data.to_sql(table_name, conn, if_exists='append', index=False)
+                df.to_sql(table_name, conn, if_exists='append', index=False)
                 imported += 1
-                with open(imported_file, 'a') as f:
-                    f.write(file_path + '\n')
             except Exception as e:
-                print(f"    DB insert error: {e}")
+                print(f"    DB insert error for {file}: {e}")
+                continue
+
+            if (i + 1) % 50 == 0 or i + 1 == total:
+                print(f"    Imported {i+1}/{total} files ({imported} successful)")
 
         conn.commit()
         conn.close()
-        print(f"  Imported {imported} files into {db_path}")
+        print(f"  Imported {imported}/{total} files into {db_path}")
 
-    def build_refs_database(self, ref_dir=None, db_path=None):
+    def build_refs_database(self, ref_dir=None, db_path=None, table_name="references"):
         if ref_dir is None:
             ref_dir = os.path.join(self.data_dir, "Split", "References")
         if db_path is None:
@@ -214,36 +231,46 @@ class GEOROCProcessor:
         if not os.path.exists(ref_dir):
             return
 
-        conn = sqlite3.connect(db_path)
-        imported = 0
-        imported_file = db_path.replace('.db', '_imported_ref_files.txt')
-        imported_set = set()
-        if os.path.exists(imported_file):
-            with open(imported_file, 'r') as f:
-                imported_set = set(line.strip() for line in f)
-
+        all_columns = ['Reference']
+        file_dfs = []
         for file in sorted(os.listdir(ref_dir)):
             if not file.lower().endswith('.csv'):
                 continue
             file_path = os.path.join(ref_dir, file)
-            if file_path in imported_set:
+            lines = []
+            for enc in ['utf-8-sig', 'utf-8', 'ISO-8859-1', 'Windows-1252']:
+                try:
+                    with open(file_path, 'r', encoding=enc) as f:
+                        lines = [line.strip().strip('"') for line in f if line.strip()]
+                    break
+                except Exception:
+                    continue
+            if not lines:
                 continue
-
-            data = self._read_csv(file_path, skiprows=1, header=None)
-            if data is None:
+            if HAS_PANDAS:
+                df = pd.DataFrame(lines, columns=all_columns)
+            else:
                 continue
+            file_dfs.append((file, df))
 
+        if not file_dfs:
+            return
+
+        conn = sqlite3.connect(db_path)
+        col_defs = ', '.join(f'[{c}] TEXT' for c in all_columns)
+        conn.execute(f'CREATE TABLE IF NOT EXISTS [{table_name}] ({col_defs})')
+
+        imported = 0
+        for file, df in file_dfs:
             try:
-                data.to_sql('references', conn, if_exists='append', index=False)
+                df.to_sql('references', conn, if_exists='append', index=False)
                 imported += 1
-                with open(imported_file, 'a') as f:
-                    f.write(file_path + '\n')
             except Exception as e:
                 print(f"    Ref DB error for {file}: {e}")
 
         conn.commit()
         conn.close()
-        print(f"  Imported {imported} reference files")
+        print(f"  Imported {imported}/{len(file_dfs)} reference files")
 
     @staticmethod
     def _read_csv(file_path, skiprows=0, header='infer', **kwargs):

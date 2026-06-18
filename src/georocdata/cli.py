@@ -23,7 +23,9 @@ def main():
     parser.add_argument("--output-dir", default=None,
                         help="Output directory for downloaded data")
     parser.add_argument("--db-name", default="GeoRoc.db",
-                        help="SQLite database filename")
+                        help="SQLite database filename (used with --output-dir)")
+    parser.add_argument("--db-path", default=None,
+                        help="Full path for the SQLite database file (overrides --db-name)")
     parser.add_argument("--skip-fix", action="store_true",
                         help="Skip CSV quote fixing step")
     parser.add_argument("--skip-split", action="store_true",
@@ -31,7 +33,7 @@ def main():
     parser.add_argument("--skip-db", action="store_true",
                         help="Skip database building step")
     parser.add_argument("-V", "--version", action="version",
-                        version="%(prog)s 0.1.0")
+                        version="%(prog)s 0.2.0")
     args = parser.parse_args()
 
     timestamp = datetime.now().strftime("%Y-%m-%d")
@@ -78,7 +80,10 @@ def main():
     if not args.skip_db:
         print("Step 3: Building SQLite database...")
         data_source = os.path.join(data_dir, "Split", "Data") if not args.skip_split else data_dir
-        db_path = os.path.join(data_dir, args.db_name)
+        if args.db_path:
+            db_path = args.db_path
+        else:
+            db_path = os.path.join(data_dir, args.db_name)
         processor.build_database(data_dir=data_source, db_path=db_path)
 
         if not args.skip_split:
