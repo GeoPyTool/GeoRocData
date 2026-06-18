@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "georocdata"
+version = "0.1.0"
+description = "GEOROC database downloader and SQLite converter"
+readme = "README.md"
+license = {text = "GPLv3+"}
+requires-python = ">=3.8"
+authors = [
+    {name = "GeoPyTool Team"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Earth Sciences",
+    "Topic :: Database",
+]
+dependencies = [
+    "pandas>=1.3",
+]
+
+[project.optional-dependencies]
+dev = ["build", "twine"]
+
+[project.scripts]
+georocdata = "georocdata.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/GeoPyTool/GeoRocData"
+Repository = "https://github.com/GeoPyTool/GeoRocData"
+"Bug Tracker" = "https://github.com/GeoPyTool/GeoRocData/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+georocdata = ["data/*.csv"]
