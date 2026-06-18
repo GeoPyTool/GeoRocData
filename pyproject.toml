@@ -4,13 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "georocdata"
-version = "0.1.0"
-description = "GEOROC database downloader and SQLite converter"
+version = "0.2.0"
+description = "GEOROC database downloader, processor, and SQLite converter for geochemical rock data"
 readme = "README.md"
 license = {text = "GPLv3+"}
 requires-python = ">=3.8"
 authors = [
-    {name = "GeoPyTool Team"},
+    {name = "GeoPyTool Team", email = "geopytool@gmail.com"},
+]
+keywords = [
+    "georoc",
+    "geochemistry",
+    "petrology",
+    "volcanology",
+    "igneous",
+    "rock",
+    "mineral",
+    "database",
+    "sqlite",
+    "earth-science",
+    "geoscience",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -25,13 +38,14 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
     "Topic :: Database",
+    "Environment :: Console",
 ]
 dependencies = [
     "pandas>=1.3",
 ]
 
 [project.optional-dependencies]
-dev = ["build", "twine"]
+dev = ["build", "twine", "pytest"]
 
 [project.scripts]
 georocdata = "georocdata.cli:main"
@@ -40,6 +54,8 @@ georocdata = "georocdata.cli:main"
 Homepage = "https://github.com/GeoPyTool/GeoRocData"
 Repository = "https://github.com/GeoPyTool/GeoRocData"
 "Bug Tracker" = "https://github.com/GeoPyTool/GeoRocData/issues"
+Changelog = "https://github.com/GeoPyTool/GeoRocData/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/GeoPyTool/GeoRocData#readme"
 
 [tool.setuptools.packages.find]
 where = ["src"]
