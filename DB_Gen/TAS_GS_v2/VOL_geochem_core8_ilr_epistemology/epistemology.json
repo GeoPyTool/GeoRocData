@@ -1,0 +1,7 @@
+{
+  "tau": 0.9687613651096894,
+  "n_flagged_citation_label_pairs": 100,
+  "mean_irreducible": 0.08697713998562902,
+  "labels_with_high_irreducibility": [],
+  "base_accuracy": 0.557878026193941
+}

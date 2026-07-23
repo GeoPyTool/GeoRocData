@@ -1,0 +1,117 @@
+{
+  "SoftMax_Pred": {
+    "accuracy": 0.48977665932683234,
+    "n_evaluated": 3179
+  },
+  "MaxRatio_Pred": {
+    "accuracy": 0.48977665932683234,
+    "n_evaluated": 3179
+  },
+  "TAS_Pred": {
+    "accuracy": 0.40327146901541366,
+    "n_evaluated": 3179
+  },
+  "restricted": {
+    "SoftMax_Pred": {
+      "accuracy": 0.5088047958036718,
+      "n_evaluated": 2669
+    },
+    "MaxRatio_Pred": {
+      "accuracy": 0.5088047958036718,
+      "n_evaluated": 2669
+    },
+    "TAS_Pred": {
+      "accuracy": 0.48032971150243536,
+      "n_evaluated": 2669
+    }
+  },
+  "per_label": {
+    "SoftMax_Pred": {
+      "Adakite": 0.0,
+      "Andesite": 0.4266666666666667,
+      "Basalt": 0.44991364421416236,
+      "Basanite": 0.14814814814814814,
+      "Benmoreite": 0.4,
+      "Boninite": 0.6304347826086957,
+      "Dacite": 0.6750629722921915,
+      "Foidite": 0.0,
+      "Hawaiite": 0.9428571428571428,
+      "Kimberlite": 0.6055045871559633,
+      "Komatiite": 0.6037735849056604,
+      "Latite": 0.0,
+      "Mugearite": 0.4166666666666667,
+      "Nephelinite": 0.0,
+      "Phonolite": 0.75,
+      "Picrite": 0.2777777777777778,
+      "Rhyodacite": 0.35714285714285715,
+      "Rhyolite": 0.6172839506172839,
+      "Shoshonite": 0.0,
+      "Tephrite": 0.0,
+      "Trachyandesite": 0.6071428571428571,
+      "Trachybasalt": 0.1111111111111111,
+      "Trachyte": 0.6666666666666666
+    },
+    "MaxRatio_Pred": {
+      "Adakite": 0.0,
+      "Andesite": 0.4266666666666667,
+      "Basalt": 0.44991364421416236,
+      "Basanite": 0.14814814814814814,
+      "Benmoreite": 0.4,
+      "Boninite": 0.6304347826086957,
+      "Dacite": 0.6750629722921915,
+      "Foidite": 0.0,
+      "Hawaiite": 0.9428571428571428,
+      "Kimberlite": 0.6055045871559633,
+      "Komatiite": 0.6037735849056604,
+      "Latite": 0.0,
+      "Mugearite": 0.4166666666666667,
+      "Nephelinite": 0.0,
+      "Phonolite": 0.75,
+      "Picrite": 0.2777777777777778,
+      "Rhyodacite": 0.35714285714285715,
+      "Rhyolite": 0.6172839506172839,
+      "Shoshonite": 0.0,
+      "Tephrite": 0.0,
+      "Trachyandesite": 0.6071428571428571,
+      "Trachybasalt": 0.1111111111111111,
+      "Trachyte": 0.6666666666666666
+    },
+    "TAS_Pred": {
+      "Adakite": 0.0,
+      "Andesite": 0.7899159663865546,
+      "Basalt": 0.6617210682492581,
+      "Basanite": 0.9166666666666666,
+      "Benmoreite": 0.0,
+      "Boninite": 0.0,
+      "Dacite": 0.6765578635014837,
+      "Foidite": 1.0,
+      "Hawaiite": 0.0,
+      "Kimberlite": 0.0,
+      "Komatiite": 0.0,
+      "Latite": 0.0,
+      "Mugearite": 0.0,
+      "Nephelinite": 0.0,
+      "Phonolite": 0.375,
+      "Picrite": 0.0,
+      "Rhyodacite": 0.0,
+      "Rhyolite": 0.8089887640449438,
+      "Shoshonite": 0.0,
+      "Tephrite": 0.0,
+      "Trachyandesite": 0.4666666666666667,
+      "Trachybasalt": 0.0,
+      "Trachyte": 0.8505747126436781
+    }
+  },
+  "runtime_sec": {
+    "total": 14.218266248703003,
+    "fit": 8.97229528427124,
+    "eval": 7.817615032196045,
+    "n_train": 128016,
+    "n_test": 3179,
+    "n_test_citations": 200,
+    "use_ilr": true,
+    "rock_type": "VOL",
+    "feature_set": "tas",
+    "seed": 7
+  }
+}

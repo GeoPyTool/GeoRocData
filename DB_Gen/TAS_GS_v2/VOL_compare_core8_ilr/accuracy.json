@@ -1,0 +1,118 @@
+{
+  "rows": [
+    {
+      "Method": "Classical TAS",
+      "Accuracy_all": 0.65339881106229,
+      "CI_all": "[0.645, 0.661]",
+      "n_all": 11607,
+      "Accuracy_TAScomp": 0.70739669806921,
+      "CI_TAScomp": "[0.700, 0.715]",
+      "n_TAScomp": 10721
+    },
+    {
+      "Method": "KDE+SoftMax (adaptive bw)",
+      "Accuracy_all": 0.5527869508656059,
+      "CI_all": "[0.546, 0.559]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.5725156417338368,
+      "CI_TAScomp": "[0.566, 0.580]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "LDA (on ilr)",
+      "Accuracy_all": 0.6944861402982088,
+      "CI_all": "[0.689, 0.701]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.7365988388478665,
+      "CI_TAScomp": "[0.730, 0.743]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "QDA (on ilr)",
+      "Accuracy_all": 0.48058641048734113,
+      "CI_all": "[0.474, 0.487]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.5014373485147399,
+      "CI_TAScomp": "[0.493, 0.511]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "PCA(10)+KDE+SoftMax",
+      "Accuracy_all": 0.5031522065445813,
+      "CI_all": "[0.497, 0.510]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.5114142382052872,
+      "CI_TAScomp": "[0.504, 0.518]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "PCA(10)+LDA",
+      "Accuracy_all": 0.5819073351345943,
+      "CI_all": "[0.575, 0.588]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.6209909249760442,
+      "CI_TAScomp": "[0.614, 0.628]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "Trace-only KDE+SoftMax (ilr)",
+      "Accuracy_all": 0.4921945361753227,
+      "CI_all": "[0.485, 0.499]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.49816808522631195,
+      "CI_TAScomp": "[0.492, 0.505]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "Trace-only LDA (on ilr)",
+      "Accuracy_all": 0.4513659561693185,
+      "CI_all": "[0.444, 0.459]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.4888112282283975,
+      "CI_TAScomp": "[0.482, 0.496]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "LDA (shrinkage, on ilr)",
+      "Accuracy_all": 0.6927849494646252,
+      "CI_all": "[0.687, 0.699]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.7347387407699679,
+      "CI_TAScomp": "[0.728, 0.741]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "Random Forest (on ilr)",
+      "Accuracy_all": 0.7669368557990593,
+      "CI_all": "[0.762, 0.772]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.8079025985006482,
+      "CI_TAScomp": "[0.801, 0.814]",
+      "n_TAScomp": 17741
+    },
+    {
+      "Method": "Random Forest (major-only, on ilr)",
+      "Accuracy_all": 0.7672871009706794,
+      "CI_all": "[0.762, 0.772]",
+      "n_all": 19986,
+      "Accuracy_TAScomp": 0.8067752663322247,
+      "CI_TAScomp": "[0.799, 0.811]",
+      "n_TAScomp": 17741
+    }
+  ],
+  "runtime_sec": 168.44901132583618,
+  "config": {
+    "db": "/Users/fred/Documents/GitHub/GeoPyTool/GeoRocData/GeoRoc.db",
+    "rock_type": "VOL",
+    "use_trace": true,
+    "trace_variant": "ilr",
+    "trace_set": "core8",
+    "cleanup": false,
+    "cv_bw": false,
+    "n_test_citations": 1500,
+    "pca_n": 10,
+    "n_boot": 100,
+    "seed": 7,
+    "out_root": "/Users/fred/Documents/GitHub/GeoPyTool/GeoRocData/DB_Gen/TAS_GS_v2"
+  }
+}
